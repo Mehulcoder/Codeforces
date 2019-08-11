@@ -11,21 +11,7 @@
 #include<stdlib.h>
  
 using namespace std;
- 
-#define pb push_back
-#define mp make_pair
-#define F first
-#define S second
-#define ln length()
-#define mod 1000000007
-#define MAX 1000000
-#define umap unordered_map
-#define uset unordered_set
-#define PII pair<int, int>
-#define PLL pair<ll, ll>
-#define V(x) vector<x>
-#define deci(n) cout<<fixed<<setprecision(n)
-#define pq priority_queue 
+
 
 bool isPossible(int* arr, int n, int k, int bag){
 	if (n==1)
@@ -73,15 +59,6 @@ int main( int argc , char ** argv )
 
 	}
 
-
-	
-
-
-
-
-
 	return 0 ; 
-
-
 
 }

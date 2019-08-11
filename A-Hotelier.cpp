@@ -35,9 +35,10 @@ int main( int argc , char ** argv )
 		{
 			arr[left] = 1;
 			
-			while(arr[left]!=0 && left<n){
+			while(arr[left]!=0 && left<10){
 				left++;
 			}
+			continue;
 
 		}else if (events[i] == 'R')
 		{
@@ -46,6 +47,7 @@ int main( int argc , char ** argv )
 			while(arr[right]!=0 && right>=0){
 				right--;
 			}
+			continue;
 
 		}else
 		{
@@ -54,23 +56,22 @@ int main( int argc , char ** argv )
 			arr[room] = 0;
 			if (abs(left-room)<=abs(right-room))
 			{
-				if(left>room){
-				left = room;
-			}
+				if(left>room)
+					left = room;
+				
 			}else{
 				if(right<room){
-				right = room;
+					right = room;
 			}
 			}
 		}
 	}
-	//cout <<"left "<<left  << '\n';
-	//cout <<"right "<<right  << '\n';
+	
 	for (int i = 0; i < 10; ++i)
 	{
 		cout << arr[i];
 	}
-	//	cout <<'\n';
+		cout <<'\n';
 
 
 	return 0 ; 
