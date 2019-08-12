@@ -21,7 +21,7 @@ int main( int argc , char ** argv )
 	string events;
 	cin>>events;
 
-	int left = 0, right = 9;
+	
 	int arr[10];
 	for (int i = 0; i < 10; ++i)
 	{
@@ -33,37 +33,27 @@ int main( int argc , char ** argv )
 	{
 		if (events[i]=='L')
 		{
-			arr[left] = 1;
-			
-			while(arr[left]!=0 && left<10){
+			int left = 0;
+			while(arr[left]==1 && left<9){
 				left++;
 			}
+			arr[left] = 1;
 			continue;
 
 		}else if (events[i] == 'R')
 		{
-			arr[right] = 1;
+			int right = 9;
 
-			while(arr[right]!=0 && right>=0){
+			while(arr[right]==1 && right>0){
 				right--;
 			}
+			arr[right] = 1;
 			continue;
 
 		}else
 		{
 			int room  = int(events[i])-48;
-			//cout << "My boy"<< room << '\n';
 			arr[room] = 0;
-			if (abs(left-room)<=abs(right-room))
-			{
-				if(left>room)
-					left = room;
-				
-			}else{
-				if(right<room){
-					right = room;
-			}
-			}
 		}
 	}
 	
