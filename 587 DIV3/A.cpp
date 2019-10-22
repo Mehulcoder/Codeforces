@@ -34,34 +34,40 @@ typedef unordered_set<int> useti;
 #define s second
 #define MOD 1000000007
 
-bool a[10][10];
+
 int main( int argc , char ** argv )
 {
-	int n,m;
-	cin>>n>>m;
-	for(int i=0;i<m;i++)
-	{
-	    int x,y;
-	    cin>>x>>y;
-	    a[x][y]=true;
-	    a[y][x]=true;
+	ios_base::sync_with_stdio(false) ; 
+	cin.tie(NULL) ; 
+	
+	int n;
+	cin>>n;
+	string s;
+	cin>>s;
+	
+	int i = 1;
+	int count = 0;
+	int k = ((n/2)*2)-1;
+	while(i<=k){
+		if (s[i]==s[i-1])
+		{
+			count++;
+			if (s[i]=='a')
+			{
+				s[i-1] = 'b';
+			}else
+			{
+				s[i-1] = 'a';
+			}
+		}
+		i=i+2;
 	}
-	if(n<7)
-		{cout<<m;return 0;}
-	int d=1000;
-	for(int i=1;i<7;i++)
-	{
-	    for(int j=i+1;j<=7;j++)
-	    {
-	    	int u=0;
-	        for(int q=1;q<=7;q++)
-	        	if(a[i][q]&&a[j][q])
-	        		u++;
-	    	d=min(d,u);
-	    }
-	}
-	cout<<m-d<<endl;
-	    return 0;
+
+	cout << count << '\n';
+	cout<<s<<endl;
+
+	return 0 ; 
+
 
 
 }

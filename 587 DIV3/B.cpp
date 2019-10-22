@@ -34,34 +34,49 @@ typedef unordered_set<int> useti;
 #define s second
 #define MOD 1000000007
 
-bool a[10][10];
+bool mysort(pii a, pii b){
+	return (a.first>b.first);
+}
+
 int main( int argc , char ** argv )
 {
-	int n,m;
-	cin>>n>>m;
-	for(int i=0;i<m;i++)
+	ios_base::sync_with_stdio(false) ; 
+	cin.tie(NULL) ; 
+	
+	int n;
+	cin>>n;
+	vector<pii> arr(n);
+
+	for (int i = 0; i < n; ++i)
 	{
-	    int x,y;
-	    cin>>x>>y;
-	    a[x][y]=true;
-	    a[y][x]=true;
+		int a;
+		cin>>a;
+		arr[i] = {a, i};
 	}
-	if(n<7)
-		{cout<<m;return 0;}
-	int d=1000;
-	for(int i=1;i<7;i++)
+
+	sort(arr.begin(), arr.end(), mysort);
+
+	ll cost = 0;
+	int cansshot = 0;
+	for (int i = 0; i < n; ++i)
 	{
-	    for(int j=i+1;j<=7;j++)
-	    {
-	    	int u=0;
-	        for(int q=1;q<=7;q++)
-	        	if(a[i][q]&&a[j][q])
-	        		u++;
-	    	d=min(d,u);
-	    }
+		cost+=arr[i].first*cansshot+1;
+		cansshot++;
 	}
-	cout<<m-d<<endl;
-	    return 0;
+
+	cout << cost << '\n';
+	for (int i = 0; i < n; ++i)
+	{
+		cout << arr[i].second+1 << ' ';
+	}
+
+
+	cout << '\n';
+
+
+
+	return 0 ; 
+
 
 
 }
