@@ -63,15 +63,13 @@ int main( int argc , char ** argv )
 
 	if (y[4]>=y[2] && y[3]<=y[1] && x[3]<=x[1] && x[4]>=x[2])
 	{	
-		//cout << "here1" << '\n';
+		
 		cout << "NO" << '\n';
 		return 0;
 	}
 
 	if (y[6]>=y[2] && y[5]<=y[1] && x[5]<=x[1] && x[6]>=x[2])
 	{
-		//cout << "here2" << '\n';
-
 		cout << "NO" << '\n';
 		return 0;
 	}
@@ -80,7 +78,7 @@ int main( int argc , char ** argv )
 	{
 		if (x[6]>=x[2] && y[6]>=y[2] && y[5]<=y[1] && x[5]<=x[4])
 		{
-			//cout << "here3" << '\n';
+			
 			cout << "NO" << '\n';
 			return 0;
 		}
@@ -90,8 +88,6 @@ int main( int argc , char ** argv )
 	{
 		if (x[6]>=x[3] && y[6]>=y[2] && y[5]<=y[1] && x[5]<=x[1])
 		{
-		//cout << "here4" << '\n';
-
 			cout << "NO" << '\n';
 			return 0;
 		}
@@ -101,8 +97,6 @@ int main( int argc , char ** argv )
 	{
 		if (x[6]>=x[2] && x[5]<=x[1] && y[5]<=y[1] && y[6]>=y[3])
 		{
-		//cout << "here5" << '\n';
-
 			cout << "NO" << '\n';
 			return 0;
 		}
@@ -112,8 +106,6 @@ int main( int argc , char ** argv )
 	{
 		if (x[4]>=x[2] && x[3]<=x[1] && y[5]<=y[4] && y[6]>=y[2])
 		{
-			//cout << "here6" << '\n';
-
 			cout << "NO" << '\n';
 			return 0;
 		}
