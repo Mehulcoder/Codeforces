@@ -35,27 +35,60 @@ typedef unordered_set<int> useti;
 #define MOD 1000000007
 
 
-
 int main( int argc , char ** argv )
 {
 	ios_base::sync_with_stdio(false) ; 
 	cin.tie(NULL) ; 
 	
-	int n, k;
-	cin>>n>>k;
+	int t;
+	cin>>t;
+	while(t--){
+		int n;
+		cin>>n;
+		int evecount = 0;
+		int evenotpal = 0;
+		int oddcount = 0;
+		int ans = 0;
 
-	vector<int> weight(n, 0);
-	vector<int>* edges = new vector<int>[n-1];
+		for (int i = 0; i < n; ++i)
+		{
+			string s;
+			cin>>s;
+			if (s.size()%2==0)
+			{
+				int zero = 0;
+				int one = 0;
+				for (int j = 0; j < s.size(); ++j)
+				{
+					if (s[j]=='1')
+					{
+						one++;
+					}else{
+						zero++;
+					}
+				}
 
-	for (int i = 0; i < n-1; ++i)
-	{
-		int a, b;
-		cin>>a>>b;
-		edges[a-1].push_back(b-1);
-		edges[b-1].push_back(a-1);
+				if (one%2!=0)
+				{
+					evenotpal++;
+				}else{
+					evecount++;
+				}
+
+			}else{
+				oddcount++;
+				//ans++;
+			}
+		}
+
+		if (oddcount>0)
+		{
+			cout<<n<<endl;;
+		}else{
+			cout << evecount+(evenotpal/2)*2 << '\n';
+		}
 	}
 
-	
 
 
 	return 0 ; 

@@ -34,28 +34,61 @@ typedef unordered_set<int> useti;
 #define s second
 #define MOD 1000000007
 
-
+int arr[1000000];
 
 int main( int argc , char ** argv )
 {
 	ios_base::sync_with_stdio(false) ; 
 	cin.tie(NULL) ; 
 	
-	int n, k;
-	cin>>n>>k;
+	int t;
+	cin>>t;
+	while(t--){
+		string s;
+		cin>>s;
+		int n = s.size();
+		for (int i = 0; i < n; ++i)
+		{
+			arr[i] = s[i] - '0';
+		}
 
-	vector<int> weight(n, 0);
-	vector<int>* edges = new vector<int>[n-1];
+		// for (int i = 0; i < n; ++i)
+		// {
+		// 	cout << arr[i] << '\n';
+		// }
+		
+		int start = 0;
+		while(start!=n-1){
+			int next = arr[start+1];
+			int now = arr[start];
 
-	for (int i = 0; i < n-1; ++i)
-	{
-		int a, b;
-		cin>>a>>b;
-		edges[a-1].push_back(b-1);
-		edges[b-1].push_back(a-1);
+			if (abs(next%2-now%2)==1 && next<now)
+			{
+				swap(arr[start+1], arr[start]);
+				int leftmover = start;
+				while(leftmover!=0)
+				{
+					int prev = arr[leftmover-1];
+					int rn = arr[leftmover];
+
+					if (abs(rn%2-prev%2) == 1 && prev>rn)
+					{
+						swap(arr[leftmover-1], arr[leftmover]);
+					}
+					leftmover--;
+				}
+			}
+
+			start++;
+		}
+
+		for (int i = 0; i < n; ++i)
+		{
+			cout << arr[i];
+		}
+		cout << '\n';
+
 	}
-
-	
 
 
 	return 0 ; 

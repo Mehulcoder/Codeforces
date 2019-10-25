@@ -34,28 +34,38 @@ typedef unordered_set<int> useti;
 #define s second
 #define MOD 1000000007
 
-
+char matrix[101][101];
 
 int main( int argc , char ** argv )
 {
 	ios_base::sync_with_stdio(false) ; 
 	cin.tie(NULL) ; 
 	
-	int n, k;
-	cin>>n>>k;
+	int n;
+	cin>>n;
 
-	vector<int> weight(n, 0);
-	vector<int>* edges = new vector<int>[n-1];
-
-	for (int i = 0; i < n-1; ++i)
+	for (int i = 1; i <= n; ++i)
 	{
-		int a, b;
-		cin>>a>>b;
-		edges[a-1].push_back(b-1);
-		edges[b-1].push_back(a-1);
+		for (int j = 1; j <= n; ++j)
+		{
+			if ((i+j)%2==0)
+			{
+				matrix[i][j] = 'B';
+			}else{
+				matrix[i][j] = 'W';
+			}
+		}
 	}
 
-	
+	for (int i = 1; i <= n; ++i)
+	{
+		for (int j = 1; j <= n; ++j)
+		{
+			cout << matrix[i][j] ;
+		}
+		cout <<'\n';
+	}
+
 
 
 	return 0 ; 

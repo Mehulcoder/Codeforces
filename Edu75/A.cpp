@@ -35,27 +35,49 @@ typedef unordered_set<int> useti;
 #define MOD 1000000007
 
 
-
 int main( int argc , char ** argv )
 {
 	ios_base::sync_with_stdio(false) ; 
 	cin.tie(NULL) ; 
 	
-	int n, k;
-	cin>>n>>k;
+	int t;
+	cin>>t;
+	while(t--){
+		set<char> undefected;
+		set<char> maybedefected;
 
-	vector<int> weight(n, 0);
-	vector<int>* edges = new vector<int>[n-1];
+		
+		string s;
+		cin>>s;
+		int n = s.size();
+		int i = 0;
+		while(i<n){
+			if (s[i]!=s[i+1])
+			{
+				undefected.insert(s[i]);
+				i++;
+			}else{
+				maybedefected.insert(s[i]);
+				i = i+2;
+			}
+		}
 
-	for (int i = 0; i < n-1; ++i)
-	{
-		int a, b;
-		cin>>a>>b;
-		edges[a-1].push_back(b-1);
-		edges[b-1].push_back(a-1);
+		auto it1 = undefected.begin();
+		auto it2 = maybedefected.begin();
+		while(it1!=undefected.end()){
+			cout << *it1 ;
+			it1++;
+		}
+
+		// while(it2!=maybedefected.end()){
+		// 	if (undefected.find((*it2)) == undefected.end())
+		// 	{
+		// 		cout<<*it2;
+		// 	}
+		// 	it2++;
+		// }
+		cout << '\n';
 	}
-
-	
 
 
 	return 0 ; 
