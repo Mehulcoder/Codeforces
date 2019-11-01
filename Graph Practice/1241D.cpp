@@ -64,9 +64,10 @@ int main( int argc , char ** argv )
     else cout << 1;
 	
 
-
+   
 
 	return 0 ; 
+
 
 
 
