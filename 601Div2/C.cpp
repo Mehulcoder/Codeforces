@@ -25,7 +25,7 @@ typedef pair<int, int> pii;
 typedef pair<long long, long long> pll;
 typedef unordered_set<int> useti;
 
-#define DEBUG(x) cout << '>' << #x << ':' << x << endl;
+#define debug(x) cout << '>' << #x << ':' << x << endl;
 #define uset unordered_set
 #define it iterator
 #define mp make_pair
@@ -44,20 +44,20 @@ int main( int argc , char ** argv )
 	int n;
 	cin>>n;
 
-	vector<set<int>> v1(n-2);
-	vector<set<int>> v1(n);
+	vector<vector<int>> v1(n-2);
+	vector<vector<int>> v2(n);
 	for (int i = 0; i < n-2; ++i)
 	{
 		int a, b, c;
 		cin>>a>>b>>c;
 
-		v1[i].insert(a-1);
-		v1[i].insert(b-1);
-		v1[i].insert(c-1);
+		v1[i].push_back(a-1);
+		v1[i].push_back(b-1);
+		v1[i].push_back(c-1);
 
-		v2[a-1].insert(i);
-		v2[b-1].insert(i);
-		v2[c-1].insert(i);
+		v2[a-1].push_back(i);
+		v2[b-1].push_back(i);
+		v2[c-1].push_back(i);
 	}
 
 	vector<int> freq(n, 0);
@@ -80,8 +80,67 @@ int main( int argc , char ** argv )
 
 	ans[0] = ends[0];
 	ans[n-1] = ends[1];
+	// debug(ans[n-1])
 
-	int temp = *(ans[0].begin());
+	int temp = (v2[ans[0]][0]);
+	// debug(temp)
+	// debug(ans[0])
+
+	for(auto num : v1[temp]){
+		if (v2[num].size() == 2)
+		{
+			ans[1] = num;
+			break;
+		}
+	}
+
+	// debug(ans[1])
+	unordered_map<int, int> m1;
+	for (int i = 0; i < n-3; ++i)
+	{
+		int a,b;
+		a = ans[i];
+		b = ans[i+1];
+
+		// debug(a);
+		// debug(b)
+		int common;
+		for (int j = 0; j < v2[a].size(); ++j)
+		{
+			int c1 = v2[a][j];
+			for (int k = 0; k < v2[b].size(); ++k)
+			{
+				if (v2[b][k]==c1 && m1[c1]==0)
+				{
+					common = c1;
+					break;
+				}	
+			}
+		}
+		m1[common]++;
+		// debug(common)
+		// debug(m1[common])
+
+		// debug(v1[common][2])
+
+		for (int j = 0; j < v1[common].size(); ++j)
+		{
+			if (v1[common][j]!=a && v1[common][j]!=b)
+			{
+				// debug(a)
+				// debug(b)
+				ans[i+2] = v1[common][j];
+				// debug(i);
+				// debug(ans[i+2])
+			}
+		}
+	}
+
+	for (int i = 0; i < n; ++i)
+	{
+		cout << ans[i]+1 << ' ';
+	}
+	cout <<'\n';
 
 
 	
