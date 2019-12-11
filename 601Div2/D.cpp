@@ -42,7 +42,7 @@ int main( int argc , char ** argv )
 	cin.tie(NULL) ; 
 	
 	int t;
-	ci>>t;
+	cin>>t;
 
 	while(t--){
 		int r,c,k;
@@ -91,7 +91,7 @@ int main( int argc , char ** argv )
 				if (v1[i][J]=='R')
 				{
 					hisrice++;
-					if (hisrice==av+(diff>0))
+					if (hisrice==av+(diff>0) && count+1<k)
 					{
 						count++;
 						hisrice = 0;
@@ -111,6 +111,7 @@ int main( int argc , char ** argv )
 			}
 			cout << '\n';
 		}
+		// cout <<  '\n';
 	}
 	
 
