@@ -35,72 +35,29 @@ typedef unordered_set<int> useti;
 #define s second
 #define MOD 1000000007
 
+int n;
+int a[200005];
+int l[200005];
+int r[200005];
+int ans;
 
-int main( int argc , char ** argv )
+int main()
 {
-	ios_base::sync_with_stdio(false) ; 
-	cin.tie(NULL) ; 
-	
-	int n;
-	cin>>n;
-
-	vector<int> v1(n,0);
-	for (int i = 0; i < n; ++i)
+	cin >> n;
+	for (int i=1; i<=n; i++) cin >> a[i];
+	for (int i=1; i<=n; i++)
 	{
-		cin>>v1[i]
+		if (a[i]>a[i-1]) l[i]=l[i-1]+1;
+		else l[i]=1;
 	}
-
-	int* breakpoint = new int[n];
-	int* iskaa = new int[n];
-	for (int i = 0; i < n; ++i)
+	for (int i=n; i>=1; i--)
 	{
-		breakpoint[i] = 0;
-		iskaa[i] = 0;
+		if (a[i]<a[i+1]) r[i]=r[i+1]+1;
+		else r[i]=1;
 	}
-
-
-	queue<int> q1;
-	for (int i = 0; i < n-1; ++i)
-	{
-		if (v1[i]<=v1[i+1])
-		{
-			breakpoint[i+1]++;
-			q1.push(i+1);
-		}
-	}
-
-	int start = 0;
-	int left = 0;
-	while(q.size()!=0){
-		int t = q.top();
-		q.pop();
-		while(start<t){
-			iskaa[start] = (t-left);
-			start++;
-		}
-		left = t;
-	}
-
-	int count = 1;
-	for (int i = 0; i < n-1; ++i)
-	{
-		if (v1[i+1]>v1[i])
-		{
-			count++;
-			iskaa[i] = count;
-			count++;
-		}else{
-			count = 1;
-			iskaa[i] = count;
-		}
-	}
-	
-
-
-
-	return 0 ; 
-
-
-
+	ans=*max_element(l+1,l+n+1);
+	for (int i=1; i<=n; i++) ans=max(ans,a[i-1]<a[i+1]?l[i-1]+r[i+1]:0);
+	cout << ans << endl;
+	return 0;
 }
 
