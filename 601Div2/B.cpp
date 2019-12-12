@@ -67,8 +67,9 @@ int main( int argc , char ** argv )
 
 		for (int i = 1; i <= n; ++i)
 		{
-			i, i%n+1
+			cout<<i<<" "<<(i%n+1)<<endl;
 		}
+
 
 	}
 	
