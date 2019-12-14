@@ -1,11 +1,5 @@
-10
-onetwonetwooneooonetwooo
-two
-one
-twooooo
-ttttwo
-ttwwoo
-ooone
-onnne
-oneeeee
-oneeeeeeetwooooo
+4
+onetwone
+testme
+oneoneone
+twotwo
