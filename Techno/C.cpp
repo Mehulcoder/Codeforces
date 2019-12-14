@@ -44,9 +44,13 @@ void computeLPSArray(char* pat, int M, int* lps);
 // Prints occurrences of txt[] in pat[] 
 void KMPSearch(char* pat, char* txt, vector<int> &indexes) 
 { 
-    int M = strlen(pat); 
+    int M = strlen(pat);
+    // DEBUG(M)
+    // DEBUG(pat)
     int N = strlen(txt); 
   
+    // DEBUG(N)
+    // DEBUG(txt)
     // create lps[] that will hold the longest prefix suffix 
     // values for pattern 
     int lps[M]; 
@@ -59,7 +63,7 @@ void KMPSearch(char* pat, char* txt, vector<int> &indexes)
     while (i < N) { 
         if (pat[j] == txt[i]) { 
             j++; 
-            i++; 
+            i++;
         } 
   
         if (j == M) {
@@ -127,15 +131,16 @@ int main( int argc , char ** argv )
 	while(t--){
 		string input;
 		cin>>input;
-		char s[input.size()];
+		char* s = new char[input.size()+1];
 		for (int i = 0; i < input.size(); ++i)
 		{
 			s[i] = input[i];
 		}
+		s[input.size()] = '\0';
 
-		char s1[] = "one";
-		char s2[] = "two";
-		char s3[] = "twone";
+		char s1[] = "one\0";
+		char s2[] = "two\0";
+		char s3[] = "twone\0";
 		vector<int> one;
 		vector<int> two;
 		vector<int> twone;
