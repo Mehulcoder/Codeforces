@@ -35,6 +35,15 @@ typedef unordered_set<int> useti;
 #define s second
 #define MOD 1000000007
 
+void dbg_out() { cerr << endl; }
+template<typename Head, typename... Tail> void dbg_out(Head H, Tail... T) { cerr << ' ' << H; dbg_out(T...); }
+
+#ifdef NEAL
+#define dbg(...) cerr << "(" << #__VA_ARGS__ << "):"; dbg_out(__VA_ARGS__)
+#else
+#define dbg(...)
+#endif
+
 
 int main( int argc , char ** argv )
 {
@@ -83,6 +92,8 @@ int main( int argc , char ** argv )
 	{
 		cout << -1 ;
 	}
+
+	dbg_out(a, b);
 
 	for (int i = 0; i < n && flag == 1; ++i)
 	{
