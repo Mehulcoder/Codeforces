@@ -55,4 +55,7 @@ int main(){
                 cout<<i+1<<endl;
         }
     }
+
+    cerr << "Time elapsed : " << 1.0 * clock() / CLOCKS_PER_SEC << " sec \n";
+    return 0;
 }
