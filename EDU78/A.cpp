@@ -41,7 +41,52 @@ int main( int argc , char ** argv )
 	ios_base::sync_with_stdio(false) ; 
 	cin.tie(NULL) ; 
 	
+	int t;
+	cin>>t;
+	while(t--){
+		string s1, s2;
+		cin>>s1>>s2;
 
+		map<int, int> m1;
+		for (int i = 0; i < s1.size(); ++i)
+		{
+			m1[s1[i]-'a']++;
+		}
+
+		int flag = 0;
+
+		for (int start = 0; start < s2.size(); ++start)
+		{
+			for (int end = s2.size()-1; end >= start; --end)
+			{
+				// set<int> b;
+				map<int, int> m2;
+				for (int i = start; i <= end; ++i)
+				{
+					// b.insert(s2[i]-'a');
+					m2[s2[i]-'a']++;
+				}
+
+				if (m1==m2)
+				{
+					cout << "YES" << '\n';
+					flag = 1;
+					break;
+				}
+			}
+
+			if (flag==1)
+			{
+				break;
+			}
+		}
+
+		if (flag==0)
+		{
+			cout << "NO" << '\n';
+		}
+		
+	}
 	
 
 

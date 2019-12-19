@@ -62,14 +62,17 @@ int main( int argc , char ** argv )
 		// cout << a << '\n';
 
 		long double k = 0;
-		k = (-1.0+sqrt(1.0+8.0*b))/2.0;
+		int p1 = 0;
+		while(1){
+			k = (-1.0+sqrt(1.0+4.0*(4.0*p1+2.0*b)))/2.0;
+			if (floor(k)*1.0 == k)
+			{
+				cout << k << '\n';
+				break;
+			}
 
-		operations = floor(k);
-		int next = operations+1;
-		cout << next << '\n';
-		a+=((operations)*(operations+1))/2;
-		cout << a<<" "<<b << '\n';
-
+			p1++;
+		}
 
 		// cout << operations << '\n';
 	}
