@@ -1,54 +1,31 @@
-/*
-
-				Name: Mehul Chaturvedi
-				IIT-Guwahati
-
-*/
-
-/*
-				PROBLEM STATEMENT
-
-*/
-
-#include <bits/stdc++.h>
-using namespace std;
-
-typedef long long ll;
-typedef unordered_map<int, int> umapii;
-typedef unordered_map<int, bool> umapib;
-typedef unordered_map<string, int> umapsi;
-typedef unordered_map<string, string> umapss;
-typedef map<string, int> mapsi;
-typedef map<pair<int, int>, int> mappiii;
-typedef map<int, int> mapii;
-typedef pair<int, int> pii;
-typedef pair<long long, long long> pll;
-typedef unordered_set<int> useti;
-
-#define debug(x) cout << '>' << #x << ':' << x << endl;
-#define uset unordered_set
-#define it iterator
-#define mp make_pair
-#define pb push_back
-#define all(x) (x).begin(), (x).end()
-#define f first
-#define s second
-#define MOD 1000000007
-
-
-int main( int argc , char ** argv )
-{
-	ios_base::sync_with_stdio(false) ; 
-	cin.tie(NULL) ; 
-	
-	
-	
-
-
-
-	return 0 ; 
-
-
-
-}
-
+    #include <iostream>
+    #include <string>
+    #include <vector>
+    #include <fstream>
+    #include <algorithm>
+    #include <math.h>
+    #include <map>
+    using namespace std;
+     
+    map<string,int> m;
+    string s[1505];
+    int ans=0;
+    int main(){
+    int n,k;cin>>n>>k;
+    for(int i=0;i<n;i++){
+     cin>>s[i];
+     m[s[i]]++;
+    }
+    for(int i=0;i<n;i++)
+    for(int j=i+1;j<n;j++){
+        string t="";
+        for(int a=0;a<k;a++){
+            if(s[i][a]==s[j][a])t+=s[i][a];
+            else if(s[i][a]!='S'&&s[j][a]!='S')t+='S';
+            else if(s[i][a]!='T'&&s[j][a]!='T')t+='T';
+            else t+='E';
+        }
+        ans+=m.count(t);
+    }
+    cout<<ans/3;
+    }

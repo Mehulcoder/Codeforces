@@ -1,7 +1,2 @@
-3
-12
-APPAPPPAPPPP
-3
-AAP
-3
-PPA
+7
+1 0 0 5 0 0 2
