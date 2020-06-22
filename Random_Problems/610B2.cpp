@@ -91,51 +91,6 @@ int begtime = clock();
 #define end_routine()
 #endif
 
-int T, n, m;
-vector<pii> edges[5005];
-int dp[5005][5005];
-int parent[5005][5005];
-bool visited[5005];
-
-//Minimum cost ending at u and covering k vertices
-int dfs(int u, int k, int currParent){
-
-	
-	if (u==1 && k!=1)
-	{
-		return 1e9;
-	}else if (u==1 && k==1)
-	{
-		return 0;
-	}
-	if (u>1 && k<1)
-	{
-		return 1e9;
-	}
-
-	// trace(u, k);
-	if (dp[u][k]!=-1)
-	{
-		return dp[u][k];
-	}
-
-	dp[u][k] = T+5;
-	trav(par, edges[u]){
-		if (par.f == currParent)
-		{
-			continue;
-		}
-		int temp = dfs(par.f, k-1, u);
-		if (dp[u][k]>=par.s+temp)
-		{
-			parent[u][k] = par.f;
-			dp[u][k] = par.s+temp;
-
-		}
-	}
-
-	return dp[u][k];
-}
 
 int main( int argc , char ** argv )
 {
@@ -146,46 +101,40 @@ int main( int argc , char ** argv )
 	#endif
 
     int t;
-    cin>>n>>m>>t;
-
-    T=t;
-    //Take in the input
-    rep(i, m){
-    	int a, b, w;
-    	cin>>a>>b>>w;
-    	edges[b].push_back({a, w});
-    }
-
-    //Fill dp and parent matrix
-    fil(dp, -1);
-    int start;
-    frr(i, n, 1){
-    	int temp = dfs(n, i, n);
-    	if (temp<=t)
-    	{
-    		start = i;
-    		cout << i << '\n';
-    		break;
+    
+    cin>>t;
+    while(t--){
+    	int n, p, k;
+    	cin>>n>>p>>k;
+    	vector<int> a(n);
+    	rep(i, n){
+    		cin>>a[i];
     	}
-    }
-    vector<int> ans;
-    int val = n;
-    ans.push_back(n);
-    while(1){
-    	val = parent[val][start--];
-    	ans.push_back(val);
-    	if (val==1)
-    	{
-    		break;
+    	vector<int> dp(n+1, 0);
+    	sort(all(a));
+    	fr(i, 1, k-1){
+    		dp[i] = a[i-1]+dp[i-1];
     	}
+
+    	fr(i, k, n){
+    		dp[i] = dp[i-k]+a[i-1];
+    	}
+
+
+    	int prev = 0;
+    	trace(p,k,  dp);
+    	repr(i, n){
+    		int elem = dp[i];
+    		if (dp[i]<=p)
+    		{
+    			cout << i << '\n';
+    			break;
+    		}
+    	}
+ 
+
     }
-    repr(i, ans.size()-1){
-    	cout << ans[i] << ' ';
-    }
-
-
-
-
+	//Code Goes here
 	
 	#ifdef mehul
     end_routine();
