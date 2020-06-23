@@ -84,7 +84,7 @@ void __f(const char *names, Arg1 &&arg1, Args &&... args) {
 }
 #define trace(...) cout<<"Line:"<<__LINE__<<" "; __f(#__VA_ARGS__, __VA_ARGS__)
 int begtime = clock();
-#define end_routine() cout << "\n\nTime elapsed: " << (clock() - begtime)*1000/CLOCKS_PER_SEC << " ms\n\n";
+#define end_routine() cout << "\n\nTime elapsed: " << fixed  << double(clock() - begtime)*1000/double(CLOCKS_PER_SEC) << setprecision(12) << " ms\n\n";
 #else
 #define endl '\n'
 #define trace(...)
@@ -101,7 +101,7 @@ int main( int argc , char ** argv )
 	#endif
 
     int t;
-    
+
     cin>>t;
     while(t--){
     	int n, p, k;
@@ -119,7 +119,6 @@ int main( int argc , char ** argv )
     	fr(i, k, n){
     		dp[i] = dp[i-k]+a[i-1];
     	}
-
 
     	int prev = 0;
     	trace(p,k,  dp);
