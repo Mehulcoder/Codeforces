@@ -103,18 +103,47 @@ int main( int argc , char ** argv )
     int t;
     cin>>t;
 
-
     while(t--){
     	int n;
     	cin>>n;
-    	if (n%2==0)
-    	{
-    		cout << n/2 << '\n';
-    	}else{
-    		cout << (n-1)/2 << '\n';
-    	}
-    }
 
+    	string s1;
+    	int index = 0;
+    	cin>>s1;
+
+    	int start1 = 0;
+    	int last1 = s1.size()-1;
+    	string temp0 = "";
+    	string temp1 = "";
+
+    	if (start1<n && s1[start1] == '0')
+    	{
+    		while(start1<n && s1[start1] == '0'){
+    			temp0+='0';
+    			start1++;
+    		}
+    	}
+
+    	if (last1>=0 && s1[last1]=='1')
+    	{
+    		while(last1>=0 && s1[last1]=='1'){
+    			temp1+='1';
+    			last1--;
+    		}
+    	}
+
+    	if (temp1.size()+temp0.size() == s1.size())
+    	{
+    		cout << temp0+temp1 << '\n';
+    		continue;
+    	}
+
+    	cout << temp0+'0'+temp1 << '\n';
+
+
+    }
+	//Code Goes here
+	
 	#ifdef mehul
     end_routine();
 	#endif

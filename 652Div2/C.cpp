@@ -91,7 +91,6 @@ int begtime = clock();
 #define end_routine()
 #endif
 
-
 int main( int argc , char ** argv )
 {
 	ios_base::sync_with_stdio(false) ; 
@@ -99,22 +98,43 @@ int main( int argc , char ** argv )
 	#ifdef mehul
     freopen("input.txt", "r", stdin);
 	#endif
-
     int t;
     cin>>t;
 
-
     while(t--){
-    	int n;
-    	cin>>n;
-    	if (n%2==0)
-    	{
-    		cout << n/2 << '\n';
-    	}else{
-    		cout << (n-1)/2 << '\n';
-    	}
-    }
+    	int N, K;
+	    cin >> N >> K;
+	    vector<int64_t> A(N);
+	 
+	    for (auto &a : A)
+	        cin >> a;
+	 
+	    sort(A.begin(), A.end());
+	    vector<int> W(K);
+	 
+	    for (auto &w : W)
+	        cin >> w;
+	 
+	    sort(W.rbegin(), W.rend());
+	    int first = 0, last = N - 1;
+	    int64_t answer = 0;
+	 
+	    for (int w : W)
+	        if (w > 1) {
+	            answer += A[first];
+	            first += w - 1;
+	        }
+	 
+	    reverse(W.begin(), W.end());
+	 
+	    for (int w : W)
+	        answer += (w == 1 ? 2 : 1) * A[last--];
+	 
+	    cout << answer << '\n';
 
+    }
+	//Code Goes here
+	
 	#ifdef mehul
     end_routine();
 	#endif

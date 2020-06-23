@@ -103,18 +103,72 @@ int main( int argc , char ** argv )
     int t;
     cin>>t;
 
-
     while(t--){
-    	int n;
-    	cin>>n;
-    	if (n%2==0)
-    	{
-    		cout << n/2 << '\n';
-    	}else{
-    		cout << (n-1)/2 << '\n';
+    	trace(t);
+    	int k;
+    	cin>>k;
+    	int n=2*k;
+    	vector<int> v(n, 0);
+    	vector<int> oddIndex;
+    	vector<int> eveIndex;
+    	int odd = 0;
+    	int even = 0;
+    	trace(n);
+    	rep(i, n){
+    		cin>>v[i];
+    		if (v[i]%2==0)
+    		{
+    			v[i] = 0;
+    			even++;
+    			eveIndex.push_back(i+1);
+    		}else{
+    			v[i] = 1;
+    			odd++;
+    			oddIndex.push_back(i+1);
+    		}
     	}
-    }
+    	trace(oddIndex, eveIndex);
+    	if (odd%2==0)
+    	{
+    		if (odd!=0)
+    		{
+    			oddIndex.pop_back();
+    			oddIndex.pop_back();
+    		}else{
+    			eveIndex.pop_back();
+    			eveIndex.pop_back();
+    		}
+    	}else{
+    		oddIndex.pop_back();
+    		eveIndex.pop_back();
+    	}
+    	trace(oddIndex, eveIndex);
 
+    	int start = 0;
+    	if (oddIndex.size()==1 && eveIndex.size()==1)
+    	{
+    		cout << oddIndex[0]<<" "<<eveIndex[0] << '\n';
+    		continue;
+    	}
+
+    	while(start+1<oddIndex.size()){
+    		cout << oddIndex[start]<<" "<<oddIndex[start+1] << '\n';
+    		start+=2;
+    	}
+
+    	start = 0;
+
+    	while(start+1<eveIndex.size()){
+    		cout << eveIndex[start]<<" "<<eveIndex[start+1] << '\n';
+    		start+=2;
+    	}
+
+
+
+
+    }
+	//Code Goes here
+	
 	#ifdef mehul
     end_routine();
 	#endif

@@ -100,21 +100,22 @@ int main( int argc , char ** argv )
     freopen("input.txt", "r", stdin);
 	#endif
 
-    int t;
-    cin>>t;
+	int t;
+	cin>>t;
+	while(t--){
+		int n;
+		cin>>n;
 
+		if (n%4==0)
+		{
+			cout << "YES" << '\n';
+		}else{
+			cout << "NO" << '\n';
+		}
+	}
 
-    while(t--){
-    	int n;
-    	cin>>n;
-    	if (n%2==0)
-    	{
-    		cout << n/2 << '\n';
-    	}else{
-    		cout << (n-1)/2 << '\n';
-    	}
-    }
-
+	//Code Goes here
+	
 	#ifdef mehul
     end_routine();
 	#endif

@@ -91,6 +91,32 @@ int begtime = clock();
 #define end_routine()
 #endif
 
+string helper(int n, string s1, string s2){
+	if (n==1)
+	{
+		return s2;
+	}
+	if (n==2)
+	{
+		return s1;
+	}
+
+	if (n%2!=0)
+	{
+		return s1;
+	}
+
+	for (int i = 3; i <= n; i+=2)
+	{
+		if (n%i==0)
+		{
+			return helper(n/i, s2, s1);
+		}
+	}
+
+	return s2;
+}
+
 
 int main( int argc , char ** argv )
 {
@@ -100,25 +126,22 @@ int main( int argc , char ** argv )
     freopen("input.txt", "r", stdin);
 	#endif
 
-    int t;
-    cin>>t;
+	int t;
+	cin>>t;
 
+	while(t--){
+		int n;
+		cin>>n;
 
-    while(t--){
-    	int n;
-    	cin>>n;
-    	if (n%2==0)
-    	{
-    		cout << n/2 << '\n';
-    	}else{
-    		cout << (n-1)/2 << '\n';
-    	}
-    }
+		string ans = helper(n, "Ashishgup", "FastestFinger");
+		cout << ans << '\n';
+	}
 
+	//Code Goes here
+	
 	#ifdef mehul
     end_routine();
 	#endif
  
     return 0 ; 
 }
-
