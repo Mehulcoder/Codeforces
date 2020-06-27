@@ -91,6 +91,51 @@ int begtime = clock();
 #define end_routine()
 #endif
 
+// 1 2 3 4  2,3
+bool get(int val, int k, auto &v, int eveOdd, auto &result){
+	int start = 1;
+	if (eveOdd)
+	{
+		//Odd elements will be checked
+		rep(i, v.size()){
+			if (start%2!=0)
+			{
+				if (v[i]<=val)
+				{
+					result.push_back(v[i]);
+					start++;
+				}
+			}else{
+				result.push_back(v[i]);
+				start++;
+			}
+		}
+	}else{
+		//Even elements will be checked
+		rep(i, v.size()){
+			if (start%2==0)
+			{
+				if (v[i]<=val)
+				{
+					result.push_back(v[i]);
+
+					start++;
+				}
+			}else{
+				result.push_back(v[i]);
+
+				start++;
+			}
+		}
+	}
+
+	if (start>k)
+	{
+		return 1;
+	}
+
+	return 0;
+}
 
 int main( int argc , char ** argv )
 {
@@ -100,102 +145,33 @@ int main( int argc , char ** argv )
     freopen("input.txt", "r", stdin);
 	#endif
 
-	int n, m;
-	cin>>n>>m;
+    int n, k;
+    cin>>n>>k;
+    vector<ll> v(n);
+    rep(i, n){
+    	cin>>v[i];
+    }
 
-	vector<int> quantity(n);
-	vector<bool> visited(m, 0);
-	rep(i, n){
-		cin>>quantity[i];
-	}
-	trace(quantity);
-	vector<pii> favouriteFood(m);
-	vector<vector<int>> foodLikedBy(n);
-	rep(i, m){
-		int a, b;
-		cin>>a>>b;
-		a--;
-		b--;
-		favouriteFood[i] = {a, b};
-		foodLikedBy[a].push_back(i);
-		foodLikedBy[b].push_back(i);
-		quantity[a]--;
-		quantity[b]--;
-	}
+    ll left = *min_element(all(v));
+    ll right = *max_element(all(v));
+    
+    ll ans = INT_MIN;
 
-	trace(quantity);
-	trav(group, foodLikedBy){
-		trace(group);
-	}
-
-	queue<int> friendOrder;
-	vector<int> rEatingOrder;
-	//Iterate on food
-	rep(i, m){
-		if (!visited[i] && (quantity[favouriteFood[i].f]>=0 || quantity[favouriteFood[i].s]>=0))
-		{
-			visited[i] = 1;
-			friendOrder.push(i);
-			rEatingOrder.push_back(i+1);
-			// trace(i);
-		}
-	}
-	// trace(favouriteFood);
-	trav(food, favouriteFood){
-		trace(food);
-	}
-	while(!friendOrder.empty()){
-		int currPerson = friendOrder.front();
-		trace(currPerson);
-		friendOrder.pop();
-		//Food left before he ate(The best possible case)
-		quantity[favouriteFood[currPerson].f]++;
-		quantity[favouriteFood[currPerson].s]++;
-		int x = quantity[favouriteFood[currPerson].f];
-		int y = quantity[favouriteFood[currPerson].s];
-		trace(quantity);
-		if (x==0)
-		{
-			trav(prevPerson, foodLikedBy[favouriteFood[currPerson].f]){
-				if (!visited[prevPerson])
-				{
-					friendOrder.push(prevPerson);
-					rEatingOrder.push_back(prevPerson+1);
-					visited[prevPerson] = 1;
-				}
-			}
-		}
-
-		if (y==0)
-		{
-			trav(prevPerson, foodLikedBy[favouriteFood[currPerson].s]){
-				if (!visited[prevPerson])
-				{
-					friendOrder.push(prevPerson);
-					rEatingOrder.push_back(prevPerson+1);
-					visited[prevPerson] = 1;
-				}
-			}	
-		}
-	}
-
-
-	reverse(all(rEatingOrder));
-	trace(rEatingOrder);	
-	if (rEatingOrder.size()!=m)
-	{
-		cout << "DEAD" << '\n';
-		return 0;
-	}
-	cout << "ALIVE" << '\n';
-	trav(friends, rEatingOrder){
-		cout << friends << ' ';
-	}
-	cout <<'\n';
-
-
-	
-
+    while(left<=right){
+	    vector<ll> temp1;
+	    vector<ll> temp2;
+    	ll mid = (left+right)/2;
+    	trace(mid);
+    	if (get(mid, k, v, 0, temp1) || get(mid, k, v, 1, temp2))
+    	{
+    		ans = mid;
+	    	right = mid-1;
+    	}else{
+    		left = mid+1;
+    	}
+    	trace(temp1, temp2);
+    }
+    cout << ans << '\n';
 	//Code Goes here
 	
 	#ifdef mehul
@@ -204,5 +180,4 @@ int main( int argc , char ** argv )
  
     return 0 ; 
 }
-
 
