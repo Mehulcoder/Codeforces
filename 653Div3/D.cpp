@@ -45,7 +45,7 @@ typedef unordered_set<int> useti;
 
 
 #define sz(x) (int)(x).size()
-template<typename T,typename U>inline bool exist(T &cont,U &val){return cont.find(val)!=cont.end();}
+ 
 #define fr(i, a, b) for (int i = (a), _b = (b); i <= _b; i++)
 #define rep(i, n) for (int i = 0, _n = (n); i < _n; i++)
 #define repr(i, n) for (int i = n; i >= 0; i--)
@@ -93,7 +93,6 @@ int begtime = clock();
 #define end_routine()
 #endif
 
-//Custom has for unordered map
 struct custom_hash {
     static uint64_t splitmix64(uint64_t x) {
         // http://xorshift.di.unimi.it/splitmix64.c
@@ -117,7 +116,50 @@ int main( int argc , char ** argv )
     freopen("input.txt", "r", stdin);
 	#endif
 
-	//Code Goes here
+
+	int t;
+	cin>>t;
+	while(t--){
+		ll n, k;
+		cin>>n>>k;
+
+		vector<ll> v1(n);
+		rep(i, n){
+			cin>>v1[i];
+		}
+
+
+		unordered_map<ll, ll, custom_hash> m1;
+
+		ll curr = 0;
+		ll temp = 0;
+		trav(elem, v1){
+			if (elem%k==0)
+			{
+				continue;
+			}
+
+			temp = ((elem/k)+1)*k-elem;
+				
+			if (m1.find(temp)==m1.end())
+			{
+				m1[temp] = temp;
+				curr = max(curr, temp);
+			}else{
+				m1[temp]+=k;
+				curr = max(curr, m1[temp]);
+			}
+			
+		}
+
+		if (curr==0)
+		{
+			cout << 0 << '\n';
+			continue;
+		}
+
+		cout << curr+1 << '\n';
+	}
 	
 	#ifdef mehul
     end_routine();
