@@ -92,7 +92,21 @@ int begtime = clock();
 #define trace(...)
 #define end_routine()
 #endif
-
+ll power(ll x, ll y) 
+{ 
+    ll res = 1; // Initialize result 
+  
+    while (y > 0) { 
+        // If y is odd, multiply x with result 
+        if (y & 1) 
+            res = res * x; 
+  
+        // n must be even now 
+        y = y >> 1; // y = y/2 
+        x = x * x; // Change x to x^2 
+    } 
+    return res; 
+} 
 
 int main( int argc , char ** argv )
 {
@@ -101,35 +115,39 @@ int main( int argc , char ** argv )
 	#ifdef mehul
     freopen("input.txt", "r", stdin);
 	#endif
-    int t;
-    cin>>t;
-    while(t--) {
-        int n,arr[200009];
-        cin>>n;
-        vector<pair<int,int> >v;
-        for(int f=0;f<n;f++) {
-            cin>>arr[f];
-            v.push_back({arr[f],-f});
-        }
-        sort(v.begin(),v.end());
-        int i=0,ans=0;
-        set<int>s;
-        set<int>s1;
-        for(int f=0;f<n;f++) {
-            if(v[f].first!=v[f-s1.size()].first) {
-                for(int x:s1)
-                    s.insert(x);
-                s1.clear();
-            }
-            while(s.size()&&*s.begin()<v[f].second) {
-                s.erase(v[i].second);
-                i++;
-            }
-            s1.insert(v[f].second);
-            ans=max(ans,(int)s.size()+(int)s1.size());
-        }
-        cout<<n-ans<<endl;
-    }
+
+
+	int t;
+	cin>>t;
+
+	while(t--){
+		bool flag = 0;
+		ll n;
+		cin>>n;
+
+		rep(a, 31){
+			fr(b, a, 31){
+				ll temp = 1;
+				temp = power(3, b)*power(2, a);
+				if (temp==n)
+				{
+					cout << 2*b-a << '\n';
+					flag = 1;
+					break;
+				}
+			}
+			if (flag)
+			{
+				break;
+			}
+		}
+
+		if (!flag)
+		{
+			cout << -1 << '\n';
+		}
+		
+	}
 	//Code Goes here
 	
 	#ifdef mehul

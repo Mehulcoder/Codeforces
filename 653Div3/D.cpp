@@ -45,7 +45,7 @@ typedef unordered_set<int> useti;
 
 
 #define sz(x) (int)(x).size()
- 
+template<typename T,typename U>inline bool exist(T &cont,U &val){return cont.find(val)!=cont.end();}
 #define fr(i, a, b) for (int i = (a), _b = (b); i <= _b; i++)
 #define rep(i, n) for (int i = 0, _n = (n); i < _n; i++)
 #define repr(i, n) for (int i = n; i >= 0; i--)
@@ -93,6 +93,21 @@ int begtime = clock();
 #define end_routine()
 #endif
 
+//Custom has for unordered map
+struct custom_hash {
+    static uint64_t splitmix64(uint64_t x) {
+        // http://xorshift.di.unimi.it/splitmix64.c
+        x += 0x9e3779b97f4a7c15;
+        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
+        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+        return x ^ (x >> 31);
+    }
+
+    size_t operator()(uint64_t x) const {
+        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
+        return splitmix64(x + FIXED_RANDOM);
+    }
+};
 
 int main( int argc , char ** argv )
 {
@@ -101,35 +116,7 @@ int main( int argc , char ** argv )
 	#ifdef mehul
     freopen("input.txt", "r", stdin);
 	#endif
-    int t;
-    cin>>t;
-    while(t--) {
-        int n,arr[200009];
-        cin>>n;
-        vector<pair<int,int> >v;
-        for(int f=0;f<n;f++) {
-            cin>>arr[f];
-            v.push_back({arr[f],-f});
-        }
-        sort(v.begin(),v.end());
-        int i=0,ans=0;
-        set<int>s;
-        set<int>s1;
-        for(int f=0;f<n;f++) {
-            if(v[f].first!=v[f-s1.size()].first) {
-                for(int x:s1)
-                    s.insert(x);
-                s1.clear();
-            }
-            while(s.size()&&*s.begin()<v[f].second) {
-                s.erase(v[i].second);
-                i++;
-            }
-            s1.insert(v[f].second);
-            ans=max(ans,(int)s.size()+(int)s1.size());
-        }
-        cout<<n-ans<<endl;
-    }
+
 	//Code Goes here
 	
 	#ifdef mehul
