@@ -109,7 +109,6 @@ struct custom_hash {
     }
 };
 
-vector<int> arr;
 int main( int argc , char ** argv )
 {
 	ios_base::sync_with_stdio(false) ; 
@@ -118,23 +117,72 @@ int main( int argc , char ** argv )
     freopen("input.txt", "r", stdin);
 	#endif
 
-    arr.clear();
-	arr.resize(5001, 0);
-	int n;
-	cin>>n;
-	int ans = 0;
-	rep(i, n){
-		int a;
-		cin>>a;
-		arr[a]++;
+	int red, blue;
+	cin>>red>>blue;
 
-		if (arr[a]>1 || (a>n))
-		{
-			ans++;
-		}
+	string start;
+	bool flag = 0;
+	if (min(red, blue)%2==0 && red!=blue)
+	{
+		flag = 1;
 	}
 
-	cout << ans << '\n';
+	if (red>blue && blue>0)
+	{
+		start+='B';
+		blue--;
+	}else{
+		if (red>0)
+		{
+			start+='R';
+			red--;
+		}
+	}
+	bool curr = 0; //Vasya
+	int k = 1;
+	trace(start);
+	char prev = start[0];
+	int p, v;
+	p = v = 0;
+	while(red>0 || blue>0){
+		if (prev == 'R')
+		{
+			if (curr==0 && blue>0)
+			{
+				prev='B';
+				v++;
+				blue--;
+			}else if (red>0)
+			{
+				prev='R';
+				p++;
+				red--;
+			}
+		}else{
+			if (curr == 0 && red>0)
+			{
+				prev='R';
+				v++;
+				red--;
+			}else if (blue>0)
+			{
+				prev='B';
+				p++;
+				blue--;
+			}
+		}
+
+		curr = !curr;
+	}
+
+	if (flag)
+	{
+		p++;
+		v--;
+	}
+
+	cout << p<<" "<<v << '\n';
+
 	//Code Goes here
 	
 	#ifdef mehul

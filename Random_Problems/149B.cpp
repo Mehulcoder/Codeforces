@@ -109,7 +109,6 @@ struct custom_hash {
     }
 };
 
-vector<int> arr;
 int main( int argc , char ** argv )
 {
 	ios_base::sync_with_stdio(false) ; 
@@ -117,24 +116,26 @@ int main( int argc , char ** argv )
 	#ifdef mehul
     freopen("input.txt", "r", stdin);
 	#endif
+    int n;
+    cin>>n;
+    int left, right;
+    left = INT_MAX;
+    right = INT_MIN;
+    vector<pii> v;
+    rep(i, n){
+    	int a, b;
+    	cin>>a>>b;
+    	v.push_back({a, b});
+    	left = min(left, a);
+    	right = max(right, b);
+    }
 
-    arr.clear();
-	arr.resize(5001, 0);
-	int n;
-	cin>>n;
-	int ans = 0;
-	rep(i, n){
-		int a;
-		cin>>a;
-		arr[a]++;
-
-		if (arr[a]>1 || (a>n))
-		{
-			ans++;
-		}
-	}
-
-	cout << ans << '\n';
+    if (find(all(v),mp(left, right))!=v.end())
+    {
+    	cout << find(all(v), mp(left,right))-v.begin() +1<< '\n';
+    }else{
+    	cout << -1 << '\n';
+    }
 	//Code Goes here
 	
 	#ifdef mehul

@@ -109,7 +109,6 @@ struct custom_hash {
     }
 };
 
-vector<int> arr;
 int main( int argc , char ** argv )
 {
 	ios_base::sync_with_stdio(false) ; 
@@ -118,23 +117,54 @@ int main( int argc , char ** argv )
     freopen("input.txt", "r", stdin);
 	#endif
 
-    arr.clear();
-	arr.resize(5001, 0);
 	int n;
 	cin>>n;
-	int ans = 0;
+	ll tof = 0;
+	ll fif = 0;
+	ll hun = 0;
 	rep(i, n){
 		int a;
 		cin>>a;
-		arr[a]++;
-
-		if (arr[a]>1 || (a>n))
+		if (a==25)
 		{
-			ans++;
+			tof++;
+		}else if (a==50)
+		{
+			if (tof==0)
+			{
+				cout << "NO" << '\n';
+				return 0;
+			}else{
+				tof--;
+				fif++;
+			}
+		}else if (a==100)
+		{
+			if (fif>0)
+			{
+				fif--;
+				if (tof>0)
+				{
+					tof--;
+				}else{
+					cout << "NO" << '\n';
+					return 0;
+				}
+			}else{
+				if (tof>=3)
+				{
+					tof-=3;
+				}else{
+					cout << "NO" << '\n';
+					return 0;
+				}
+			}
 		}
 	}
 
-	cout << ans << '\n';
+
+	cout << "YES" << '\n';
+
 	//Code Goes here
 	
 	#ifdef mehul

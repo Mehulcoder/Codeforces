@@ -17,7 +17,7 @@ using namespace std;
 #pragma GCC optimize("Ofast")
 #endif
 
-typedef long long ll;
+typedef unsigned long long int ll;
 typedef unordered_map<int, int> umapii;
 typedef unordered_map<int, bool> umapib;
 typedef unordered_map<string, int> umapsi;
@@ -109,7 +109,6 @@ struct custom_hash {
     }
 };
 
-vector<int> arr;
 int main( int argc , char ** argv )
 {
 	ios_base::sync_with_stdio(false) ; 
@@ -118,23 +117,47 @@ int main( int argc , char ** argv )
     freopen("input.txt", "r", stdin);
 	#endif
 
-    arr.clear();
-	arr.resize(5001, 0);
-	int n;
+	ll n;
 	cin>>n;
-	int ans = 0;
+	vector<ll> v;
 	rep(i, n){
-		int a;
+		ll a;
 		cin>>a;
-		arr[a]++;
-
-		if (arr[a]>1 || (a>n))
-		{
-			ans++;
-		}
+		v.push_back(a);
 	}
 
+
+	sort(all(v));
+	ll ans = 0;
+	ll diff = 0;
+	if (v[0]==v[v.size()-1])
+	{
+		if (n%2==0)
+		{
+			ans = (n/2)*(n-1);
+		}else{
+			ans = (n)*((n-1)/2);	
+		}
+	}else{
+		 ll minCount = 0;
+		 ll maxCount = 0;
+		trav(elem, v){
+			if (elem == v[0])
+			{
+				minCount++;
+			}else if (elem == v[v.size()-1])
+			{
+				maxCount++;
+			}
+		}
+
+		ans = minCount*maxCount;
+	}
+	cout << v[v.size()-1]-v[0] << ' ';
 	cout << ans << '\n';
+
+
+
 	//Code Goes here
 	
 	#ifdef mehul
