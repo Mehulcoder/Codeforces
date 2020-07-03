@@ -93,7 +93,7 @@ int begtime = clock();
 #define end_routine()
 #endif
 
-//Custom has for unordered map
+//Custom hash for unordered map
 struct custom_hash {
     static uint64_t splitmix64(uint64_t x) {
         // http://xorshift.di.unimi.it/splitmix64.c
@@ -109,6 +109,8 @@ struct custom_hash {
     }
 };
 
+
+
 int main( int argc , char ** argv )
 {
 	ios_base::sync_with_stdio(false) ; 
@@ -117,64 +119,66 @@ int main( int argc , char ** argv )
     freopen("input.txt", "r", stdin);
 	#endif
 
-    int n, p;
-    cin>>n>>p;
-    vector<int> v(n);
-    
-    vector<ll> coutntLessThanEqual(4000, 0);
-    
-    rep(i, n){
-    	cin>>v[i];
+    string s;
+    cin>>s;
+
+    string b = s;
+    vector<int> character(25, 0);
+    trav(elem, s){
+    	character[elem-'a']++;
     }
+    ll evenCount = 0;
+    ll oddCount = 0;
+    ll diffCount = 0;
 
-    rep(i, 4000){
-    	ll count = 0;
-    	rep(j, n){
-    		if (v[j]<=i)
-    		{
-    			count++;
-    		}
-    	}
-
-    	coutntLessThanEqual[i] = count;
-    }
-    vector<ll> ans;
-    ll maxim = *max_element(all(v));
-
-    rep(x, maxim+1){
-    	if (x<=maxim-n)
+    trav(elem, character){
+    	if (elem%2==0 && elem>0)
     	{
-    		continue;
-    	}
-    	ll f = 0ll;
-    	ll sub = 0ll;
-    	ll final = 1ll;
-    	rep(i, n){
-
-    		final*=(coutntLessThanEqual[x+sub]-sub);
-    		final = final%p;
-    		if (x==2)
-    		{
-	    		trace(coutntLessThanEqual[x+sub]-sub);
-    			trace(final, x+sub);
-    		}
-    		sub++;
-    	}
-
-    	trace(x, final);
-
-    	if (final%p!=0)
+    		evenCount++;
+    	}else if (elem>0 && elem%2!=0)
     	{
-    		ans.push_back(x);
+    		oddCount++;
     	}
-
     }
 
-    cout << ans.size() << '\n';
-    trav(elem, ans){
-    	cout << elem << ' ';
+    trav(elem, character){
+    	diffCount+=(elem!=0);
     }
-    cout <<  '\n';
+
+    // sort(all(s));
+
+    trace(diffCount, s.size(), oddCount, evenCount);
+    ll curr;
+    if ((s.size()-diffCount)%2==0)
+    {
+    	curr = 1;
+    }else{
+    	curr = 2;
+    }
+   	if (oddCount <= 1)
+   	{
+   		cout <<"First"  << '\n';
+   		return 0;
+   	}
+
+   	if (diffCount%2!=0)
+   	{
+   		if (curr==1)
+   		{
+   			cout << "First" << '\n';
+   		}else{
+   			cout << "Second" << '\n';
+   		}
+   	}else{
+   		if (curr==1)
+   		{
+   			cout << "Second" << '\n';
+   		}else{
+   			cout << "First" << '\n';
+   		}
+   	}
+
+	//Code Goes here
 	
 	#ifdef mehul
     end_routine();

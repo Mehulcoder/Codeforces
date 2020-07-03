@@ -18,6 +18,7 @@ using namespace std;
 #endif
 
 typedef long long ll;
+typedef long double ld;
 typedef unordered_map<int, int> umapii;
 typedef unordered_map<int, bool> umapib;
 typedef unordered_map<string, int> umapsi;
@@ -93,7 +94,7 @@ int begtime = clock();
 #define end_routine()
 #endif
 
-//Custom has for unordered map
+//Custom hash for unordered map
 struct custom_hash {
     static uint64_t splitmix64(uint64_t x) {
         // http://xorshift.di.unimi.it/splitmix64.c
@@ -108,6 +109,63 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
+//Power Function O(log(n))
+ll poww(ll a, ll b, ll mod)
+{
+    if(b==0)
+        return 1;
+    ll ans=poww(a,b/2, mod);
+    if(b%2==0)
+        return (ans*ans)%mod;
+    return (((ans*ans)%mod)*a)%mod;
+}
+
+vector<bool> visited(4005, 0);
+vector<bool> vvisited(4005, 0);
+vector<vector<int>> edges;
+vector<vector<int>> ans;
+bool dfs(int root, int parent, int pparent, auto temp){
+	// visited[root] = 1;
+	temp.push_back(root);
+	bool flag = 0;
+	if (parent == -1)
+	{
+		trav(child, edges[root]){
+			if (!vvisited[child])
+			{	
+				if(dfs(child, root, -1, temp)){
+					flag = 1;
+				}
+				
+			}
+		}		
+	}else if (pparent == -1)
+	{
+		trav(cchild, edges[root]){
+			if (!visited[cchild] && cchild!=parent)
+			{
+				if (dfs(cchild, root, parent, temp))
+				{
+					flag = 1;
+					
+				}
+			}
+		}
+	}else{
+		trav(back, edges[root]){
+			if (back==pparent)
+			{
+				flag = 1;
+				// temp.push_back(root);
+				ans.push_back(temp);
+			}
+		}
+	}
+
+	return flag;
+
+
+}
 
 int main( int argc , char ** argv )
 {
@@ -117,64 +175,49 @@ int main( int argc , char ** argv )
     freopen("input.txt", "r", stdin);
 	#endif
 
-    int n, p;
-    cin>>n>>p;
-    vector<int> v(n);
-    
-    vector<ll> coutntLessThanEqual(4000, 0);
-    
-    rep(i, n){
-    	cin>>v[i];
-    }
+	int n, m;
+	cin>>n>>m;
+	edges.clear();
+	edges.resize(n);
+	rep(i, m){
+		int a, b;
+		cin>>a>>b;
+		a--;
+		b--;
+		edges[a].push_back(b);
+		edges[b].push_back(a);
+	}
 
-    rep(i, 4000){
-    	ll count = 0;
-    	rep(j, n){
-    		if (v[j]<=i)
-    		{
-    			count++;
-    		}
-    	}
+	rep(i, n){
+		if (!vvisited[i])
+		{
+			vvisited[i] = 1;
+			vector<int> temp;
+			dfs(i, -1, -1, temp);
+		}
+	}
 
-    	coutntLessThanEqual[i] = count;
-    }
-    vector<ll> ans;
-    ll maxim = *max_element(all(v));
+	ll minSum = INT_MAX;
+	trav(elem, ans){
+		ll temp = 0;
+		trav(ell, elem){
+			temp+=edges[ell].size()-2;
+		}
+		minSum = min(minSum, temp);
+	}
 
-    rep(x, maxim+1){
-    	if (x<=maxim-n)
-    	{
-    		continue;
-    	}
-    	ll f = 0ll;
-    	ll sub = 0ll;
-    	ll final = 1ll;
-    	rep(i, n){
+	trav(elem, ans){
+		trace(ans);
+	}
+	if (ans.size()==0)
+	{
+		cout << -1 << '\n';
+	}else{
+		
+		cout << minSum << '\n';
+	}
 
-    		final*=(coutntLessThanEqual[x+sub]-sub);
-    		final = final%p;
-    		if (x==2)
-    		{
-	    		trace(coutntLessThanEqual[x+sub]-sub);
-    			trace(final, x+sub);
-    		}
-    		sub++;
-    	}
-
-    	trace(x, final);
-
-    	if (final%p!=0)
-    	{
-    		ans.push_back(x);
-    	}
-
-    }
-
-    cout << ans.size() << '\n';
-    trav(elem, ans){
-    	cout << elem << ' ';
-    }
-    cout <<  '\n';
+	//Code Goes here
 	
 	#ifdef mehul
     end_routine();

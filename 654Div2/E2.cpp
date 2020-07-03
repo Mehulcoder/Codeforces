@@ -93,7 +93,7 @@ int begtime = clock();
 #define end_routine()
 #endif
 
-//Custom has for unordered map
+//Custom hash for unordered map
 struct custom_hash {
     static uint64_t splitmix64(uint64_t x) {
         // http://xorshift.di.unimi.it/splitmix64.c
@@ -108,6 +108,17 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
+//Power Function O(log(n))
+ll poww(ll a, ll b, ll mod)
+{
+    if(b==0)
+        return 1;
+    ll ans=poww(a,b/2);
+    if(b%2==0)
+        return (ans*ans)%mod;
+    return (((ans*ans)%mod)*a)%mod;
+}
+
 
 int main( int argc , char ** argv )
 {
@@ -117,64 +128,19 @@ int main( int argc , char ** argv )
     freopen("input.txt", "r", stdin);
 	#endif
 
-    int n, p;
-    cin>>n>>p;
-    vector<int> v(n);
-    
-    vector<ll> coutntLessThanEqual(4000, 0);
-    
-    rep(i, n){
-    	cin>>v[i];
-    }
+	ll n, p;
+	cin>>n>>p;
 
-    rep(i, 4000){
-    	ll count = 0;
-    	rep(j, n){
-    		if (v[j]<=i)
-    		{
-    			count++;
-    		}
-    	}
+	vector<ll> v(n);
+	rep(i, n){
+		cin>>v[i];
+	}
 
-    	coutntLessThanEqual[i] = count;
-    }
-    vector<ll> ans;
-    ll maxim = *max_element(all(v));
+	ll maximum = *max_element(all(v));
+	ll leftX = maximum-n+1;
+	
 
-    rep(x, maxim+1){
-    	if (x<=maxim-n)
-    	{
-    		continue;
-    	}
-    	ll f = 0ll;
-    	ll sub = 0ll;
-    	ll final = 1ll;
-    	rep(i, n){
-
-    		final*=(coutntLessThanEqual[x+sub]-sub);
-    		final = final%p;
-    		if (x==2)
-    		{
-	    		trace(coutntLessThanEqual[x+sub]-sub);
-    			trace(final, x+sub);
-    		}
-    		sub++;
-    	}
-
-    	trace(x, final);
-
-    	if (final%p!=0)
-    	{
-    		ans.push_back(x);
-    	}
-
-    }
-
-    cout << ans.size() << '\n';
-    trav(elem, ans){
-    	cout << elem << ' ';
-    }
-    cout <<  '\n';
+	//Code Goes here
 	
 	#ifdef mehul
     end_routine();

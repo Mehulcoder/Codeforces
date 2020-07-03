@@ -18,6 +18,7 @@ using namespace std;
 #endif
 
 typedef long long ll;
+typedef long double ld;
 typedef unordered_map<int, int> umapii;
 typedef unordered_map<int, bool> umapib;
 typedef unordered_map<string, int> umapsi;
@@ -93,7 +94,7 @@ int begtime = clock();
 #define end_routine()
 #endif
 
-//Custom has for unordered map
+//Custom hash for unordered map
 struct custom_hash {
     static uint64_t splitmix64(uint64_t x) {
         // http://xorshift.di.unimi.it/splitmix64.c
@@ -108,6 +109,17 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
+//Power Function O(log(n))
+ll poww(ll a, ll b, ll mod)
+{
+    if(b==0)
+        return 1;
+    ll ans=poww(a,b/2, mod);
+    if(b%2==0)
+        return (ans*ans)%mod;
+    return (((ans*ans)%mod)*a)%mod;
+}
+
 
 int main( int argc , char ** argv )
 {
@@ -117,64 +129,16 @@ int main( int argc , char ** argv )
     freopen("input.txt", "r", stdin);
 	#endif
 
-    int n, p;
-    cin>>n>>p;
-    vector<int> v(n);
-    
-    vector<ll> coutntLessThanEqual(4000, 0);
-    
-    rep(i, n){
-    	cin>>v[i];
-    }
+	ld m, n;
+	cin>>m>>n;
+	ld ans = 0;
+	fr(i, 1, m){
+		ans+=(pow((i*1.0)/m, n)-(pow(((i-1)*1.0)/m, n)))*i;
+	}
 
-    rep(i, 4000){
-    	ll count = 0;
-    	rep(j, n){
-    		if (v[j]<=i)
-    		{
-    			count++;
-    		}
-    	}
+	cout << fixed << setprecision(12) <<ans << '\n';
 
-    	coutntLessThanEqual[i] = count;
-    }
-    vector<ll> ans;
-    ll maxim = *max_element(all(v));
-
-    rep(x, maxim+1){
-    	if (x<=maxim-n)
-    	{
-    		continue;
-    	}
-    	ll f = 0ll;
-    	ll sub = 0ll;
-    	ll final = 1ll;
-    	rep(i, n){
-
-    		final*=(coutntLessThanEqual[x+sub]-sub);
-    		final = final%p;
-    		if (x==2)
-    		{
-	    		trace(coutntLessThanEqual[x+sub]-sub);
-    			trace(final, x+sub);
-    		}
-    		sub++;
-    	}
-
-    	trace(x, final);
-
-    	if (final%p!=0)
-    	{
-    		ans.push_back(x);
-    	}
-
-    }
-
-    cout << ans.size() << '\n';
-    trav(elem, ans){
-    	cout << elem << ' ';
-    }
-    cout <<  '\n';
+	//Code Goes here
 	
 	#ifdef mehul
     end_routine();
