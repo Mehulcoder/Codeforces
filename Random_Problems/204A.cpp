@@ -120,111 +120,36 @@ ll poww(ll a, ll b, ll mod)
     return (((ans*ans)%mod)*a)%mod;
 }
 
-vector<bool> visited(4005, 0);
-vector<bool> vvisited(4005, 0);
-vector<vector<int>> edges;
-vector<vector<int>> ans;
-bool dfs(int root, int parent, int pparent, auto temp){
-	// visited[root] = 1;
-	temp.push_back(root);
-	bool flag = 0;
-	if (parent == -1)
-	{
-		trav(child, edges[root]){
-			if (!vvisited[child])
-			{	
-				if(dfs(child, root, -1, temp)){
-					flag = 1;
-				}
-				
-			}
-		}		
-	}else if (pparent == -1)
-	{
-		trav(cchild, edges[root]){
-			if (!vvisited[cchild] && cchild!=parent)
-			{
-				if (dfs(cchild, root, parent, temp))
-				{
-					flag = 1;
-					
-				}
-			}
-		}
-	}else{
-		trav(back, edges[root]){
-			if (back==pparent && !visited[pparent])
-			{
-				trace(pparent);
-				flag = 1;
-				// temp.push_back(root);
-				ans.push_back(temp);
-			}
-		}
-	}
+long long l,r;
+long long find(long long x){
+	//If x is less than 10
+	if(x<10)return x;
 
-	return flag;
+	//tmp will represent the last digit of x
+	long long tmp=x,ans=0;
+	while(tmp>=10)tmp/=10;
 
-
+	//In every interval of 10 there will be atleast 1 such number x*****x lets say 100 ---> 56/10 == 5 ---> 11,22,33,44,0 + add 1-9 + add 55
+	// Add one more if possible
+	ans=x/10+9-(tmp>(x%10)?1:0);
+	return ans;
 }
 
 int main( int argc , char ** argv )
 {
 	ios_base::sync_with_stdio(false) ; 
-	cin.tie(NULL) ; 
+	cin.tie(NULL) ;
 	#ifdef mehul
     freopen("input.txt", "r", stdin);
 	#endif
-
-	int n, m;
-	cin>>n>>m;
-	edges.clear();
-	edges.resize(n);
-	rep(i, m){
-		int a, b;
-		cin>>a>>b;
-		a--;
-		b--;
-		edges[a].push_back(b);
-		edges[b].push_back(a);
-	}
-
-	rep(i, n){
-		if (!vvisited[i])
-		{
-			trace("here");
-			vvisited[i] = 1;
-			vector<int> temp;
-			dfs(i, -1, -1, temp);
-		}
-	}
-
-	ll minSum = INT_MAX;
-	trav(elem, ans){
-		ll temp = 0;
-		trav(ell, elem){
-			temp+=edges[ell].size()-2;
-		}
-		minSum = min(minSum, temp);
-	}
-
-	trav(elem, ans){
-		trace(elem);
-	}
-	if (ans.size()==0)
-	{
-		cout << -1 << '\n';
-	}else{
-		
-		cout << minSum << '\n';
-	}
-
-	//Code Goes here
+    cin>>l>>r;
+	cout<<find(r)-find(l-1);
 	
 	#ifdef mehul
     end_routine();
 	#endif
  
     return 0 ; 
+    
 }
 

@@ -120,52 +120,20 @@ ll poww(ll a, ll b, ll mod)
     return (((ans*ans)%mod)*a)%mod;
 }
 
-vector<bool> visited(4005, 0);
-vector<bool> vvisited(4005, 0);
-vector<vector<int>> edges;
-vector<vector<int>> ans;
-bool dfs(int root, int parent, int pparent, auto temp){
-	// visited[root] = 1;
-	temp.push_back(root);
-	bool flag = 0;
-	if (parent == -1)
-	{
-		trav(child, edges[root]){
-			if (!vvisited[child])
-			{	
-				if(dfs(child, root, -1, temp)){
-					flag = 1;
-				}
-				
-			}
-		}		
-	}else if (pparent == -1)
-	{
-		trav(cchild, edges[root]){
-			if (!vvisited[cchild] && cchild!=parent)
-			{
-				if (dfs(cchild, root, parent, temp))
-				{
-					flag = 1;
-					
-				}
-			}
-		}
-	}else{
-		trav(back, edges[root]){
-			if (back==pparent && !visited[pparent])
-			{
-				trace(pparent);
-				flag = 1;
-				// temp.push_back(root);
-				ans.push_back(temp);
-			}
+bool isPrime(ll a){
+	ll fact = 0;
+	fr(i, 2, sqrt(a)){
+		if (a%i==0 && a!=i)
+		{
+			fact++;
 		}
 	}
+	if (fact)
+	{
+		return 0;
+	}
 
-	return flag;
-
-
+	return 1;
 }
 
 int main( int argc , char ** argv )
@@ -176,48 +144,51 @@ int main( int argc , char ** argv )
     freopen("input.txt", "r", stdin);
 	#endif
 
-	int n, m;
-	cin>>n>>m;
-	edges.clear();
-	edges.resize(n);
-	rep(i, m){
-		int a, b;
-		cin>>a>>b;
-		a--;
-		b--;
-		edges[a].push_back(b);
-		edges[b].push_back(a);
-	}
+	ll a;
+	cin>>a;
 
-	rep(i, n){
-		if (!vvisited[i])
+	bool flag = 0;
+	fr(i, 1, sqrt(a)){
+		if (a%i==0)
 		{
-			trace("here");
-			vvisited[i] = 1;
-			vector<int> temp;
-			dfs(i, -1, -1, temp);
+			ll temp2 = a/i;
+			if (temp2>4 && i>4)
+			{
+				flag = 1;
+				break;
+			}
 		}
 	}
-
-	ll minSum = INT_MAX;
-	trav(elem, ans){
-		ll temp = 0;
-		trav(ell, elem){
-			temp+=edges[ell].size()-2;
-		}
-		minSum = min(minSum, temp);
-	}
-
-	trav(elem, ans){
-		trace(elem);
-	}
-	if (ans.size()==0)
+	if (!flag)
 	{
 		cout << -1 << '\n';
-	}else{
-		
-		cout << minSum << '\n';
+		return 0;
 	}
+	
+	string s = "aeiou";
+	ll p = s.size();
+	string ans;
+	fr(i, 5, a){
+		if (i*i>a)
+		{
+			break;
+		}
+		if (a%i==0)
+		{
+			ll temp = a/i;
+			rep(k, temp){
+				// trace(temp, i);
+				rep(j, i){
+					cout<<s[(j+k)%p];
+				}
+			}
+			// trace(ans.size());
+			break;
+		}
+	}
+
+
+	cout << '\n';
 
 	//Code Goes here
 	

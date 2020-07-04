@@ -120,53 +120,6 @@ ll poww(ll a, ll b, ll mod)
     return (((ans*ans)%mod)*a)%mod;
 }
 
-vector<bool> visited(4005, 0);
-vector<bool> vvisited(4005, 0);
-vector<vector<int>> edges;
-vector<vector<int>> ans;
-bool dfs(int root, int parent, int pparent, auto temp){
-	// visited[root] = 1;
-	temp.push_back(root);
-	bool flag = 0;
-	if (parent == -1)
-	{
-		trav(child, edges[root]){
-			if (!vvisited[child])
-			{	
-				if(dfs(child, root, -1, temp)){
-					flag = 1;
-				}
-				
-			}
-		}		
-	}else if (pparent == -1)
-	{
-		trav(cchild, edges[root]){
-			if (!vvisited[cchild] && cchild!=parent)
-			{
-				if (dfs(cchild, root, parent, temp))
-				{
-					flag = 1;
-					
-				}
-			}
-		}
-	}else{
-		trav(back, edges[root]){
-			if (back==pparent && !visited[pparent])
-			{
-				trace(pparent);
-				flag = 1;
-				// temp.push_back(root);
-				ans.push_back(temp);
-			}
-		}
-	}
-
-	return flag;
-
-
-}
 
 int main( int argc , char ** argv )
 {
@@ -176,49 +129,43 @@ int main( int argc , char ** argv )
     freopen("input.txt", "r", stdin);
 	#endif
 
-	int n, m;
-	cin>>n>>m;
-	edges.clear();
-	edges.resize(n);
-	rep(i, m){
-		int a, b;
-		cin>>a>>b;
-		a--;
-		b--;
-		edges[a].push_back(b);
-		edges[b].push_back(a);
-	}
+    int t = 1;
+    // cin>>t;
+    while(t--){
+        int n, k;
+        cin>>n>>k;
 
-	rep(i, n){
-		if (!vvisited[i])
-		{
-			trace("here");
-			vvisited[i] = 1;
-			vector<int> temp;
-			dfs(i, -1, -1, temp);
-		}
-	}
+        std::vector<int> v(n);
+        rep(i, n){cin>>v[i];}
 
-	ll minSum = INT_MAX;
-	trav(elem, ans){
-		ll temp = 0;
-		trav(ell, elem){
-			temp+=edges[ell].size()-2;
-		}
-		minSum = min(minSum, temp);
-	}
+        vector<int> indices;
 
-	trav(elem, ans){
-		trace(elem);
-	}
-	if (ans.size()==0)
-	{
-		cout << -1 << '\n';
-	}else{
-		
-		cout << minSum << '\n';
-	}
+        ll sum = 0;
+        rep(i, n){
+            if (v[i]>n-k)
+            {
+                indices.push_back(i);
+                sum+=v[i];
+            }
+        }
 
+        ll total = 1;
+        trace(indices);
+        vector<ll> prod;
+        fr(i, 1, indices.size()-1){
+            prod.push_back(indices[i]-indices[i-1]);
+        }
+        trace(prod);
+        trav(elem, prod){
+            total*=(elem%998244353);
+            total = total%998244353;
+        }
+
+        cout << sum << ' '<<total%998244353;
+        cout << '\n';
+
+    	
+    }
 	//Code Goes here
 	
 	#ifdef mehul
