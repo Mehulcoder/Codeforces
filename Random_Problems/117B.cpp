@@ -129,81 +129,39 @@ int main( int argc , char ** argv )
     freopen("input.txt", "r", stdin);
 	#endif
 
-    ll t;
-    cin>>t;
-    while(t--){
-        int n;
-        cin>>n;
-        vector<int> v(n);
-
-        set<int> mex;
-        set<int> notRight;
-        unordered_map<int, int, custom_hash> numbers;
-        rep(i, n+1){
-            mex.insert(i);
-        }
-        rep(i, n){ 
-            cin>>v[i];
-            numbers[v[i]]++;
-            // index[v[i]] = i;
-
-            mex.erase(v[i]);
-            if (v[i]!=i)
-            {
-                notRight.insert(i);
-            }
-        }
-
-        // trav(elem, mex){
-        //     trace(elem);
-        // }
-
-        // trav(elem, notRight){
-        //     trace(elem);
-        // }
-        vector<int> ans;
-        ll times = 0;
-        bool flag1 = 0;
-        while(!notRight.empty()){
-            int currMex = *mex.begin();
-            // trace(v, currMex);
-            if (currMex == n)
-            {
-                int currNotRight = *notRight.begin();
-                mex.insert(v[currNotRight]);
-                ans.push_back(currNotRight+1);
-                numbers[v[currNotRight]]--;
-                v[currNotRight] = currMex; 
-                numbers[currMex]++;          
-            }else{
-                ans.push_back(currMex+1);
-                notRight.erase(currMex);
-                mex.erase(currMex);
-                numbers[v[currMex]]--;
-                if (numbers[v[currMex]]<=0)
-                {
-                    mex.insert(v[currMex]);
-                }
-                numbers[currMex]++;
-                v[currMex] = currMex;
-                mex.insert(n);
-            }
-            // trace(v);
-            // times++;
-            // if (times==6)
-            // {
-            //     break;
-            // }
-
-        }
-        cout << ans.size() << '\n';
-        // trace(v, ans);
-        rep(i, ans.size()){
-            cout << ans[i] << ' ';
-        }
-        trace(v);
-        cout <<  '\n';
+    ll a, b, mod;
+    cin>>a>>b>>mod;
+    fr(x, 1, mod){
+    	if (x>a)
+    	{
+    		break;
+    	}
+    	//Lets say we get a remainder-rem by dividing x with mod that remainder will again repeat when x==x+mod;
+    	//So we'll check just till x==mod;
+    	//Now that remained +some number should be divisible by mod
+    	//Lets say that num is mod-rem
+    	//Now that number 
+    	ll rem = (x*1000000000ll)%mod;
+    	trace(x, rem, mod-rem, (mod-rem)%mod);
+    	ll hello = mod-rem;
+    	if (!rem)
+    	{
+    		hello = 0;
+    	}
+    	if ((hello)>b)
+    	{
+    		string temp = "000000000";
+    		temp+=to_string(x);
+    		reverse(all(temp));
+    		temp = temp.substr(0,9);
+    		reverse(all(temp));
+    		cout << 1 << ' '<<temp<<endl;
+    		return 0;
+    	}
     }
+
+    cout << 2 << '\n';
+
 
 	//Code Goes here
 	

@@ -67,23 +67,23 @@ template<typename T, typename ...Arg>
 void __p(T a1, Arg ...a) { __p(a1); __p(a...); }
 template<typename Arg1>
 void __f(const char *name, Arg1 &&arg1) {
-	cout<<name<<" : ";__p(arg1);cout<<endl;
+    cout<<name<<" : ";__p(arg1);cout<<endl;
 }
 template<typename Arg1, typename ... Args>
 void __f(const char *names, Arg1 &&arg1, Args &&... args) {
-	int bracket=0,i=0;
-	for(; ;i++)
-		if(names[i]==','&&bracket==0)
-			break;
-		else if(names[i]=='(')
-			bracket++;
-		else if(names[i]==')')
-			bracket--;
-	const char *comma=names+i;
-	cout.write(names,comma-names)<<" : ";
-	__p(arg1);
-	cout<<"| ";
-	__f(comma+1,args...);
+    int bracket=0,i=0;
+    for(; ;i++)
+        if(names[i]==','&&bracket==0)
+            break;
+        else if(names[i]=='(')
+            bracket++;
+        else if(names[i]==')')
+            bracket--;
+    const char *comma=names+i;
+    cout.write(names,comma-names)<<" : ";
+    __p(arg1);
+    cout<<"| ";
+    __f(comma+1,args...);
 }
 #define trace(...) cout<<"Line:"<<__LINE__<<" "; __f(#__VA_ARGS__, __VA_ARGS__)
 int begtime = clock();
@@ -123,93 +123,34 @@ ll poww(ll a, ll b, ll mod)
 
 int main( int argc , char ** argv )
 {
-	ios_base::sync_with_stdio(false) ; 
-	cin.tie(NULL) ; 
-	#ifdef mehul
+    ios_base::sync_with_stdio(false) ; 
+    cin.tie(NULL) ; 
+    #ifdef mehul
     freopen("input.txt", "r", stdin);
-	#endif
+    #endif
 
-    ll t;
-    cin>>t;
-    while(t--){
-        int n;
-        cin>>n;
-        vector<int> v(n);
+    int n;
+    cin>>n;
 
-        set<int> mex;
-        set<int> notRight;
-        unordered_map<int, int, custom_hash> numbers;
-        rep(i, n+1){
-            mex.insert(i);
+    int top;
+    cin>>top;
+    int bottom = 7-top;
+    rep(i, n){
+        int a, b;
+        cin>>a>>b;
+        if (a==bottom || a==top || b == bottom || b==top)
+        {
+            cout << "NO" << '\n';
+            return 0;
         }
-        rep(i, n){ 
-            cin>>v[i];
-            numbers[v[i]]++;
-            // index[v[i]] = i;
-
-            mex.erase(v[i]);
-            if (v[i]!=i)
-            {
-                notRight.insert(i);
-            }
-        }
-
-        // trav(elem, mex){
-        //     trace(elem);
-        // }
-
-        // trav(elem, notRight){
-        //     trace(elem);
-        // }
-        vector<int> ans;
-        ll times = 0;
-        bool flag1 = 0;
-        while(!notRight.empty()){
-            int currMex = *mex.begin();
-            // trace(v, currMex);
-            if (currMex == n)
-            {
-                int currNotRight = *notRight.begin();
-                mex.insert(v[currNotRight]);
-                ans.push_back(currNotRight+1);
-                numbers[v[currNotRight]]--;
-                v[currNotRight] = currMex; 
-                numbers[currMex]++;          
-            }else{
-                ans.push_back(currMex+1);
-                notRight.erase(currMex);
-                mex.erase(currMex);
-                numbers[v[currMex]]--;
-                if (numbers[v[currMex]]<=0)
-                {
-                    mex.insert(v[currMex]);
-                }
-                numbers[currMex]++;
-                v[currMex] = currMex;
-                mex.insert(n);
-            }
-            // trace(v);
-            // times++;
-            // if (times==6)
-            // {
-            //     break;
-            // }
-
-        }
-        cout << ans.size() << '\n';
-        // trace(v, ans);
-        rep(i, ans.size()){
-            cout << ans[i] << ' ';
-        }
-        trace(v);
-        cout <<  '\n';
     }
 
-	//Code Goes here
-	
-	#ifdef mehul
+    cout << "YES" << '\n';
+    //Code Goes here
+    
+    #ifdef mehul
     end_routine();
-	#endif
+    #endif
  
     return 0 ; 
 }

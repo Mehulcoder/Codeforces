@@ -6,6 +6,10 @@
 */
 
 /*
+		I'll get there!
+*/
+
+/*
                 PROBLEM STATEMENT
 
 */
@@ -128,82 +132,55 @@ int main( int argc , char ** argv )
 	#ifdef mehul
     freopen("input.txt", "r", stdin);
 	#endif
+	
+	ll t = 1;
+	// cin>>t;
+	while(t--){
 
-    ll t;
-    cin>>t;
-    while(t--){
-        int n;
-        cin>>n;
-        vector<int> v(n);
+		int n, m;
+		cin>>n>>m;
+		vector<ll> v(n);
+		unordered_set<ll, custom_hash>s1;
+		unordered_set<ll, custom_hash>s;
+		queue<pair<ll, ll>> q1;
+		rep(i, n){
+			cin>>v[i];
+			q1.push({v[i], v[i]});
+			s1.insert(v[i]);
+			s.insert(v[i]);
+		}
 
-        set<int> mex;
-        set<int> notRight;
-        unordered_map<int, int, custom_hash> numbers;
-        rep(i, n+1){
-            mex.insert(i);
-        }
-        rep(i, n){ 
-            cin>>v[i];
-            numbers[v[i]]++;
-            // index[v[i]] = i;
+		vector<ll> ans;
+		ll sum = 0;
+		while(!q1.empty() && ans.size()!=m){
+			pll t = q1.front();
+			if (s.find(t.f)==s.end())
+			{
+				ans.push_back(t.f);
+				sum+=abs(t.s-t.f);
+			}
+			q1.pop();
+			if (s1.find(t.f-1)==s1.end())
+			{
+				q1.push({t.f-1, t.s});
+				s1.insert(t.f-1);
+			}
+			
+			if (s1.find(t.f+1)==s1.end())
+			{
+				q1.push({t.f+1, t.s});
+				s1.insert(t.f+1);
+			}
+		}
 
-            mex.erase(v[i]);
-            if (v[i]!=i)
-            {
-                notRight.insert(i);
-            }
-        }
+		cout << sum << '\n';
+		// cout << ans.size() << '\n';
+		trav(elem, ans){
+			cout << elem << ' ';
+		}
+		cout << '\n';
 
-        // trav(elem, mex){
-        //     trace(elem);
-        // }
-
-        // trav(elem, notRight){
-        //     trace(elem);
-        // }
-        vector<int> ans;
-        ll times = 0;
-        bool flag1 = 0;
-        while(!notRight.empty()){
-            int currMex = *mex.begin();
-            // trace(v, currMex);
-            if (currMex == n)
-            {
-                int currNotRight = *notRight.begin();
-                mex.insert(v[currNotRight]);
-                ans.push_back(currNotRight+1);
-                numbers[v[currNotRight]]--;
-                v[currNotRight] = currMex; 
-                numbers[currMex]++;          
-            }else{
-                ans.push_back(currMex+1);
-                notRight.erase(currMex);
-                mex.erase(currMex);
-                numbers[v[currMex]]--;
-                if (numbers[v[currMex]]<=0)
-                {
-                    mex.insert(v[currMex]);
-                }
-                numbers[currMex]++;
-                v[currMex] = currMex;
-                mex.insert(n);
-            }
-            // trace(v);
-            // times++;
-            // if (times==6)
-            // {
-            //     break;
-            // }
-
-        }
-        cout << ans.size() << '\n';
-        // trace(v, ans);
-        rep(i, ans.size()){
-            cout << ans[i] << ' ';
-        }
-        trace(v);
-        cout <<  '\n';
-    }
+	}
 
 	//Code Goes here
 	
