@@ -16,6 +16,11 @@
 
 #include <bits/stdc++.h>
 using namespace std;
+#include<ext/pb_ds/assoc_container.hpp>
+#include<ext/pb_ds/tree_policy.hpp>
+using namespace __gnu_pbds;
+template <typename T>
+using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
 #include <chrono> 
 #ifndef mehul
 #pragma GCC optimize("Ofast")
@@ -23,6 +28,25 @@ using namespace std;
 
 typedef long long ll;
 typedef long double ld;
+typedef unordered_map<int, int> umapii;
+typedef unordered_map<int, bool> umapib;
+typedef unordered_map<string, int> umapsi;
+typedef unordered_map<string, string> umapss;
+typedef map<string, int> mapsi;
+typedef map<pair<int, int>, int> mappiii;
+typedef map<int, int> mapii;
+typedef pair<int, int> pii;
+typedef pair<long long, long long> pll;
+typedef unordered_set<int> useti;
+
+#define debug(x) cout << '>' << #x << ':' << x << endl;
+#define uset unordered_set
+#define it iterator
+#define mp make_pair
+#define pb push_back
+#define all(x) (x).begin(), (x).end()
+#define f first
+#define s second
 
 #define INF 4557430888798830399ll
 #define MOD 1000000007
@@ -74,45 +98,55 @@ void __f(const char *names, Arg1 &&arg1, Args &&... args) {
 int begtime = clock();
 #define end_routine() cout << "\n\nTime elapsed: "<< fixed << double(clock() - begtime)*1000/CLOCKS_PER_SEC << setprecision(12) << " ms\n\n";
 #else
+#define endl '\n'
 #define trace(...)
 #define end_routine()
 #endif
 
+//Using of set
+//O(log(n))
+/*
+ordered_set<int>  s;
+s.insert(1); 
+s.insert(3);
+cout << s.order_of_key(2) << endl; // the number of elements in the s less than 2
+cout << *s.find_by_order(0) << endl; // print the 0-th smallest number in s(0-based)
+*/
+
+//Custom hash for unordered map
+struct custom_hash {
+    static uint64_t splitmix64(uint64_t x) {
+        // http://xorshift.di.unimi.it/splitmix64.c
+        x += 0x9e3779b97f4a7c15;
+        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
+        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+        return x ^ (x >> 31);
+    }
+
+    size_t operator()(uint64_t x) const {
+        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
+        return splitmix64(x + FIXED_RANDOM);
+    }
+};
+//Power Function O(log(n))
+ll poww(ll a, ll b, ll mod)
+{
+    if(b==0)
+        return 1;
+    ll ans=poww(a,b/2, mod);
+    if(b%2==0)
+        return (ans*ans)%mod;
+    return (((ans*ans)%mod)*a)%mod;
+}
+
 
 //Segment Tree
-
-class data
-{
-public:
-	ll prefix;
-	ll suffix;
-	ll sum;
-	ll ans;
-};
-
-vector<data> t;
-data combine(data l, data r){
-	data res;
-	res.prefix = max(l.prefix, l.sum+r.prefix);
-	res.suffix = max(r.suffix, r.sum+l.suffix);
-	res.sum = l.sum+r.sum;
-	res.ans = max(l.suffix+r.prefix, max(l.ans, r.ans));
-
-	return res;
-}
-
-data make_data(ll val) {
-    data res;
-    res.sum = val;
-    res.prefix = res.suffix = res.ans = val;
-    // trace(res.ans);
-    return res;
-}
-
+vector<pll> t;
 void build(vector<ll> &a, ll start, ll tl, ll tr){
 	if (tl==tr)
 	{
-		t[start] = make_data(a[tl]);
+		t[start].f = a[tl];
+		t[start].s = 1;
 		return;
 	}
 
@@ -123,16 +157,31 @@ void build(vector<ll> &a, ll start, ll tl, ll tr){
 	build(a, 2*start, tl, mid);
 	build(a, 2*start+1, mid+1, tr);
 
-	t[start] = combine(t[2*start], t[2*start+1]);
+	pll left = t[2*start];
+	pll right = t[2*start+1];
+	//If both have the same max
+	if (left.f==right.f)
+	{
+		t[start].f = left.f;
+		t[start].s = left.s+right.s;
+	}else{
+		if (left.f>right.f)
+		{
+			t[start] = left;
+		}else{
+			t[start] = right;
+		}
+	}
+	
 	return;
 }
 
 //tl and tr are the bounds of t[curr]
-data query(ll curr, ll tl, ll tr, ll l, ll r){
+pll query(ll curr, ll tl, ll tr, ll l, ll r){
 	//Case1: If queried range is wierd
 	if (l>r)
 	{
-		return make_data(-1e9);
+		return {-INF, 0};
 	}
 
 	//Case2: If the curr has the same bounds
@@ -142,14 +191,50 @@ data query(ll curr, ll tl, ll tr, ll l, ll r){
 	}
 
 	//Else call on left and right child
+	
 	ll mid = (tl+tr)/2;
-	data left = query(2*curr, tl, mid, l, min(mid, r));
-	data right = query(2*curr+1, mid+1, tr, max(mid+1, l), r);
+	pll left = query(2*curr, tl, mid, l, min(mid, r));
+	pll right = query(2*curr+1, mid+1, tr, max(mid+1, l), r);
 
-	data result = combine(left, right);
-	return result;
+	//If both have the same max
+	pii ans;
+	if (left.f==right.f)
+	{
+		ans.f = left.f;
+		ans.s = left.s+right.s;
+	}else{
+		if (left.f>right.f)
+		{
+			ans = left;
+		}else{
+			ans = right;
+		}
+	}
+
+	return ans;
 }
 
+// void update(ll curr, ll tl, ll tr, ll pos, ll newVal){
+// 	if (tl>pos || tr<pos)
+// 	{
+// 		return;
+// 	}
+
+// 	//Here we are not updating the original array
+// 	if (tl==tr && tl==pos)
+// 	{
+// 		t[curr] += newVal;
+// 		return;
+// 	}
+
+// 	ll mid = (tl+tr)/2;
+
+// 	//Update on left and right
+// 	update(2*curr, tl, mid, pos, newVal);
+// 	update(2*curr+1, mid+1, tr, pos, newVal);
+// 	t[curr] = t[2*curr]+t[2*curr+1];
+// 	return;
+// }
 
 void solve(){
 	ll n;
@@ -162,18 +247,16 @@ void solve(){
 
 	//We start filling from 1
 	build(v, 1, 0, n-1);
-	// trav(elem, t){
-	// 	cout << elem.prefix<<" "<<elem.suffix<<" "<<elem.sum<<" "<<elem.ans << '\n';
-	// }
+	trace(t);
+	// update(1, 0, n-1, 4, -10);
 	// trace(t);
 	ll m;
 	cin>>m;
 	rep(i, m){
 		ll p, q;
 		cin>>p>>q;
-		p--;
-		q--;
-		cout << query(1, 0, n-1, p, q).ans << endl;
+		auto result = query(1, 0, n-1, p, q); 
+		cout << result.f<<" "<<result.s << '\n';
 	}
 	return;
 	
