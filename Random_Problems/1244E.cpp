@@ -142,12 +142,43 @@ ll poww(ll a, ll b, ll mod)
     return (((ans*ans)%mod)*a)%mod;
 }
 
+vector<ll>v;
+ll n;
+ll getCount(ll start, ll val){
+	ll ans = 0;
+	fr(i, start, n-1){
+		if (v[i]==val)
+		{
+			ans++;
+		}else{
+			break;
+		}
+	}
+
+	return ans;
+}
+
+ll getrCount(ll last, ll val){
+	ll ans = 0;
+
+	frr(i, n-1-last, 0){
+		if (v[i]==val)
+		{
+			ans++;
+		}else{
+			break;
+		}
+	}
+
+	return ans;
+}
+
 void solve(){
-	ll n;
+	// ll n;
 	cin>>n;
+	v.resize(n, 0);
 	ll k;
 	cin>>k;
-	vector<ll>v(n);
 	rep(i, n){
 		cin>>v[i];
 	}
@@ -172,7 +203,7 @@ void solve(){
 			}else{
 				k-=diff*lFreq;
 				v[start]+=diff;
-				lFreq+=count(v.begin()+lFreq, v.end(), v[start]);
+				lFreq+=getCount(lFreq, v[start]);
 				ans = min(ans, abs(v[end]-v[start]));
 			}
 		}else{
@@ -185,7 +216,7 @@ void solve(){
 			}else{
 				k-=diff*rFreq;
 				v[end]-=diff;
-				rFreq+=count(v.rbegin()+rFreq, v.rend(), v[end]);
+				rFreq+=getrCount(rFreq, v[end]);
 				ans = min(ans, abs(v[end]-v[start]));
 			}
 		}
