@@ -143,40 +143,47 @@ ll poww(ll a, ll b, ll mod)
 }
 
 void solve(){
-	ll n, q, c;
-	cin>>n>>q>>c;
-	vector<vector<vector<ll>>>dp(105, vector<vector<ll>>(105, vector<ll>(15, 0)));
-	rep(i, n){
-		ll a, b, c;
-		cin>>a>>b>>c;
-		dp[a][b][c] += 1;
-	}
+	ld x, y, n;
+	cin>>x>>y>>n;
 
-	rep(i, 105){
-		rep(j, 105){
-			rep(k, 15){
-				if (i-1>=0 && j-1>=0)
-				{
-					dp[i][j][k]+=dp[i-1][j][k]+dp[i][j-1][k]-dp[i-1][j-1][k];
-				}
+	ld a = 0;
+	ld b = 1;
+	ld final = x/y;
+
+	ld minDiff = (INF-10)*1.0;
+	ld x1, y1;
+	while(b<=n){
+		trace(a, b);
+		ld val = a/b;
+		if (val>final)
+		{
+			ld diff = val-final;
+			if (diff<minDiff)
+			{
+				x1 = a;
+				y1 = b;
+				minDiff = diff;
 			}
+			b++;
+		}else if (val<final)
+		{
+			ld diff = final-val;
+			if (diff<minDiff)
+			{
+				minDiff = diff;
+				x1 = a;
+				y1 = b;
+			}
+			a++;
+		}else{
+			// trace(a, b);
+			x1=a;
+			y1=b;
+			break;
 		}
 	}
 
-	
-	rep(i, q){
-		ll t, x1, y1, x2, y2;
-		cin>>t>>x1>>y1>>x2>>y2;
-		ll totalBright = 0;
-		rep(k, 15){
-			ll totalKStars = 0;
-			totalKStars+=dp[x2][y2][k]-dp[x1-1][y2][k]-dp[x2][y1-1][k]+dp[x1-1][y1-1][k];
-			totalBright+=((k+t)%(c+1))*totalKStars;
-		}
-		cout << totalBright << '\n';
-	}
-
-	return;
+	cout << x1<<"/"<<y1 << '\n';
 }
 
 int main( int argc , char ** argv )

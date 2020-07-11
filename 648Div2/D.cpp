@@ -142,40 +142,171 @@ ll poww(ll a, ll b, ll mod)
     return (((ans*ans)%mod)*a)%mod;
 }
 
-void solve(){
-	ll n, q, c;
-	cin>>n>>q>>c;
-	vector<vector<vector<ll>>>dp(105, vector<vector<ll>>(105, vector<ll>(15, 0)));
-	rep(i, n){
-		ll a, b, c;
-		cin>>a>>b>>c;
-		dp[a][b][c] += 1;
+ll n, m;
+vector<vector<int>> arr;
+vector<vector<int>> visited;
+int dpi[] = {0, 0, 1, -1};
+int dpj[] = {1, -1, 0, 0};
+
+bool isSafe(int i, int j){
+	if (i>=0 && i<n && j>=0 && j<m)
+	{
+		return 1;
 	}
 
-	rep(i, 105){
-		rep(j, 105){
-			rep(k, 15){
-				if (i-1>=0 && j-1>=0)
-				{
-					dp[i][j][k]+=dp[i-1][j][k]+dp[i][j-1][k]-dp[i-1][j-1][k];
+	return 0;
+}
+
+void block(){
+	rep(i, n){
+		rep(j, m){
+			if (arr[i][j]==-1)
+			{
+				rep(k, 4){
+					ll newI = i+dpi[k];
+					ll newJ = j+dpj[k];
+					// trace(newI,newJ);
+					if (isSafe(newI, newJ) && arr[newI][newJ]==0)
+					{
+						arr[newI][newJ] = 2;
+					}
+
 				}
 			}
 		}
 	}
 
-	
-	rep(i, q){
-		ll t, x1, y1, x2, y2;
-		cin>>t>>x1>>y1>>x2>>y2;
-		ll totalBright = 0;
-		rep(k, 15){
-			ll totalKStars = 0;
-			totalKStars+=dp[x2][y2][k]-dp[x1-1][y2][k]-dp[x2][y1-1][k]+dp[x1-1][y1-1][k];
-			totalBright+=((k+t)%(c+1))*totalKStars;
+	return;
+}
+
+string check(){
+	if (arr[n-1][m-1]==2 || arr[n-1][m-1]==-1)
+	{
+		return "No";
+	}
+	rep(i, n){
+		rep(j, m){
+			if (arr[i][j]==1)
+			{
+				rep(k, 4){
+					ll newI = i+dpi[k];
+					ll newJ = j+dpj[k];
+					// trace(newI,newJ);
+					if (isSafe(newI, newJ) && arr[newI][newJ]==-1)
+					{
+						return "No";
+					}
+
+				}
+			}
 		}
-		cout << totalBright << '\n';
 	}
 
+	return "Yes";
+}
+
+bool dfs(int i, int j, auto &visited2){
+
+	if (i==n-1 && j==m-1)
+	{
+		return 1;
+	}
+	
+	rep(k, 4){
+		int newI = dpi[k]+i;
+		int newJ = dpj[k]+j;
+
+		if (isSafe(newI, newJ) && !visited2[newI][newJ])
+		{
+			if (arr[newI][newJ]!=2)
+			{
+				// trace(newI, newJ, i, j, arr[newI][newJ]);
+				if (arr[newI][newJ]==1)
+				{
+					visited[newI][newJ] = 1;
+				}
+				visited2[newI][newJ] = 1;
+				bool temp = dfs(newI, newJ, visited2);
+
+				if (temp)
+				{
+					return 1;
+				}
+			}
+		}
+	}
+
+	return 0;
+}
+
+
+void solve(){
+	cin>>n>>m;
+	arr.clear();
+	visited.clear();
+	arr.resize(n, vector<int>(m, 0));
+	visited.resize(n, vector<int>(m, 0));
+	ll good = 0;
+	ll bad = 0;
+	rep(i, n){
+		rep(j, m){
+			char a;
+			cin>>a;
+			if (a=='G')
+			{
+				good++;
+			}
+			if (a=='B')
+			{
+				bad++;
+			}
+			if (a=='.')
+			{
+				arr[i][j] = 0;
+			}else if (a=='G')
+			{
+				arr[i][j] = 1;
+			}else if (a=='B')
+			{
+				arr[i][j] = -1;
+			}else{
+				arr[i][j] = 2;
+			}
+		}
+	}
+	trace(good, bad);
+	if (good==0 && arr[n-1][m-1]!=-1)
+	{
+		cout << "Yes" << '\n';
+		return;
+	}
+	block();
+
+	if (check()=="No")
+	{
+		cout << "No" << '\n';
+		return;
+	}
+
+	rep(i, n){
+		rep(j, m){
+			if (!visited[i][j] && arr[i][j]==1)
+			{
+				vector<vector<int>>visited2(n, vector<int>(m, 0));
+				visited2[i][j] = 1;
+				visited[i][j] = 1;
+				trace(i, j);
+				bool val = dfs(i, j, visited2);
+				if (!val)
+				{
+					cout << "No" << '\n';
+					return;
+				}
+			}
+		}
+	}
+
+	cout << "Yes" << '\n';
 	return;
 }
 
@@ -189,7 +320,7 @@ int main( int argc , char ** argv )
 	
 	//Code Goes here	
 	ll t = 1;
-	
+	cin>>t;
 	while(t--){
 		solve();
 	}

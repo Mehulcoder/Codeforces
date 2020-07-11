@@ -14,6 +14,9 @@
 
 */
 
+
+
+
 #include <bits/stdc++.h>
 #include<ext/pb_ds/assoc_container.hpp>
 #include<ext/pb_ds/tree_policy.hpp>
@@ -142,41 +145,95 @@ ll poww(ll a, ll b, ll mod)
     return (((ans*ans)%mod)*a)%mod;
 }
 
+vector<ll> leftSum;
+vector<ll> rightSum;
 void solve(){
-	ll n, q, c;
-	cin>>n>>q>>c;
-	vector<vector<vector<ll>>>dp(105, vector<vector<ll>>(105, vector<ll>(15, 0)));
+	ll n, m;
+	cin>>n>>m;
+	vector<pair<pll, pll>> points;
+	vector<vector<ll>> notLike(n+5, vector<ll>(0));
+	// unordered_map<ll, vector<ll>, custom_hash> notLike;
+	vector<ll> index(n+5);
+	leftSum.resize(n, 0);
+	rightSum.resize(n, 0);
 	rep(i, n){
-		ll a, b, c;
-		cin>>a>>b>>c;
-		dp[a][b][c] += 1;
+		ll x, y;
+		cin>>x>>y;
+		points.push_back({{y-x, i}, {x, y}});
 	}
 
-	rep(i, 105){
-		rep(j, 105){
-			rep(k, 15){
-				if (i-1>=0 && j-1>=0)
-				{
-					dp[i][j][k]+=dp[i-1][j][k]+dp[i][j-1][k]-dp[i-1][j-1][k];
-				}
+	sort(all(points));
+	rep(i, m){
+		ll a, b;
+		cin>>a>>b;
+		a--;
+		b--;
+		notLike[a].push_back(b);
+		notLike[b].push_back(a);
+	}
+
+	rep(i, n){
+		auto point = points[i];
+		index[point.f.s] = i;
+		trace(point.f, point.s);
+		leftSum[i] = point.s.f;
+		rightSum[i] = point.s.s;
+		if (i>0)
+		{
+			leftSum[i]+=leftSum[i-1];
+			rightSum[i]+=rightSum[i-1];
+		}
+	}
+	trace(leftSum);
+	trace(rightSum);
+	vector<ll> ans(n, 0);
+	rep(i, n){
+		auto point = points[i];
+		ll lSum = 0;
+		ll rSum = 0;
+		ll selfSum = 0;
+		ll subtract = 0;
+		ll number = point.f.s;
+
+		if (i>0)
+		{
+			rSum = rightSum[i-1];
+			selfSum+=point.s.f*i;
+		}
+		lSum = leftSum[n-1] - leftSum[i];
+		selfSum+=point.s.s*(n-i-1);
+		trav(elem, notLike[point.f.s]){
+			// if (number==0)
+			// {
+			// 	trace(elem, index[elem]);
+			// }
+			if (index[elem]<i)
+			{
+				subtract+=points[index[elem]].s.s;
+				subtract+=point.s.f;
+			}else{
+				subtract+=points[index[elem]].s.f;
+				subtract+=point.s.s;
 			}
 		}
+		// if (number==0)
+		// {
+		// 	trace(lSum, rSum, selfSum, subtract);
+		// }
+
+		ans[number] = lSum+rSum+selfSum-subtract;
+
 	}
 
-	
-	rep(i, q){
-		ll t, x1, y1, x2, y2;
-		cin>>t>>x1>>y1>>x2>>y2;
-		ll totalBright = 0;
-		rep(k, 15){
-			ll totalKStars = 0;
-			totalKStars+=dp[x2][y2][k]-dp[x1-1][y2][k]-dp[x2][y1-1][k]+dp[x1-1][y1-1][k];
-			totalBright+=((k+t)%(c+1))*totalKStars;
-		}
-		cout << totalBright << '\n';
+	trav(elem, ans){
+		cout << elem << ' ';
 	}
+
+	cout << '\n';
+
 
 	return;
+
 }
 
 int main( int argc , char ** argv )

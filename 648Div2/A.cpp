@@ -143,37 +143,49 @@ ll poww(ll a, ll b, ll mod)
 }
 
 void solve(){
-	ll n, q, c;
-	cin>>n>>q>>c;
-	vector<vector<vector<ll>>>dp(105, vector<vector<ll>>(105, vector<ll>(15, 0)));
-	rep(i, n){
-		ll a, b, c;
-		cin>>a>>b>>c;
-		dp[a][b][c] += 1;
-	}
+	ll n, m;
+	cin>>n>>m;
 
-	rep(i, 105){
-		rep(j, 105){
-			rep(k, 15){
-				if (i-1>=0 && j-1>=0)
-				{
-					dp[i][j][k]+=dp[i-1][j][k]+dp[i][j-1][k]-dp[i-1][j-1][k];
-				}
+	ll row = 0ll;
+	ll col = 0ll;
+	vector<vector<int>> input(n, vector<int>(m, 0));
+	rep(i, n){
+		ll count = 0;
+		rep(j, m){
+			cin>>input[i][j];
+			if (input[i][j])
+			{
+				count++;
 			}
 		}
+		if (!count)
+		{
+			row++;
+		}
 	}
 
-	
-	rep(i, q){
-		ll t, x1, y1, x2, y2;
-		cin>>t>>x1>>y1>>x2>>y2;
-		ll totalBright = 0;
-		rep(k, 15){
-			ll totalKStars = 0;
-			totalKStars+=dp[x2][y2][k]-dp[x1-1][y2][k]-dp[x2][y1-1][k]+dp[x1-1][y1-1][k];
-			totalBright+=((k+t)%(c+1))*totalKStars;
+	rep(j, m){
+		ll count = 0;
+		rep(i, n){
+			if (input[i][j])
+			{
+				count++;
+			}
 		}
-		cout << totalBright << '\n';
+
+		if (!count)
+		{
+			col++;
+		}
+	}
+
+
+	ll val = min(row, col);
+	if (val%2==0)
+	{
+		cout << "Vivek" << '\n';
+	}else{
+		cout << "Ashish" << '\n';
 	}
 
 	return;
@@ -189,7 +201,7 @@ int main( int argc , char ** argv )
 	
 	//Code Goes here	
 	ll t = 1;
-	
+	cin>>t;
 	while(t--){
 		solve();
 	}

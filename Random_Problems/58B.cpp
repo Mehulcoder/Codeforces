@@ -142,40 +142,32 @@ ll poww(ll a, ll b, ll mod)
     return (((ans*ans)%mod)*a)%mod;
 }
 
+ll getLargestFactor(ll n){
+	// trace(n);
+	frr(i, n-1, 1){
+		if (n%i==0)
+		{
+			return i;
+		}
+	}
+}
+
 void solve(){
-	ll n, q, c;
-	cin>>n>>q>>c;
-	vector<vector<vector<ll>>>dp(105, vector<vector<ll>>(105, vector<ll>(15, 0)));
-	rep(i, n){
-		ll a, b, c;
-		cin>>a>>b>>c;
-		dp[a][b][c] += 1;
-	}
-
-	rep(i, 105){
-		rep(j, 105){
-			rep(k, 15){
-				if (i-1>=0 && j-1>=0)
-				{
-					dp[i][j][k]+=dp[i-1][j][k]+dp[i][j-1][k]-dp[i-1][j-1][k];
-				}
-			}
+	ll n;
+	cin>>n;
+	std::vector<ll> ans;
+	cout << n << ' ';
+	while(n>1){
+		ll a = getLargestFactor(n);
+		trace(n, a);
+		cout << a << ' ';
+		if (a==1)
+		{
+			return;
 		}
+		n=a;
 	}
-
-	
-	rep(i, q){
-		ll t, x1, y1, x2, y2;
-		cin>>t>>x1>>y1>>x2>>y2;
-		ll totalBright = 0;
-		rep(k, 15){
-			ll totalKStars = 0;
-			totalKStars+=dp[x2][y2][k]-dp[x1-1][y2][k]-dp[x2][y1-1][k]+dp[x1-1][y1-1][k];
-			totalBright+=((k+t)%(c+1))*totalKStars;
-		}
-		cout << totalBright << '\n';
-	}
-
+	cout <<'\n';
 	return;
 }
 

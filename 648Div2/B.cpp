@@ -143,40 +143,47 @@ ll poww(ll a, ll b, ll mod)
 }
 
 void solve(){
-	ll n, q, c;
-	cin>>n>>q>>c;
-	vector<vector<vector<ll>>>dp(105, vector<vector<ll>>(105, vector<ll>(15, 0)));
+	ll n;
+	cin>>n;
+
+	vector<ll> v(n);
 	rep(i, n){
-		ll a, b, c;
-		cin>>a>>b>>c;
-		dp[a][b][c] += 1;
+		ll a;
+		cin>>a;
+		v[i] = a;
 	}
 
-	rep(i, 105){
-		rep(j, 105){
-			rep(k, 15){
-				if (i-1>=0 && j-1>=0)
-				{
-					dp[i][j][k]+=dp[i-1][j][k]+dp[i][j-1][k]-dp[i-1][j-1][k];
-				}
-			}
+	ll zer = 0;
+	ll one = 0;
+	rep(i, n){
+		ll a;
+		cin>>a;
+		if (a)
+		{
+			one++;
+		}else{
+			zer++;
 		}
 	}
 
-	
-	rep(i, q){
-		ll t, x1, y1, x2, y2;
-		cin>>t>>x1>>y1>>x2>>y2;
-		ll totalBright = 0;
-		rep(k, 15){
-			ll totalKStars = 0;
-			totalKStars+=dp[x2][y2][k]-dp[x1-1][y2][k]-dp[x2][y1-1][k]+dp[x1-1][y1-1][k];
-			totalBright+=((k+t)%(c+1))*totalKStars;
-		}
-		cout << totalBright << '\n';
+
+	vector<ll> sorted = v;
+	sort(all(sorted));
+	if (sorted==v)
+	{
+		cout<<"Yes"<<endl;
+		return;
 	}
 
-	return;
+	trace(zer, one, n);
+	if (zer==0 || one==0)
+	{
+		 cout << "No" << '\n';
+		 return;
+	}else{
+		cout << "Yes" << '\n';
+		return;
+	}
 }
 
 int main( int argc , char ** argv )
@@ -189,7 +196,7 @@ int main( int argc , char ** argv )
 	
 	//Code Goes here	
 	ll t = 1;
-	
+	cin>>t;
 	while(t--){
 		solve();
 	}
