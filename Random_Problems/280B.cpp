@@ -142,59 +142,52 @@ ll poww(ll a, ll b, ll mod)
     return (((ans*ans)%mod)*a)%mod;
 }
 
-
 void solve(){
-	ll n, x;
-	cin>>n>>x;
+	ll n, s, ans = 0;
+	//We'll maintain a monotonic decreasing stack from left to right
+	/*
+	|
+	|
+	||
+	|||
+	|||
+	||||
+	||||
+	||||
+	*/
+	stack<ll> st;
+	//KEY-NOTE
+	//Hame kewal previous waale se bade waalo kaa kaam hai
 
-	multiset<ll>s1;
-	rep(i, n){
-		ll a;
-		cin>>a;
-		s1.insert(a);
-
-	}
-
-	ll ans = 0;
-	while(1){
-		auto it1 = s1.lower_bound(x);
-		if (it1 == s1.end())
-		{
-			ans += s1.size();
-			cout << ans << '\n';
-			return;
-		}else{
-			if (*it1==x)
+	cin>>n;
+	while(n--){
+		cin>>s;
+		while(!st.empty()){
+			ll t = st.top();
+			//The top is always the just previous element(for the first while iteration)
+			// So the XOR of the current and previous will always be there
+			ans = max(ans, t^s);
+			//If the just left element is greater than current
+			// curr can never be maximum --> curr will only contribute to the upcoming elements(maybe)
+			if (t>s)
 			{
-				ans++;
-				x = 2*x;
-				s1.erase(it1);
-			}else{
-				ll power = floor(log2((*it1)/x));
-				ans+=power;
-				x = x*poww(2, power, INF);
-				if (x==*it1)
-				{
-					s1.erase(it1);
-					x = 2*x;
-					ans++;
-					continue;
-				}
-				if (s1.lower_bound(2*x) == s1.end()) 
-				{
-					ans++;
-					ans+=s1.size();
-					cout << ans << '\n';
-					return;
-				}else{
-					ans+=2;
-					x = 2*(*it1);
-					s1.erase(it1);
-				}
+				break;
 			}
+
+			//If the just left element is smaller
+			//Pop tilll you find an element larger than curr and keep on taking XOR
+			//Till you don't find an element greater than the curr ---> curr will be max and the every popped element will be 2nd Max
+			// If you find such an element the previous case will hold
+			//i.e it'll only contribute to the just prev and the upcoming elements' XOR
+			st.pop();
 		}
 
+		st.push(s);
+
 	}
+
+	cout << ans << '\n';
+	return;
 }
 
 int main( int argc , char ** argv )
@@ -207,7 +200,7 @@ int main( int argc , char ** argv )
 	
 	//Code Goes here	
 	ll t = 1;
-	cin>>t;
+	
 	while(t--){
 		solve();
 	}

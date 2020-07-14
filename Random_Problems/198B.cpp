@@ -142,59 +142,34 @@ ll poww(ll a, ll b, ll mod)
     return (((ans*ans)%mod)*a)%mod;
 }
 
+ll n, k;
+vector<string> s;
+vector<vector<bool>> visited;
+
+
+auto dfs(ll v,bool x, ll water){
+	if(v >= n)
+    {
+        cout << "YES";
+        exit(0);
+    }
+    if(v < 0 || s[x][v] == 'X' || v <= water || visited[v][x]) return;
+    visited[v][x] = 1;
+    dfs(v + k, 1 - x, water + 1);
+    dfs(v + 1, x, water + 1);
+    dfs(v - 1, x, water + 1);
+}
 
 void solve(){
-	ll n, x;
-	cin>>n>>x;
-
-	multiset<ll>s1;
-	rep(i, n){
-		ll a;
-		cin>>a;
-		s1.insert(a);
-
-	}
-
-	ll ans = 0;
-	while(1){
-		auto it1 = s1.lower_bound(x);
-		if (it1 == s1.end())
-		{
-			ans += s1.size();
-			cout << ans << '\n';
-			return;
-		}else{
-			if (*it1==x)
-			{
-				ans++;
-				x = 2*x;
-				s1.erase(it1);
-			}else{
-				ll power = floor(log2((*it1)/x));
-				ans+=power;
-				x = x*poww(2, power, INF);
-				if (x==*it1)
-				{
-					s1.erase(it1);
-					x = 2*x;
-					ans++;
-					continue;
-				}
-				if (s1.lower_bound(2*x) == s1.end()) 
-				{
-					ans++;
-					ans+=s1.size();
-					cout << ans << '\n';
-					return;
-				}else{
-					ans+=2;
-					x = 2*(*it1);
-					s1.erase(it1);
-				}
-			}
-		}
-
-	}
+	cin>>n>>k;
+	string sl, sr;
+	cin>>sl>>sr;
+	s.push_back(sl);
+	s.push_back(sr);
+	visited.resize(n+1000, vector<bool>(2, 0));
+	dfs(0,0,-1);
+    cout << "NO";
+	return;
 }
 
 int main( int argc , char ** argv )
@@ -207,7 +182,7 @@ int main( int argc , char ** argv )
 	
 	//Code Goes here	
 	ll t = 1;
-	cin>>t;
+	
 	while(t--){
 		solve();
 	}

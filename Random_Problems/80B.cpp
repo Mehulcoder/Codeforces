@@ -142,59 +142,44 @@ ll poww(ll a, ll b, ll mod)
     return (((ans*ans)%mod)*a)%mod;
 }
 
-
 void solve(){
-	ll n, x;
-	cin>>n>>x;
+	string s;
+	cin>>s;
 
-	multiset<ll>s1;
-	rep(i, n){
-		ll a;
-		cin>>a;
-		s1.insert(a);
-
-	}
-
-	ll ans = 0;
-	while(1){
-		auto it1 = s1.lower_bound(x);
-		if (it1 == s1.end())
+	string s1;
+	ll hour = 0;
+	ll min = 0;
+	rep(i, s.size()){
+		if (s[i]==':')
 		{
-			ans += s1.size();
-			cout << ans << '\n';
-			return;
+			hour = stoll(s1);
+			s1 = "";
 		}else{
-			if (*it1==x)
-			{
-				ans++;
-				x = 2*x;
-				s1.erase(it1);
-			}else{
-				ll power = floor(log2((*it1)/x));
-				ans+=power;
-				x = x*poww(2, power, INF);
-				if (x==*it1)
-				{
-					s1.erase(it1);
-					x = 2*x;
-					ans++;
-					continue;
-				}
-				if (s1.lower_bound(2*x) == s1.end()) 
-				{
-					ans++;
-					ans+=s1.size();
-					cout << ans << '\n';
-					return;
-				}else{
-					ans+=2;
-					x = 2*(*it1);
-					s1.erase(it1);
-				}
-			}
+			s1+=s[i];
 		}
-
 	}
+	if (hour>=12)
+	{
+		hour-=12;
+	}
+	min = stoll(s1);
+	trace(hour, min);
+	min = stoll(s1);
+	trace((hour+min/60.0)*15);
+
+	ld a = (30.0)*(hour+min/60.0);
+	ld b = (6)*(min);
+	if (a>=360)
+	{
+		a = 0;
+	}
+	if (b==360)
+	{
+		b=0;
+	}
+	cout << a<<" "<<b << '\n';
+
+
 }
 
 int main( int argc , char ** argv )
@@ -207,7 +192,7 @@ int main( int argc , char ** argv )
 	
 	//Code Goes here	
 	ll t = 1;
-	cin>>t;
+	
 	while(t--){
 		solve();
 	}

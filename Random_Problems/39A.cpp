@@ -142,58 +142,36 @@ ll poww(ll a, ll b, ll mod)
     return (((ans*ans)%mod)*a)%mod;
 }
 
-
 void solve(){
-	ll n, x;
-	cin>>n>>x;
-
-	multiset<ll>s1;
-	rep(i, n){
-		ll a;
-		cin>>a;
-		s1.insert(a);
-
+	ll x, y;
+	cin>>x>>y;
+	ll r = floor(sqrt(x*x+y*y));
+	if (r*r == x*x+y*y)
+	{
+		cout << "black" << '\n';
+		return;
 	}
-
-	ll ans = 0;
-	while(1){
-		auto it1 = s1.lower_bound(x);
-		if (it1 == s1.end())
+	
+	if (r%2!=0)
+	{
+		if (x*y>0)
 		{
-			ans += s1.size();
-			cout << ans << '\n';
-			return;
+			cout << "white" << '\n';
+			return;	
 		}else{
-			if (*it1==x)
-			{
-				ans++;
-				x = 2*x;
-				s1.erase(it1);
-			}else{
-				ll power = floor(log2((*it1)/x));
-				ans+=power;
-				x = x*poww(2, power, INF);
-				if (x==*it1)
-				{
-					s1.erase(it1);
-					x = 2*x;
-					ans++;
-					continue;
-				}
-				if (s1.lower_bound(2*x) == s1.end()) 
-				{
-					ans++;
-					ans+=s1.size();
-					cout << ans << '\n';
-					return;
-				}else{
-					ans+=2;
-					x = 2*(*it1);
-					s1.erase(it1);
-				}
-			}
+			cout << "black" << '\n';
+			return;
 		}
-
+		
+	}else{
+		if (x*y>0)
+		{
+			cout << "black" << '\n';
+			return;	
+		}else{
+			cout << "white" << '\n';
+			return;
+		}
 	}
 }
 
@@ -207,7 +185,7 @@ int main( int argc , char ** argv )
 	
 	//Code Goes here	
 	ll t = 1;
-	cin>>t;
+	
 	while(t--){
 		solve();
 	}

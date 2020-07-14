@@ -142,60 +142,26 @@ ll poww(ll a, ll b, ll mod)
     return (((ans*ans)%mod)*a)%mod;
 }
 
-
 void solve(){
-	ll n, x;
-	cin>>n>>x;
-
-	multiset<ll>s1;
+	ll n;
+	cin>>n;
+	vector<ld> rad(n);
 	rep(i, n){
-		ll a;
-		cin>>a;
-		s1.insert(a);
+		cin>>rad[i];
+	}
+	sort(all(rad), greater<ld>());
 
+	rad.push_back(0);
+	ld ans = 0;
+	for (int i = 0; i < n; i+=2)
+	{
+		ans+=PI*(rad[i]*rad[i]-rad[i+1]*rad[i+1]);
 	}
 
-	ll ans = 0;
-	while(1){
-		auto it1 = s1.lower_bound(x);
-		if (it1 == s1.end())
-		{
-			ans += s1.size();
-			cout << ans << '\n';
-			return;
-		}else{
-			if (*it1==x)
-			{
-				ans++;
-				x = 2*x;
-				s1.erase(it1);
-			}else{
-				ll power = floor(log2((*it1)/x));
-				ans+=power;
-				x = x*poww(2, power, INF);
-				if (x==*it1)
-				{
-					s1.erase(it1);
-					x = 2*x;
-					ans++;
-					continue;
-				}
-				if (s1.lower_bound(2*x) == s1.end()) 
-				{
-					ans++;
-					ans+=s1.size();
-					cout << ans << '\n';
-					return;
-				}else{
-					ans+=2;
-					x = 2*(*it1);
-					s1.erase(it1);
-				}
-			}
-		}
-
-	}
+	cout << ans << '\n';
+	return;
 }
+
 
 int main( int argc , char ** argv )
 {
@@ -207,7 +173,7 @@ int main( int argc , char ** argv )
 	
 	//Code Goes here	
 	ll t = 1;
-	cin>>t;
+	
 	while(t--){
 		solve();
 	}

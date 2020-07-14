@@ -142,58 +142,62 @@ ll poww(ll a, ll b, ll mod)
     return (((ans*ans)%mod)*a)%mod;
 }
 
+vector<vector<ll>> edges;
+ll n, m, k;
 
-void solve(){
-	ll n, x;
-	cin>>n>>x;
 
-	multiset<ll>s1;
-	rep(i, n){
-		ll a;
-		cin>>a;
-		s1.insert(a);
-
+bool dfs(ll root, auto &visited, ll parent){
+	trace(root+1);
+	visited[root] = 1;
+	trav(child, edges[root]){
+		if (visited[child] && child!=parent)
+		{
+			return 0;
+		}
+		if (child!=parent)
+		{
+			dfs(child, visited, root);
+		}
 	}
 
-	ll ans = 0;
-	while(1){
-		auto it1 = s1.lower_bound(x);
-		if (it1 == s1.end())
+	return 1;
+}
+
+ll ifTree(){
+	vector<bool> visited(n, 0);
+	rep(i, n){
+		if (!visited[i])
 		{
-			ans += s1.size();
-			cout << ans << '\n';
-			return;
-		}else{
-			if (*it1==x)
+			trace(i+1);
+			trace(visited);
+			ll check1 = dfs(i, visited, -1);
+			if (!check1)
 			{
-				ans++;
-				x = 2*x;
-				s1.erase(it1);
-			}else{
-				ll power = floor(log2((*it1)/x));
-				ans+=power;
-				x = x*poww(2, power, INF);
-				if (x==*it1)
-				{
-					s1.erase(it1);
-					x = 2*x;
-					ans++;
-					continue;
-				}
-				if (s1.lower_bound(2*x) == s1.end()) 
-				{
-					ans++;
-					ans+=s1.size();
-					cout << ans << '\n';
-					return;
-				}else{
-					ans+=2;
-					x = 2*(*it1);
-					s1.erase(it1);
-				}
+				trace(i+1);
+				return 0;
 			}
 		}
+	}
 
+	return 1;
+}
+
+void solve(){
+	cin>>n>>m>>k;
+	edges.resize(n);
+	rep(i, m){
+		ll a, b;
+		cin>>a>>b;
+		a--;
+		b--;
+		edges[a].push_back(b);
+		edges[b].push_back(a);
+	}
+
+	ll tree = ifTree();
+	if (tree)
+	{
+		cout << "Tree hai bhai" << '\n';
 	}
 }
 
@@ -207,7 +211,7 @@ int main( int argc , char ** argv )
 	
 	//Code Goes here	
 	ll t = 1;
-	cin>>t;
+	
 	while(t--){
 		solve();
 	}

@@ -142,59 +142,27 @@ ll poww(ll a, ll b, ll mod)
     return (((ans*ans)%mod)*a)%mod;
 }
 
-
 void solve(){
-	ll n, x;
-	cin>>n>>x;
-
-	multiset<ll>s1;
+	
+	ll n, k;
+	cin>>n>>k;
+	vector<pll> points(n);
 	rep(i, n){
-		ll a;
-		cin>>a;
-		s1.insert(a);
+		ll x, y;
+		cin>>x>>y;
 
+		points[i] = {x, y};
 	}
-
-	ll ans = 0;
-	while(1){
-		auto it1 = s1.lower_bound(x);
-		if (it1 == s1.end())
-		{
-			ans += s1.size();
-			cout << ans << '\n';
-			return;
-		}else{
-			if (*it1==x)
-			{
-				ans++;
-				x = 2*x;
-				s1.erase(it1);
-			}else{
-				ll power = floor(log2((*it1)/x));
-				ans+=power;
-				x = x*poww(2, power, INF);
-				if (x==*it1)
-				{
-					s1.erase(it1);
-					x = 2*x;
-					ans++;
-					continue;
-				}
-				if (s1.lower_bound(2*x) == s1.end()) 
-				{
-					ans++;
-					ans+=s1.size();
-					cout << ans << '\n';
-					return;
-				}else{
-					ans+=2;
-					x = 2*(*it1);
-					s1.erase(it1);
-				}
-			}
-		}
-
+	ld ans = 0;
+	fr(i, 1, n-1){
+		trace(points[i]);
+		ans+=(ld)sqrt((points[i].f-points[i-1].f)*(points[i].f-points[i-1].f)+(points[i].s-points[i-1].s)*(points[i].s-points[i-1].s));
 	}
+	trace(ans);
+	ans*=((k*1.0)/50);
+
+	cout <<fixed << ans <<setprecision(12)<< '\n';
+	return;
 }
 
 int main( int argc , char ** argv )
@@ -207,7 +175,7 @@ int main( int argc , char ** argv )
 	
 	//Code Goes here	
 	ll t = 1;
-	cin>>t;
+	
 	while(t--){
 		solve();
 	}
