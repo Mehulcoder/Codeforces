@@ -142,142 +142,29 @@ ll poww(ll a, ll b, ll mod)
     return (((ans*ans)%mod)*a)%mod;
 }
 
-vector<vector<ll>> edges;
-vector<bool> visited;
-vector<ll> color;
-vector<ll> parent;
-vector<ll> shortestCycle;
-ll n, m, k;
-
-void printCycle(){
-	if (shortestCycle.size()>k)
-	{
-		cout << 1 << '\n';
-		ll count = 0;
-		for (int i = 0; i < shortestCycle.size(); i+=2)
-		{
-			if (count>=(k+1)/2)
-			{
-				cout <<  '\n';
-				return;
-			}
-			cout << shortestCycle[i]+1 << ' ';
-			count++;
-		}
-	}else{
-		cout << 2 << '\n';
-		cout << shortestCycle.size() << '\n';
-		trav(elem, shortestCycle){
-			cout << elem+1 << ' ';
-		}
-		cout << '\n';
-		return;
-	}
-}
-
-void dfs(ll root, ll currColor){
-	trace(root);
-	visited[root] = 1;
-	color[root] = currColor;
-	trav(child, edges[root]){
-		if (visited[child] && child!=parent[root])
-		{
-			//Cycle detected
-			//Now, find the shortest path from child to root, not having backedge ---> USE BFS
-			queue<ll> q;
-			q.push(child);
-			trace(root+1, child+1);
-			
-			visited.clear();
-			parent.clear();
-			shortestCycle.clear();
-			
-			visited.resize(n, 0);
-			parent.resize(n, -1);
-			while(!q.empty()){
-				ll t = q.front();
-				visited[t] = 1;
-				q.pop();
-				trav(cchild, edges[t]){
-					if (t==child && cchild==root)
-					{
-						continue;
-					}
-					if (t==root && cchild==child)
-					{
-						trace(parent);
-						ll curr = root;
-						while(curr!=child){
-							shortestCycle.push_back(curr);
-							curr = parent[curr];
-						}
-						shortestCycle.push_back(curr);
-						trace(shortestCycle);
-						printCycle();
-						exit(0);
-					}else if (!visited[cchild])
-					{
-						if (parent[cchild]==-1)
-						{
-							parent[cchild]=t;
-							q.push(cchild);
-						}
-					}
-				}
-			}
-			exit(0);
-			return;
-		}else if (!visited[child])
-		{
-			parent[child] = root;
-			dfs(child, !currColor);
-		}
-	}
-
-	return;
-}
-
-
 void solve(){
-	cin>>n>>m>>k;
-	edges.resize(n);
-	visited.resize(n, 0);
-	parent.resize(n, -1);
-	color.resize(n, -1);
+	ll n, x, m;
+	cin>>n>>x>>m;
+	x--;
+	bool flag = 0;
+	ll left = x;
+	ll right = x;
 	rep(i, m){
 		ll a, b;
 		cin>>a>>b;
 		a--;
 		b--;
-		edges[a].push_back(b);
-		edges[b].push_back(a);
-	}
-
-	dfs(0, 0);
-
-	//If we reach here, means no cycle detected, color the tree alternatively
-	bool col = 0;
-	ll oneCount = count(all(color), 1);
-	ll zeroCount = n-oneCount;
-	if (oneCount>zeroCount)
-	{
-		col = 1;
-	}
-	cout << 1 << '\n';
-	ll count = 0;
-	rep(i, n){
-		if (color[i]==col)
+		if (a>right || b<left)
 		{
-			if (count>=(k+1)/2)
-			{
-				cout <<'\n';
-				return;
-			}
-			cout << i+1 << ' ';
-			count++;
+			continue;
 		}
+
+		left = min(a, left);
+		right = max(b, right);
+		trace(left, right);
 	}
-	cout << '\n';
+
+	cout << right-left+1 << '\n';
 }
 
 int main( int argc , char ** argv )
@@ -290,7 +177,7 @@ int main( int argc , char ** argv )
 	
 	//Code Goes here	
 	ll t = 1;
-	
+	cin>>t;
 	while(t--){
 		solve();
 	}
@@ -303,3 +190,4 @@ int main( int argc , char ** argv )
     return 0 ; 
 }
 
+	

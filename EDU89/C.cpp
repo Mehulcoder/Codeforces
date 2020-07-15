@@ -142,142 +142,45 @@ ll poww(ll a, ll b, ll mod)
     return (((ans*ans)%mod)*a)%mod;
 }
 
-vector<vector<ll>> edges;
-vector<bool> visited;
-vector<ll> color;
-vector<ll> parent;
-vector<ll> shortestCycle;
-ll n, m, k;
+void solve(){
+	ll n, m;
+	cin>>n>>m;
+	vector<vector<ll>> mat(n, vector<ll>(m, 0));
+	vector<ll> ones(m+n, 0);
+	vector<ll> zeroes(m+n, 0);
 
-void printCycle(){
-	if (shortestCycle.size()>k)
-	{
-		cout << 1 << '\n';
-		ll count = 0;
-		for (int i = 0; i < shortestCycle.size(); i+=2)
-		{
-			if (count>=(k+1)/2)
+	rep(i, n){
+		rep(j, m){
+			cin>>mat[i][j];
+			if (i+j<m+n-2-i-j)
 			{
-				cout <<  '\n';
-				return;
-			}
-			cout << shortestCycle[i]+1 << ' ';
-			count++;
-		}
-	}else{
-		cout << 2 << '\n';
-		cout << shortestCycle.size() << '\n';
-		trav(elem, shortestCycle){
-			cout << elem+1 << ' ';
-		}
-		cout << '\n';
-		return;
-	}
-}
-
-void dfs(ll root, ll currColor){
-	trace(root);
-	visited[root] = 1;
-	color[root] = currColor;
-	trav(child, edges[root]){
-		if (visited[child] && child!=parent[root])
-		{
-			//Cycle detected
-			//Now, find the shortest path from child to root, not having backedge ---> USE BFS
-			queue<ll> q;
-			q.push(child);
-			trace(root+1, child+1);
-			
-			visited.clear();
-			parent.clear();
-			shortestCycle.clear();
-			
-			visited.resize(n, 0);
-			parent.resize(n, -1);
-			while(!q.empty()){
-				ll t = q.front();
-				visited[t] = 1;
-				q.pop();
-				trav(cchild, edges[t]){
-					if (t==child && cchild==root)
-					{
-						continue;
-					}
-					if (t==root && cchild==child)
-					{
-						trace(parent);
-						ll curr = root;
-						while(curr!=child){
-							shortestCycle.push_back(curr);
-							curr = parent[curr];
-						}
-						shortestCycle.push_back(curr);
-						trace(shortestCycle);
-						printCycle();
-						exit(0);
-					}else if (!visited[cchild])
-					{
-						if (parent[cchild]==-1)
-						{
-							parent[cchild]=t;
-							q.push(cchild);
-						}
-					}
+				if (mat[i][j]==1)
+				{
+					ones[i+j]++;
+				}else{
+					zeroes[i+j]++;
+				}
+			}else{
+				if (mat[i][j]==1)
+				{
+					ones[m+n-2-i-j]++;
+				}else{
+					zeroes[m+n-2-i-j]++;
 				}
 			}
-			exit(0);
-			return;
-		}else if (!visited[child])
-		{
-			parent[child] = root;
-			dfs(child, !currColor);
 		}
 	}
-
-	return;
-}
-
-
-void solve(){
-	cin>>n>>m>>k;
-	edges.resize(n);
-	visited.resize(n, 0);
-	parent.resize(n, -1);
-	color.resize(n, -1);
-	rep(i, m){
-		ll a, b;
-		cin>>a>>b;
-		a--;
-		b--;
-		edges[a].push_back(b);
-		edges[b].push_back(a);
+	ll ans = 0;
+	rep(i, m+n){
+		ans+=min(ones[i], zeroes[i]);
 	}
 
-	dfs(0, 0);
 
-	//If we reach here, means no cycle detected, color the tree alternatively
-	bool col = 0;
-	ll oneCount = count(all(color), 1);
-	ll zeroCount = n-oneCount;
-	if (oneCount>zeroCount)
-	{
-		col = 1;
-	}
-	cout << 1 << '\n';
-	ll count = 0;
-	rep(i, n){
-		if (color[i]==col)
-		{
-			if (count>=(k+1)/2)
-			{
-				cout <<'\n';
-				return;
-			}
-			cout << i+1 << ' ';
-			count++;
-		}
-	}
-	cout << '\n';
+	
+	cout << ans << '\n';
+
+
+
 }
 
 int main( int argc , char ** argv )
@@ -290,7 +193,7 @@ int main( int argc , char ** argv )
 	
 	//Code Goes here	
 	ll t = 1;
-	
+	cin>>t;
 	while(t--){
 		solve();
 	}
