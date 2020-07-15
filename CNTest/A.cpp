@@ -143,49 +143,32 @@ ll poww(ll a, ll b, ll mod)
 }
 
 void solve(){
-	ll n, m;
-	cin>>n>>m;
-	vector<vector<ll>> mat(n, vector<ll>(m, 0));
-	vector<ll> ones(m+n, 0);
-	vector<ll> zeroes(m+n, 0);
+	ll n;
+	ll count = 0;
+	cin>>n;
 
-	//KEY: Points with same distance from start and end (i+j, m+n-2-i-j) should have all same elements
-	//Except the central one ---> when i+j==(m+n-2)/2
+	vector<ll> v(n);
+	vector<ll> aux(n, 0);
+	unordered_map<ll, ll, custom_hash> m;
 	rep(i, n){
-		rep(j, m){
-			cin>>mat[i][j];
-			if (i+j!=(ld)(m+n-2)/2.0)
-			{
-				if (i+j<m+n-2-i-j)
-				{
-					if (mat[i][j]==1)
-					{
-						ones[i+j]++;
-					}else{
-						zeroes[i+j]++;
-					}
-				}else{
-					if (mat[i][j]==1)
-					{
-						ones[m+n-2-i-j]++;
-					}else{
-						zeroes[m+n-2-i-j]++;
-					}
-				}
-			}
+		cin>>v[i];
+		m[v[i]]++;
+	}
+	sort(all(v));
+	rep(i, n){
+		aux[i] = n-i+v[i];
+	}
+	sort(all(aux));
+	// trace()
+	rep(i, n){
+		i+=m[v[i]]-1;
+		if (upper_bound(all(aux), v[i]+n)==aux.end())
+		{
+			count+=m[v[i]];
 		}
 	}
-	ll ans = 0;
-	rep(i, m+n){
-		ans+=min(ones[i], zeroes[i]);
-	}
-
-
-	
-	cout << ans << '\n';
-
-
-
+	cout << count << '\n';
+	return;
 }
 
 int main( int argc , char ** argv )
@@ -198,7 +181,7 @@ int main( int argc , char ** argv )
 	
 	//Code Goes here	
 	ll t = 1;
-	cin>>t;
+	
 	while(t--){
 		solve();
 	}

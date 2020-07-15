@@ -142,49 +142,51 @@ ll poww(ll a, ll b, ll mod)
     return (((ans*ans)%mod)*a)%mod;
 }
 
+
+vector<ll> spf;
+vector<ll> fact;
+vector<ll> invFact;
+vector<ll> inv;
+
+
+///PreCalculate NcR
+ll ncr(ll n, ll r, ll mod=MOD){
+	return (((fact[n]*invFact[n-r])%mod)*invFact[r])%mod;
+}
+
 void solve(){
-	ll n, m;
-	cin>>n>>m;
-	vector<vector<ll>> mat(n, vector<ll>(m, 0));
-	vector<ll> ones(m+n, 0);
-	vector<ll> zeroes(m+n, 0);
-
-	//KEY: Points with same distance from start and end (i+j, m+n-2-i-j) should have all same elements
-	//Except the central one ---> when i+j==(m+n-2)/2
-	rep(i, n){
-		rep(j, m){
-			cin>>mat[i][j];
-			if (i+j!=(ld)(m+n-2)/2.0)
-			{
-				if (i+j<m+n-2-i-j)
-				{
-					if (mat[i][j]==1)
-					{
-						ones[i+j]++;
-					}else{
-						zeroes[i+j]++;
-					}
-				}else{
-					if (mat[i][j]==1)
-					{
-						ones[m+n-2-i-j]++;
-					}else{
-						zeroes[m+n-2-i-j]++;
-					}
-				}
-			}
-		}
-	}
-	ll ans = 0;
-	rep(i, m+n){
-		ans+=min(ones[i], zeroes[i]);
-	}
-
-
 	
+	vector<ll> primeFactoes;
+	ll x, y;
+	cin>>x>>y;
+	ll ans = 1;
+	ll temp = x;
+
+	//Get prime Factors
+	while(temp!=1){
+		if (primeFactoes.size()==0 || primeFactoes.back()!=spf[temp])
+		{
+			primeFactoes.push_back(spf[temp]);
+		}
+		temp/=spf[temp];
+
+	}
+
+	//Ditribute all occurances of each prime factor
+	trav(fact, primeFactoes){
+		ll temp = x;
+		ll power = 0;
+		while(temp%fact==0 && temp>0){
+			power++;
+			temp=temp/fact;
+		}
+		ans*=(ncr(y+power-1,y-1, MOD));
+		ans%=MOD;
+	}
+	ans*=poww(2, y-1, MOD);
+	ans%=MOD;
 	cout << ans << '\n';
-
-
+	return;
 
 }
 
@@ -196,7 +198,37 @@ int main( int argc , char ** argv )
     freopen("input.txt", "r", stdin);
 	#endif
 	
-	//Code Goes here	
+	spf.resize(1100000, 0);
+	fact.resize(1100000, 1);
+	inv.resize(1100000, 1);
+	invFact.resize(1100000, 1);
+
+	//Precalc: Inverse of number, factorial, inverse of factorial of a number
+	//Calculate till max possible value of y+maxPowerOfAFactor
+	fr(i, 2, 1010000){
+		fact[i] = (fact[i-1]*i)%MOD;
+		inv[i] = inv[MOD%i]*(MOD-MOD/i)%MOD;
+		invFact[i] = (invFact[i-1]*inv[i])%MOD;
+	}	
+
+	//Pre calc smallest prime factor
+	spf[1] = 1;
+	fr(i, 2, 1010000){
+		if (!spf[i])
+		{
+			spf[i] = i;
+			for (ll j = 2*i; j < 1010000; j+=i)
+			{
+				if (!spf[j])
+				{
+					spf[j] = i;
+					
+				}
+			}
+		}
+	}
+
+
 	ll t = 1;
 	cin>>t;
 	while(t--){
