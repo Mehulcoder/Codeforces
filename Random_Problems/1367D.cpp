@@ -137,88 +137,49 @@ ll poww(ll a, ll b, ll mod)
         return (ans*ans)%mod;
     return (((ans*ans)%mod)*a)%mod;
 }
+const ll N = 55;
 
-vector<vector<ll>> edges;
-vector<vector<ll>> dirEdges;
-vector<bool> visited;
-vector<ll> topoOrder;
-
-void getTopo(ll root){
-	visited[root] = 1;
-	trav(child, dirEdges[root]){
-		if (!visited[child])
-		{
-			getTopo(child);
-		}
-	}
-
-	topoOrder.push_back(root);
-	return;
-}
+ll n;
+string s;
+ll a[N];
+bool vis[N];
 
 void solve(){
-	ll n, m;
-	cin>>n>>m;
-	edges.clear();
-	dirEdges.clear();
-	edges.resize(n);
-	dirEdges.resize(n);
-	visited.assign(n, 0);
-	topoOrder.clear();
-
-
-	vector<ll> pos(n);
-
-	rep(i, m){
-		ll t;
-		cin>>t;
-		ll a, b;
-		cin>>a>>b;
-		edges[a-1].push_back(b-1);
-		if (t==1)
+	memset(vis, 0, sizeof(vis));
+	cin >> s;
+	map<char, ll> have;
+	for(auto &it:s)
+		have[it]++;
+	cin >> n;
+	for(ll i = 1; i <= n; i++)
+		cin >> a[i];
+	string ans(n + 1, '?');
+	while(true)
+	{
+		map<ll, vector<ll> > idx;
+		for(ll i = 1; i <= n; i++)
 		{
-			dirEdges[a-1].push_back(b-1);
+			if(!vis[i])
+				idx[a[i]].push_back(i);
 		}
-	}
-
-
-	visited.assign(n, 0);
-	rep(i, n){
-		if (!visited[i])
+		if(!idx.size())
+			break;
+		auto it = idx.begin();
+		ll reqd = it -> second.size();
+		while(have.rbegin() -> second < reqd)
+			have.erase(--have.end());
+		for(auto &pos:it->second)
 		{
-			getTopo(i);
+			vis[pos] = 1;
+			for(ll i = 1; i <= n; i++)
+				a[i] -= abs(i - pos);
+			ans[pos] = have.rbegin() -> first;
 		}
+		have.erase(--have.end());
+		idx.erase(it);
 	}
-	reverse(all(topoOrder));
-
-	rep(i, n){
-		pos[topoOrder[i]] = i;
-	}
-
-	//The one with lower position will come ahead
-	//If this doesn't happen then there will be a contradiction
-	rep(u, n){
-		trav(v, dirEdges[u]){
-			if (pos[u]>pos[v])
-			{
-				cout << "NO" << '\n';
-				return;
-			}
-		}
-	}
-
-	cout << "YES" << '\n';
-	rep(u, n){
-		trav(v, edges[u]){
-			if (pos[u]<pos[v])
-			{
-				cout << u+1<<" "<<v+1 << '\n';
-			}else{
-				cout << v+1 <<" "<<u+1 << '\n';
-			}
-		}
-	}
-
+	ans = ans.substr(1);
+	cout << ans << endl;
 	return;
 }
 

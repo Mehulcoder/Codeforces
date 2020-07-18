@@ -138,87 +138,20 @@ ll poww(ll a, ll b, ll mod)
     return (((ans*ans)%mod)*a)%mod;
 }
 
-vector<vector<ll>> edges;
-vector<vector<ll>> dirEdges;
-vector<bool> visited;
-vector<ll> topoOrder;
-
-void getTopo(ll root){
-	visited[root] = 1;
-	trav(child, dirEdges[root]){
-		if (!visited[child])
-		{
-			getTopo(child);
-		}
-	}
-
-	topoOrder.push_back(root);
-	return;
-}
-
 void solve(){
-	ll n, m;
-	cin>>n>>m;
-	edges.clear();
-	dirEdges.clear();
-	edges.resize(n);
-	dirEdges.resize(n);
-	visited.assign(n, 0);
-	topoOrder.clear();
-
-
-	vector<ll> pos(n);
-
-	rep(i, m){
-		ll t;
-		cin>>t;
-		ll a, b;
-		cin>>a>>b;
-		edges[a-1].push_back(b-1);
-		if (t==1)
-		{
-			dirEdges[a-1].push_back(b-1);
-		}
-	}
-
-
-	visited.assign(n, 0);
+	string s;
+	cin>>s;
+	ll n = s.size();
+	string ans = "";
 	rep(i, n){
-		if (!visited[i])
+		if (i%2!=0 && i!=n-1)
 		{
-			getTopo(i);
+			continue;
 		}
-	}
-	reverse(all(topoOrder));
-
-	rep(i, n){
-		pos[topoOrder[i]] = i;
+		ans+=s[i];
 	}
 
-	//The one with lower position will come ahead
-	//If this doesn't happen then there will be a contradiction
-	rep(u, n){
-		trav(v, dirEdges[u]){
-			if (pos[u]>pos[v])
-			{
-				cout << "NO" << '\n';
-				return;
-			}
-		}
-	}
-
-	cout << "YES" << '\n';
-	rep(u, n){
-		trav(v, edges[u]){
-			if (pos[u]<pos[v])
-			{
-				cout << u+1<<" "<<v+1 << '\n';
-			}else{
-				cout << v+1 <<" "<<u+1 << '\n';
-			}
-		}
-	}
-
+	cout << ans << '\n';
 	return;
 }
 

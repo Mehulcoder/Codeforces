@@ -138,85 +138,56 @@ ll poww(ll a, ll b, ll mod)
     return (((ans*ans)%mod)*a)%mod;
 }
 
-vector<vector<ll>> edges;
-vector<vector<ll>> dirEdges;
+vector<vector<ll>>edges;
 vector<bool> visited;
-vector<ll> topoOrder;
 
-void getTopo(ll root){
-	visited[root] = 1;
-	trav(child, dirEdges[root]){
-		if (!visited[child])
+ll getCount(ll x){
+	visited[x] = 1;
+	ll count = 0;
+	trav(v, edges[x]){
+		if (!visited[v])
 		{
-			getTopo(child);
+			count+=getCount(v)+1;
 		}
 	}
 
-	topoOrder.push_back(root);
-	return;
+	return count;
 }
 
 void solve(){
-	ll n, m;
-	cin>>n>>m;
+	ll n, x;
+	cin>>n>>x;
+	x--;
 	edges.clear();
-	dirEdges.clear();
 	edges.resize(n);
-	dirEdges.resize(n);
 	visited.assign(n, 0);
-	topoOrder.clear();
 
-
-	vector<ll> pos(n);
-
-	rep(i, m){
-		ll t;
-		cin>>t;
+	rep(i, n-1){
 		ll a, b;
 		cin>>a>>b;
-		edges[a-1].push_back(b-1);
-		if (t==1)
-		{
-			dirEdges[a-1].push_back(b-1);
-		}
+		a--;
+		b--;
+
+		edges[a].push_back(b);
+		edges[b].push_back(a);
+	}
+
+	if (edges[x].size()<=1)
+	{
+		cout << "Ayush" << '\n';
+		return;
 	}
 
 
-	visited.assign(n, 0);
-	rep(i, n){
-		if (!visited[i])
-		{
-			getTopo(i);
-		}
-	}
-	reverse(all(topoOrder));
+	ll count = getCount(x);
+	vector<string> cand = {"Ayush", "Ashish"};
+	bool curr = (count-edges[x].size())%2;
 
-	rep(i, n){
-		pos[topoOrder[i]] = i;
-	}
-
-	//The one with lower position will come ahead
-	//If this doesn't happen then there will be a contradiction
-	rep(u, n){
-		trav(v, dirEdges[u]){
-			if (pos[u]>pos[v])
-			{
-				cout << "NO" << '\n';
-				return;
-			}
-		}
-	}
-
-	cout << "YES" << '\n';
-	rep(u, n){
-		trav(v, edges[u]){
-			if (pos[u]<pos[v])
-			{
-				cout << u+1<<" "<<v+1 << '\n';
-			}else{
-				cout << v+1 <<" "<<u+1 << '\n';
-			}
-		}
+	if (edges[x].size()%2!=0 || edges[x].size()==0)
+	{
+		cout << cand[curr] << '\n';
+	}else{
+		cout << cand[!curr] << '\n';
 	}
 
 	return;
