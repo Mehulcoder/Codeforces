@@ -1,7 +1,8 @@
+
 /*
 
-                Name: Mehul Chaturvedi
-                IIT-Guwahati
+        Name: Mehul Chaturvedi
+        IIT-Guwahati
 
 */
 
@@ -137,77 +138,103 @@ ll poww(ll a, ll b, ll mod)
         return (ans*ans)%mod;
     return (((ans*ans)%mod)*a)%mod;
 }
+vector<ll> spf;
+vector<ll> f1;
+vector<ll> f2;
+
+ll fun(ll val){
+	ll res = 1ll;
+	while(val!=1){
+		if (f1[spf[val]]>0ll)
+		{
+			f1[spf[val]]--;
+		}else{
+			res*=spf[val];
+		}
+		val = val/spf[val];
+	}
+
+	return res;
+}
+
+ll fun2(ll val){
+	ll res = 1ll;
+
+	while(val!=1){
+		if (f2[spf[val]]>0ll)
+		{
+			f2[spf[val]]--;
+		}else{
+			res*=spf[val];
+		}
+		val = val/spf[val];
+	}
+
+	return res;
+}
 
 void solve(){
 	ll n;
-	cin>>n;
-	n = 2*n;
+	ll m;
+	cin>>n>>m;
+	f1.clear();
+	f2.clear();
 
-	vector<pll> v;
-	vector<ll> segments;
+	//f1 and f2 will store the freqency of the prime number which has to be removed 
+	//from num and den respectively
+	f1.resize(1e7+2, 0);
+	f2.resize(1e7+2, 0);
+
+	vector<ll> num;
+	vector<ll> den;
 	rep(i, n){
 		ll a;
 		cin>>a;
-		v.push_back({a, i});
+		num.push_back(a);
+		while(a!=1){
+			f1[spf[a]]++;
+			a = a/spf[a];
+		}
 	}
 
-	//The segments(suffix) after the current maximum
-	//can be placed in any of the a or b
-	//Same logic for the remaining(after removing the suffix)
-	sort(all(v), greater<pll>());
-	ll last = n;
-	ll sum = 0;
+	rep(i, m){
+		ll a;
+		cin>>a;
+		den.push_back(a);
+		while(a!=1){
+			f2[spf[a]]++;
+			a = a/spf[a];
+		}
+	}
+
+	//The frequency removed will be same for both num and den
+	//And will be the minimum of both of them
+	rep(i, 1e7+2){
+		f1[i] = min(f1[i], f2[i]);
+		f2[i] = f1[i];
+	}
+
+	
+	//Creating num;
 	rep(i, n){
-		if (v[i].s>last)
-		{
-			continue;
-		}
-		segments.push_back(last-v[i].s);
-		sum+=segments.back();
-		last = v[i].s;
+		num[i] = fun(num[i]);
 	}
 
-	//Check if 2 equal sums can be created out of the
-	//given elements.
-	//Which basically means that choose the elements to sum S/2.
-	sum/=2;
-	vector<bool> dp(sum+1, 0);
-	vector<bool> dp0(sum+1, 0);
-	dp0[0] = 1;
-	rep(i, sum+1){
-		if (i==0 || i==segments[0])
-		{
-			dp0[i] = 1;
-		}
-		if (i==sum && dp0[i]==1)
-		{
-			cout << "YES" << '\n';
-			return;
-		}
+	//Creating den
+	rep(i, m){
+		den[i] = fun2(den[i]);
 	}
 
-	fr(i, 1, segments.size()-1){
-		rep(j, sum+1){
-			bool temp;
-			if (j - segments[i]<0)
-			{
-				temp = (dp0[j] || 0);
-			}else{
-				temp = dp0[j] || dp0[j-segments[i]];
-			}
-			dp[j] = temp;
-			if (j==sum && dp[j]==1)
-			{
-				cout << "YES" << '\n';
-				return;
-			}
-		}
-		dp0 = dp;
+	cout << num.size()<<" "<<den.size() << '\n';
+	rep(i, num.size()){
+		cout << num[i] << ' ';
 	}
-
-	cout << "NO" << '\n';
+	cout << '\n';
+	rep(i, den.size()){
+		cout << den[i] << ' ';
+	}
+	cout << '\n';
 	return;
-
 }
 
 int main( int argc , char ** argv )
@@ -220,7 +247,26 @@ int main( int argc , char ** argv )
 	
 	//Code Goes here	
 	ll t = 1;
-	cin>>t;
+	spf.clear();
+	spf.resize(1e7+2, 0);
+	
+	//Pre calc smallest prime factor
+	spf[1] = 1;
+	fr(i, 2, 1e7){
+		if (!spf[i])
+		{
+			spf[i] = i;
+			for (ll j = 2*i; j <= 1e7; j+=i)
+			{
+				if (!spf[j])
+				{
+					spf[j] = i;
+					
+				}
+			}
+		}
+	}
+
 	while(t--){
 		solve();
 	}

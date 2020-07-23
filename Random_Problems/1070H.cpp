@@ -141,73 +141,36 @@ ll poww(ll a, ll b, ll mod)
 void solve(){
 	ll n;
 	cin>>n;
-	n = 2*n;
 
-	vector<pll> v;
-	vector<ll> segments;
+	map<string, set<string>> m;
 	rep(i, n){
-		ll a;
-		cin>>a;
-		v.push_back({a, i});
-	}
+		string s;
+		cin>>s;
 
-	//The segments(suffix) after the current maximum
-	//can be placed in any of the a or b
-	//Same logic for the remaining(after removing the suffix)
-	sort(all(v), greater<pll>());
-	ll last = n;
-	ll sum = 0;
-	rep(i, n){
-		if (v[i].s>last)
-		{
-			continue;
-		}
-		segments.push_back(last-v[i].s);
-		sum+=segments.back();
-		last = v[i].s;
-	}
-
-	//Check if 2 equal sums can be created out of the
-	//given elements.
-	//Which basically means that choose the elements to sum S/2.
-	sum/=2;
-	vector<bool> dp(sum+1, 0);
-	vector<bool> dp0(sum+1, 0);
-	dp0[0] = 1;
-	rep(i, sum+1){
-		if (i==0 || i==segments[0])
-		{
-			dp0[i] = 1;
-		}
-		if (i==sum && dp0[i]==1)
-		{
-			cout << "YES" << '\n';
-			return;
-		}
-	}
-
-	fr(i, 1, segments.size()-1){
-		rep(j, sum+1){
-			bool temp;
-			if (j - segments[i]<0)
-			{
-				temp = (dp0[j] || 0);
-			}else{
-				temp = dp0[j] || dp0[j-segments[i]];
-			}
-			dp[j] = temp;
-			if (j==sum && dp[j]==1)
-			{
-				cout << "YES" << '\n';
-				return;
+		rep(j, s.size()){
+			fr(k, j, s.size()-1){
+				string temp = s.substr(j, k-j+1);
+				m[temp].insert(s);
 			}
 		}
-		dp0 = dp;
 	}
 
-	cout << "NO" << '\n';
+
+	ll q;
+	cin>>q;
+	rep(i, q){
+		string s1;
+		cin>>s1;
+		if (m.find(s1)!=m.end())
+		{
+			cout << m[s1].size() << ' ';
+			cout << *(m[s1].begin()) << '\n';
+		}else{
+			cout << 0 <<" -"<< '\n';
+		}
+	}
+
 	return;
-
 }
 
 int main( int argc , char ** argv )
@@ -220,7 +183,7 @@ int main( int argc , char ** argv )
 	
 	//Code Goes here	
 	ll t = 1;
-	cin>>t;
+	// cin>>t;
 	while(t--){
 		solve();
 	}
