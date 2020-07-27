@@ -45,7 +45,7 @@ typedef unordered_set<int> useti;
 #define s second
 
 #define INF 4557430888798830399ll
-#define MOD 1000000007
+#define MOD 998244353
 #define EPS 1e-7
 #define PI acos(-1)
 
@@ -138,37 +138,77 @@ ll poww(ll a, ll b, ll mod)
     return (((ans*ans)%mod)*a)%mod;
 }
 
-ll n, m, x, y;
-ll get(ll count){
-	return (count/2)*(min(2*x, y))+(count%2)*x;	
+ll gcdExtended(ll a, ll b, ll &x, ll &y){
+	if (a==0)
+	{
+		x = 0;
+		y = 1;
+		return b;
+	}
+
+	ll x1, y1;
+	ll d = gcdExtended(b%a, a, x1, y1);
+	x = y1-(b/a)*x1;
+	y = x1;
+	return d;
+}
+
+ll modInverse(ll a, ll mod){
+	ll x, y;
+	ll d = gcdExtended(a, mod, x, y);
+	if (d!=1)
+	{
+		return -1;
+	}
+
+	return (x%mod+mod)%mod;
+}
+
+const ll N=5e5+10;
+vector<ll> inv;
+vector<ll> fact;
+vector<ll> invFact;
+
+void precalc(){
+	inv.resize(N, 1);
+	fact.resize(N, 1);
+	invFact.resize(N, 1);
+
+	fr(i, 2, N-1){
+		inv[i] = inv[MOD%i]*(MOD-MOD/i)%MOD;
+		fact[i] = (fact[i-1]*i)%MOD;
+		invFact[i] = (invFact[i-1]*inv[i])%MOD;
+	}
+
+	return;
+}
+
+
+ll ncr(ll n, ll r, ll mod=MOD){
+	if (r>n)
+	{
+		return 0;
+	}
+	return (((fact[n]*invFact[n-r])%mod)*invFact[r])%mod;
 }
 
 void solve(){
-	cin>>n>>m>>x>>y;
-	ll ans = 0;
+	ll n,k;
+	cin>>n>>k;
 
-	vector<vector<char>> v(n, vector<char>(m));
-	vector<ll> con;
-	rep(i, n){
-		ll count = 0;
-		rep(j, m){
-			cin>>v[i][j];
-			if (v[i][j]=='.')
-			{
-				trace("here");
-				count++;
-			}else{
-				ans+=get(count);
-				count = 0;
-			}
-		}
-		ans+=get(count);
-		count = 0;
+	//We claim that the array is stable if and only if all elements are divisible by its minimum.
+	//Iterate on the minimum element
+	ll ans = 0ll;
+	fr(i, 1, n){
+		//i is the minimum element, now rest of the elements should be divisible by i;
+		//there are floor(n/i) elements for each i from 1-n;
+		//We have to choose k-1 out of d-1(i pehle hi kar lia)
+		ll d = n/i;
+		ans+=ncr(d-1, k-1, MOD);
+		ans%=MOD;
 	}
-
-	cout << ans << '\n';
+	cout << ans%MOD << '\n';
 	return;
-
 }
 
 int main( int argc , char ** argv )
@@ -181,7 +221,7 @@ int main( int argc , char ** argv )
 	
 	//Code Goes here	
 	ll t = 1;
-	cin>>t;
+	precalc();
 	while(t--){
 		solve();
 	}
