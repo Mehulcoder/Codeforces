@@ -6,18 +6,14 @@
 */
 
 /*
-		I'll get there!
+		Talent is Overrated
 */
 
-/*
-                PROBLEM STATEMENT
-
-*/
 
 #include <bits/stdc++.h>
-using namespace std;
 #include<ext/pb_ds/assoc_container.hpp>
 #include<ext/pb_ds/tree_policy.hpp>
+using namespace std;
 using namespace __gnu_pbds;
 template <typename T>
 using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
@@ -103,15 +99,17 @@ int begtime = clock();
 #define end_routine()
 #endif
 
-//Using of set
-//O(log(n))
 /*
+Using of set
+O(log(n))
+
 ordered_set<int>  s;
 s.insert(1); 
 s.insert(3);
 cout << s.order_of_key(2) << endl; // the number of elements in the s less than 2
 cout << *s.find_by_order(0) << endl; // print the 0-th smallest number in s(0-based)
 */
+
 
 //Custom hash for unordered map
 struct custom_hash {
@@ -128,6 +126,7 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
+
 //Power Function O(log(n))
 ll poww(ll a, ll b, ll mod)
 {
@@ -139,92 +138,28 @@ ll poww(ll a, ll b, ll mod)
     return (((ans*ans)%mod)*a)%mod;
 }
 
-
-//Segment Tree
-vector<ll> t;
-void build(vector<ll> &a, ll start, ll tl, ll tr){
-	if (tl==tr)
-	{
-		t[start] = a[tl];
-		return;
-	}
-
-	//Get the mid for dividing the query
-	ll mid = (tl+tr)/2;
-
-	//Build tl and tr child
-	build(a, 2*start, tl, mid);
-	build(a, 2*start+1, mid+1, tr);
-
-	t[start] = t[2*start]+t[2*start+1];
-	return;
-}
-
-//tl and tr are the bounds of t[curr]
-ll query(ll curr, ll tl, ll tr, ll l, ll r){
-	//Case1: If queried range is wierd
-	if (l>r)
-	{
-		return 0;
-	}
-
-	//Case2: If the curr has the same bounds
-	if (tl==l && tr==r)
-	{
-		return t[curr];
-	}
-
-	//Else call on left and right child
-	ll mid = (tl+tr)/2;
-	return query(2*curr, tl, mid, l, min(mid, r))
-		   + query(2*curr+1, mid+1, tr, max(mid+1, l), r);
-}
-
-void update(ll curr, ll tl, ll tr, ll pos, ll newVal){
-	if (tl>pos || tr<pos)
-	{
-		return;
-	}
-
-	//Here we are not updating the original array
-	if (tl==tr && tl==pos)
-	{
-		t[curr] += newVal;
-		return;
-	}
-
-	ll mid = (tl+tr)/2;
-
-	//Update on left and right
-	update(2*curr, tl, mid, pos, newVal);
-	update(2*curr+1, mid+1, tr, pos, newVal);
-	t[curr] = t[2*curr]+t[2*curr+1];
-	return;
-}
-
 void solve(){
-	ll n;
-	cin>>n;
-	vector<ll> v(n);
-	t.resize(4*n);
-	rep(i, n){
-		cin>>v[i];
+	ll a, b, c, d;
+	cin>>a>>b>>c>>d;
+
+	if (a<=b)
+	{
+		cout << b << '\n';
+		return;
+	}
+	if (d>=c)
+	{
+		cout << -1 << '\n';
+		return;
 	}
 
-	//We start filling from 1
-	build(v, 1, 0, n-1);
-	trace(t);
-	update(1, 0, n-1, 4, -10);
-	trace(t);
-	ll m;
-	cin>>m;
-	rep(i, m){
-		ll p, q;
-		cin>>p>>q;
-		cout << query(1, 0, n-1, p, q) << '\n';
-	}
+
+
+	ll time = 0;
+	ll sleep = 0;
+	cout << (ll)(b+c*ceil(1.0*((a*1.0-b*1.0)/(c*1.0-d*1.0)))) << '\n';
 	return;
-	
+
 }
 
 int main( int argc , char ** argv )
@@ -232,21 +167,20 @@ int main( int argc , char ** argv )
 	ios_base::sync_with_stdio(false) ; 
 	cin.tie(NULL) ; 
 	#ifdef mehul
-    freopen("input.txt", "r", stdin);
+	freopen("input.txt", "r", stdin);
 	#endif
 	
+	//Code Goes here	
 	ll t = 1;
-	// cin>>t;
+	cin>>t;
 	while(t--){
 		solve();
 	}
-
-	//Code Goes here
 	
 	#ifdef mehul
-    end_routine();
+	end_routine();
 	#endif
- 
-    return 0 ; 
+ 	
+ 	return 0 ; 
 }
 

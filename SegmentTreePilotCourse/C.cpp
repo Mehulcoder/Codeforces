@@ -6,18 +6,14 @@
 */
 
 /*
-		I'll get there!
+		Talent is Overrated
 */
 
-/*
-                PROBLEM STATEMENT
-
-*/
 
 #include <bits/stdc++.h>
-using namespace std;
 #include<ext/pb_ds/assoc_container.hpp>
 #include<ext/pb_ds/tree_policy.hpp>
+using namespace std;
 using namespace __gnu_pbds;
 template <typename T>
 using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
@@ -103,15 +99,17 @@ int begtime = clock();
 #define end_routine()
 #endif
 
-//Using of set
-//O(log(n))
 /*
+Using of set
+O(log(n))
+
 ordered_set<int>  s;
 s.insert(1); 
 s.insert(3);
 cout << s.order_of_key(2) << endl; // the number of elements in the s less than 2
 cout << *s.find_by_order(0) << endl; // print the 0-th smallest number in s(0-based)
 */
+
 
 //Custom hash for unordered map
 struct custom_hash {
@@ -128,6 +126,7 @@ struct custom_hash {
         return splitmix64(x + FIXED_RANDOM);
     }
 };
+
 //Power Function O(log(n))
 ll poww(ll a, ll b, ll mod)
 {
@@ -138,93 +137,108 @@ ll poww(ll a, ll b, ll mod)
         return (ans*ans)%mod;
     return (((ans*ans)%mod)*a)%mod;
 }
+vector<ll> v;
+vector<pll> t;
+ll n, m;
 
-
-//Segment Tree
-vector<ll> t;
-void build(vector<ll> &a, ll start, ll tl, ll tr){
-	if (tl==tr)
+pll help(pll left, pll right){
+	if (left.f==right.f)
 	{
-		t[start] = a[tl];
+		return {left.f, left.s+right.s};
+	}
+
+	if (left.f>right.f)
+	{
+		return right;
+	}
+
+	return left;
+}
+
+void build(ll start, ll tl, ll tr){
+	if (tl+1==tr)
+	{
+		t[start] = {v[tl], 1};
 		return;
 	}
 
-	//Get the mid for dividing the query
 	ll mid = (tl+tr)/2;
-
-	//Build tl and tr child
-	build(a, 2*start, tl, mid);
-	build(a, 2*start+1, mid+1, tr);
-
-	t[start] = t[2*start]+t[2*start+1];
+	build(2*start+1, tl, mid);
+	build(2*start+2, mid, tr);
+	pll left = t[2*start+1];
+	pll right = t[2*start+2];
+	t[start] =  help(left, right);
 	return;
 }
 
-//tl and tr are the bounds of t[curr]
-ll query(ll curr, ll tl, ll tr, ll l, ll r){
-	//Case1: If queried range is wierd
-	if (l>r)
-	{
-		return 0;
-	}
 
-	//Case2: If the curr has the same bounds
-	if (tl==l && tr==r)
+void sett(ll start, ll tl, ll tr, ll pos, ll val){
+	if (tl+1==tr)
 	{
-		return t[curr];
+		t[start].f = val;
+		return;
 	}
-
-	//Else call on left and right child
 	ll mid = (tl+tr)/2;
-	return query(2*curr, tl, mid, l, min(mid, r))
-		   + query(2*curr+1, mid+1, tr, max(mid+1, l), r);
+	if (pos<mid)
+	{
+		sett(2*start+1, tl, mid, pos, val);
+	}else{
+		sett(2*start+2, mid, tr, pos, val);
+	}
+	pll left = t[2*start+1];
+	pll right = t[2*start+2];
+	t[start] = help(left, right);
+	return;
 }
 
-void update(ll curr, ll tl, ll tr, ll pos, ll newVal){
-	if (tl>pos || tr<pos)
+
+pll get(ll start, ll tl, ll tr, ll l, ll r){
+	if (tl>=r || tr<=l)
 	{
-		return;
+		return {INF, 0};
 	}
 
-	//Here we are not updating the original array
-	if (tl==tr && tl==pos)
+	if (l<=tl && r>=tr)
 	{
-		t[curr] += newVal;
-		return;
+		return t[start];
 	}
 
 	ll mid = (tl+tr)/2;
-
-	//Update on left and right
-	update(2*curr, tl, mid, pos, newVal);
-	update(2*curr+1, mid+1, tr, pos, newVal);
-	t[curr] = t[2*curr]+t[2*curr+1];
-	return;
+	pll left = get(2*start+1, tl, mid, l, r);
+	pll right = get(2*start+2, mid, tr, l, r);
+	pll ans = help(left, right);
+	return ans;
 }
 
 void solve(){
-	ll n;
-	cin>>n;
-	vector<ll> v(n);
-	t.resize(4*n);
+	cin>>n>>m;
+	t.clear();
+	v.clear();
+	v.resize(n);
+	t.resize(4*n, {0, 0});
 	rep(i, n){
 		cin>>v[i];
 	}
 
-	//We start filling from 1
-	build(v, 1, 0, n-1);
-	trace(t);
-	update(1, 0, n-1, 4, -10);
-	trace(t);
-	ll m;
-	cin>>m;
+	build(0, 0, n);
 	rep(i, m){
-		ll p, q;
-		cin>>p>>q;
-		cout << query(1, 0, n-1, p, q) << '\n';
+		ll type;
+		cin>>type;
+		if (type==1)
+		{
+			ll a, b;
+			cin>>a>>b;
+			sett(0, 0, n, a, b);
+		}else{
+			ll a, b;
+			cin>>a>>b;
+			pll ans = get(0, 0, n, a, b);
+			cout<<ans.f<<" "<<ans.s<<endl;
+		}
 	}
+
 	return;
-	
+
 }
 
 int main( int argc , char ** argv )
@@ -232,21 +246,20 @@ int main( int argc , char ** argv )
 	ios_base::sync_with_stdio(false) ; 
 	cin.tie(NULL) ; 
 	#ifdef mehul
-    freopen("input.txt", "r", stdin);
+	freopen("input.txt", "r", stdin);
 	#endif
 	
+	//Code Goes here	
 	ll t = 1;
 	// cin>>t;
 	while(t--){
 		solve();
 	}
-
-	//Code Goes here
 	
 	#ifdef mehul
-    end_routine();
+	end_routine();
 	#endif
- 
-    return 0 ; 
+ 	
+ 	return 0 ; 
 }
 
