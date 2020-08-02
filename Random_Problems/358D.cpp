@@ -137,48 +137,61 @@ ll poww(ll a, ll b, ll mod)
 }
 
 
-string s;
-vector<bool> is;
-ll m;
-vll ans;
-void dfs(ll x, ll par, ll step){
-	if (step==m)
+ll n;
+vll a;
+vll b;
+vll c;
+vvll dp;
+
+ll get(ll curr, ll prevState){
+	//Base case
+	if (prevState)
 	{
-		cout << "YES" << '\n';
-		rep(i, ans.size()){
-			cout << ans[i] << ' ';
-		}
-		cout <<  '\n';
-		exit(0);
-	}
-	rep(i, 11){
-		if (i>x && is[i] && i!=par)
+		if (curr==n-1)
 		{
-			ans.push_back(i);
-			dfs(i-x, i, step+1);
-			ans.pop_back();
+			return b[curr];
 		}
+	}else if (curr==n-1)
+	{
+		return a[curr];
 	}
 
-	return;
+	if (dp[curr][prevState]!=-1)
+	{
+		return dp[curr][prevState];
+	}
+	//Previous one has eaten the stuff
+	if (prevState)
+	{
+		//curr can eat after the next or before it
+		return dp[curr][prevState] = max(get(curr+1, 0)+c[curr], get(curr+1, 1)+b[curr]);
+	}else{
+		//curr can eat after the next or before it
+		return dp[curr][prevState] = max(get(curr+1, 0)+b[curr], get(curr+1, 1)+a[curr]);
+	}
 }
 
 void solve(){
-	cin>>s;
-	is.resize(11, 0);
-	ans.clear();
-	rep(i, 10){
-		if (s[i]=='1')
-		{
-			is[i+1] = 1;
-		}
+	cin>>n;
+	vset(a, n, 0);
+	vset(b, n, 0);
+	vset(c, n, 0);
+	vset(dp, n+10, vll(2, -1));
+
+	rep(i, n){
+		cin>>a[i];
 	}
 
-	cin>>m;
+	rep(i, n){
+		cin>>b[i];
+	}
 
-	dfs(0, 0, 0);
-	cout << "NO" << '\n';
-	return;
+	rep(i, n){
+		cin>>c[i];
+	}
+
+	cout << get(0, 0) << '\n';
+
 }
 
 int main( int argc , char ** argv )

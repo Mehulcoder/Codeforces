@@ -136,48 +136,35 @@ ll poww(ll a, ll b, ll mod)
     return (((ans*ans)%mod)*a)%mod;
 }
 
-
+ll k;
+vll dp;
 string s;
-vector<bool> is;
-ll m;
-vll ans;
-void dfs(ll x, ll par, ll step){
-	if (step==m)
-	{
-		cout << "YES" << '\n';
-		rep(i, ans.size()){
-			cout << ans[i] << ' ';
-		}
-		cout <<  '\n';
-		exit(0);
-	}
-	rep(i, 11){
-		if (i>x && is[i] && i!=par)
-		{
-			ans.push_back(i);
-			dfs(i-x, i, step+1);
-			ans.pop_back();
-		}
-	}
-
-	return;
-}
-
+ll n;
 void solve(){
+	cin>>k;
 	cin>>s;
-	is.resize(11, 0);
-	ans.clear();
-	rep(i, 10){
-		if (s[i]=='1')
+	n = s.size();
+	vset(dp, n+10, 0);
+
+	//On every iteration we'll calculate the answer if our substring 
+	//ends at i. For that we'll need the number of ones till i, number of
+	//places till where ones' count is equal to currSum-k (before i) 
+	//(they all will serve as our left)
+	//Analyze closely.
+	ll ans = 0;
+	ll currPreSum = 0;
+	dp[0]++;
+	rep(i, n){
+		currPreSum += (s[i]=='1');
+		trace(currPreSum);
+		if (currPreSum-k>=0)
 		{
-			is[i+1] = 1;
+			ans+=dp[currPreSum-k];
 		}
+		dp[currPreSum]++;
 	}
 
-	cin>>m;
-
-	dfs(0, 0, 0);
-	cout << "NO" << '\n';
+	cout << ans << '\n';
 	return;
 }
 

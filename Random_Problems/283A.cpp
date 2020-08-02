@@ -136,49 +136,42 @@ ll poww(ll a, ll b, ll mod)
     return (((ans*ans)%mod)*a)%mod;
 }
 
-
-string s;
-vector<bool> is;
-ll m;
-vll ans;
-void dfs(ll x, ll par, ll step){
-	if (step==m)
-	{
-		cout << "YES" << '\n';
-		rep(i, ans.size()){
-			cout << ans[i] << ' ';
-		}
-		cout <<  '\n';
-		exit(0);
-	}
-	rep(i, 11){
-		if (i>x && is[i] && i!=par)
-		{
-			ans.push_back(i);
-			dfs(i-x, i, step+1);
-			ans.pop_back();
-		}
-	}
-
-	return;
-}
-
 void solve(){
-	cin>>s;
-	is.resize(11, 0);
-	ans.clear();
-	rep(i, 10){
-		if (s[i]=='1')
+	ll n;
+	cin>>n;
+	vll arr(1, 0);
+	vll lazy(n+10, 0);
+	ll add = 0;
+	ll cnt = 1;
+	ll lastPos = 0;
+	rep(i, n){
+		ll t;
+		cin>>t;
+		if (t==1)
 		{
-			is[i+1] = 1;
+			ll a, x;
+			cin>>a>>x;
+			add+=x*a;
+			lazy[a-1] += x;
+		}else if (t==2)
+		{
+			ll b;
+			cin>>b;
+			arr.push_back(b);
+			lastPos++;
+			add+=b;
+			cnt++;
+		}else{
+			cnt--;
+			lazy[lastPos-1] += lazy[lastPos];
+			arr[lastPos] += lazy[lastPos];
+			lazy[lastPos] = 0;
+			add-=arr[lastPos--];
+			arr.pop_back();
 		}
+		
+		cout << fixed << ld((add*1.0)/(cnt*1.0)) << setprecision(12) << '\n';
 	}
-
-	cin>>m;
-
-	dfs(0, 0, 0);
-	cout << "NO" << '\n';
-	return;
 }
 
 int main( int argc , char ** argv )
