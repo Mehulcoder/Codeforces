@@ -136,107 +136,52 @@ ll poww(ll a, ll b, ll mod=MOD)
     return (((ans*ans)%mod)*a)%mod;
 }
 
-const ll N=2e5+10;
-vector<ll> spf;
-vector<ll> primes;
-
-void precalc(){
-	spf.resize(N,0);
-	primes.clear();
-
-	//Calculating spf
-	spf[1] = 1;
-	fr(i, 2, N-1){
-		if (!spf[i])
-		{
-			spf[i] = i;
-			for (int j = 2*i; j <= N-1; j+=i)
-			{
-				if (!spf[j])
-				{
-					spf[j] = i;
-				}
-			}
-		}
-	}
-
-	fr(i, 2, N-1){
-		if (spf[i]==i)
-		{
-			primes.push_back(i);
-		}
-	}
-	sort(all(primes));
-	return;
-}
-
-
-ll n;
+ll n, s;
 vll v;
+ll costt;
 
-ll getPow(ll prim){
-	
-	ll ans = 0;	
-	vector<ll> s;
-	ll c1 = 0;
-	fr(i,0 ,n-1){
-		ll temp = v[i];
-		if (temp%prim!=0)
-		{
-			c1++;
-		}
-		if (c1>=2)
-		{
-			return 0;
-		}
-		ll count = 0;
-		while(temp%prim==0){
-			count++;
-			temp/=prim;
-		}
-		s.push_back(count);
-		
+bool check(ll x){
+	vll temp = v;
+	rep(i, n){
+		temp[i]+=x*(i+1);
 	}
-	sort(all(s));
-	if (s.size()==1)
-	{
-		return s[0];
+	sort(all(temp));
+	ll sum = 0ll;
+	rep(i, x){
+		sum+=temp[i];
 	}
-	if (s.size()==0)
+	if (sum<=s)
 	{
-		return 0;
+		costt = sum;
+		return 1;
 	}
 
-	return s[1];
+	return 0;
 }
 
 void solve(){
-	cin>>n;
+	cin>>n>>s;
+
 	vset(v, n, 0);
 	rep(i, n){
 		cin>>v[i];
 	}
 
-	//Basically, you need to find the primepower such that it is there in atleast n-1 elements
-	//Basically the second smallest power amongst all powers of pi in differnt elements
-	//OPTIMIZE: If you can't find in pi in two or more of the elements, then break.
-	ll temp = *max_element(all(v));
-	ll ans = 1ll;
-	trav(prim, primes){
-		if (prim>temp)
+	ll lo = 0;
+	ll hi = n;
+	ll ans = 0ll;
+	while(lo<=hi){
+		ll mid = (lo+hi)/2;
+		if (check(mid))
 		{
-			break;
+			ans = max(ans, mid);
+			lo = mid+1;
+		}else{
+			hi = mid-1;
 		}
-		ll po = getPow(prim);
-		if (po!=0)
-		{
-			trace(prim, po);
-			
-		}
-		ans*=poww(prim, po, INF);
 	}
 
-	cout << ans << '\n';
+	cout << ans << ' ' << costt;
 	return;
 }
 
@@ -250,7 +195,7 @@ int main( int argc , char ** argv )
 	
 	//Code Goes here	
 	ll t = 1;
-	precalc();
+	
 	while(t--){
 		solve();
 	}

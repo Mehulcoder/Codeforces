@@ -136,107 +136,49 @@ ll poww(ll a, ll b, ll mod=MOD)
     return (((ans*ans)%mod)*a)%mod;
 }
 
-const ll N=2e5+10;
-vector<ll> spf;
-vector<ll> primes;
-
-void precalc(){
-	spf.resize(N,0);
-	primes.clear();
-
-	//Calculating spf
-	spf[1] = 1;
-	fr(i, 2, N-1){
-		if (!spf[i])
-		{
-			spf[i] = i;
-			for (int j = 2*i; j <= N-1; j+=i)
-			{
-				if (!spf[j])
-				{
-					spf[j] = i;
-				}
-			}
-		}
-	}
-
-	fr(i, 2, N-1){
-		if (spf[i]==i)
-		{
-			primes.push_back(i);
-		}
-	}
-	sort(all(primes));
-	return;
-}
-
-
 ll n;
-vll v;
-
-ll getPow(ll prim){
-	
-	ll ans = 0;	
-	vector<ll> s;
-	ll c1 = 0;
-	fr(i,0 ,n-1){
-		ll temp = v[i];
-		if (temp%prim!=0)
-		{
-			c1++;
-		}
-		if (c1>=2)
-		{
-			return 0;
-		}
-		ll count = 0;
-		while(temp%prim==0){
-			count++;
-			temp/=prim;
-		}
-		s.push_back(count);
-		
-	}
-	sort(all(s));
-	if (s.size()==1)
-	{
-		return s[0];
-	}
-	if (s.size()==0)
-	{
-		return 0;
-	}
-
-	return s[1];
-}
-
+vll a;
+vll b;
 void solve(){
 	cin>>n;
-	vset(v, n, 0);
+	vset(a, n, 0);
+	vset(b, n, 0);
 	rep(i, n){
-		cin>>v[i];
+		cin>>a[i];
+	}
+	rep(i, n){
+		cin>>b[i];
 	}
 
-	//Basically, you need to find the primepower such that it is there in atleast n-1 elements
-	//Basically the second smallest power amongst all powers of pi in differnt elements
-	//OPTIMIZE: If you can't find in pi in two or more of the elements, then break.
-	ll temp = *max_element(all(v));
-	ll ans = 1ll;
-	trav(prim, primes){
-		if (prim>temp)
-		{
-			break;
-		}
-		ll po = getPow(prim);
-		if (po!=0)
-		{
-			trace(prim, po);
-			
-		}
-		ans*=poww(prim, po, INF);
+	multiset<pll> s1;
+	multiset<pll> s2;
+	if (a.size()!=b.size() ||  (n%2!=0 && a[n/2]!=b[n/2]))
+	{
+		cout << "No" << '\n';
+		return;
 	}
 
-	cout << ans << '\n';
+	rep(i, (n+1)/2){
+		pll p = {a[i], a[n-i-1]};
+		pll p2 = {b[i], b[n-i-1]};
+		if (p.f>p.s)
+		{
+			swap(p.f, p.s);
+		}
+		if (p2.f>p2.s)
+		{
+			swap(p2.f, p2.s);
+		}
+		s1.insert(p);
+		s2.insert(p2);
+	}
+
+	if (s1==s2)
+	{
+		cout << "yes" << '\n';
+	}else{
+		cout << "No" << '\n';
+	}
 	return;
 }
 
@@ -250,7 +192,7 @@ int main( int argc , char ** argv )
 	
 	//Code Goes here	
 	ll t = 1;
-	precalc();
+	cin>>t;
 	while(t--){
 		solve();
 	}

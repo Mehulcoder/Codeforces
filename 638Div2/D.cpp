@@ -6,7 +6,7 @@
 */
 
 /*
-		Talent is Overrated
+    Talent is Overrated
 */
 
 
@@ -70,23 +70,23 @@ template<typename T, typename ...Arg>
 void __p(T a1, Arg ...a) { __p(a1); __p(a...); }
 template<typename Arg1>
 void __f(const char *name, Arg1 &&arg1) {
-	cout<<name<<" : ";__p(arg1);cout<<endl;
+  cout<<name<<" : ";__p(arg1);cout<<endl;
 }
 template<typename Arg1, typename ... Args>
 void __f(const char *names, Arg1 &&arg1, Args &&... args) {
-	int bracket=0,i=0;
-	for(; ;i++)
-		if(names[i]==','&&bracket==0)
-			break;
-		else if(names[i]=='(')
-			bracket++;
-		else if(names[i]==')')
-			bracket--;
-	const char *comma=names+i;
-	cout.write(names,comma-names)<<" : ";
-	__p(arg1);
-	cout<<"| ";
-	__f(comma+1,args...);
+  int bracket=0,i=0;
+  for(; ;i++)
+    if(names[i]==','&&bracket==0)
+      break;
+    else if(names[i]=='(')
+      bracket++;
+    else if(names[i]==')')
+      bracket--;
+  const char *comma=names+i;
+  cout.write(names,comma-names)<<" : ";
+  __p(arg1);
+  cout<<"| ";
+  __f(comma+1,args...);
 }
 #define trace(...) cout<<"Line:"<<__LINE__<<" "; __f(#__VA_ARGS__, __VA_ARGS__)
 int begtime = clock();
@@ -136,129 +136,45 @@ ll poww(ll a, ll b, ll mod=MOD)
     return (((ans*ans)%mod)*a)%mod;
 }
 
-const ll N=2e5+10;
-vector<ll> spf;
-vector<ll> primes;
-
-void precalc(){
-	spf.resize(N,0);
-	primes.clear();
-
-	//Calculating spf
-	spf[1] = 1;
-	fr(i, 2, N-1){
-		if (!spf[i])
-		{
-			spf[i] = i;
-			for (int j = 2*i; j <= N-1; j+=i)
-			{
-				if (!spf[j])
-				{
-					spf[j] = i;
-				}
-			}
-		}
-	}
-
-	fr(i, 2, N-1){
-		if (spf[i]==i)
-		{
-			primes.push_back(i);
-		}
-	}
-	sort(all(primes));
-	return;
-}
-
-
-ll n;
-vll v;
-
-ll getPow(ll prim){
-	
-	ll ans = 0;	
-	vector<ll> s;
-	ll c1 = 0;
-	fr(i,0 ,n-1){
-		ll temp = v[i];
-		if (temp%prim!=0)
-		{
-			c1++;
-		}
-		if (c1>=2)
-		{
-			return 0;
-		}
-		ll count = 0;
-		while(temp%prim==0){
-			count++;
-			temp/=prim;
-		}
-		s.push_back(count);
-		
-	}
-	sort(all(s));
-	if (s.size()==1)
-	{
-		return s[0];
-	}
-	if (s.size()==0)
-	{
-		return 0;
-	}
-
-	return s[1];
-}
-
 void solve(){
-	cin>>n;
-	vset(v, n, 0);
-	rep(i, n){
-		cin>>v[i];
-	}
-
-	//Basically, you need to find the primepower such that it is there in atleast n-1 elements
-	//Basically the second smallest power amongst all powers of pi in differnt elements
-	//OPTIMIZE: If you can't find in pi in two or more of the elements, then break.
-	ll temp = *max_element(all(v));
-	ll ans = 1ll;
-	trav(prim, primes){
-		if (prim>temp)
-		{
-			break;
-		}
-		ll po = getPow(prim);
-		if (po!=0)
-		{
-			trace(prim, po);
-			
-		}
-		ans*=poww(prim, po, INF);
-	}
-
-	cout << ans << '\n';
-	return;
+  vector<ll>inc;   
+  ll N;
+  cin>>N;
+  //construct sequence 1, 2, 4, ... while sum <= N
+  for (ll i=1;i<=N;i*=2){
+    inc.push_back(i);
+    N-=i;
+  }
+  //if sum is not N, we insert and sort
+  if (N>0){
+    inc.push_back(N);
+    sort(inc.begin(),inc.end());
+  }
+  cout<<inc.size()-1<<endl;
+  for (ll i=1;i<(ll)inc.size();i++)
+    cout<<inc[i]-inc[i-1]<<' ';
+  cout<<endl;
 }
 
 int main( int argc , char ** argv )
 {
-	ios_base::sync_with_stdio(false) ; 
-	cin.tie(NULL) ; 
-	#ifdef mehul
-	freopen("input.txt", "r", stdin);
-	#endif
-	
-	//Code Goes here	
-	ll t = 1;
-	precalc();
-	while(t--){
-		solve();
-	}
-	
-	#ifdef mehul
-	end_routine();
-	#endif
- 	
- 	return 0 ; 
+  ios_base::sync_with_stdio(false) ; 
+  cin.tie(NULL) ; 
+  #ifdef mehul
+  freopen("input.txt", "r", stdin);
+  #endif
+  
+  //Code Goes here  
+  ll t = 1;
+  cin>>t;
+  while(t--){
+    solve();
+  }
+  
+  #ifdef mehul
+  end_routine();
+  #endif
+   
+   return 0 ; 
 }
 

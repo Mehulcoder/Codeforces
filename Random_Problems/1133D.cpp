@@ -136,68 +136,50 @@ ll poww(ll a, ll b, ll mod=MOD)
     return (((ans*ans)%mod)*a)%mod;
 }
 
-const ll N=2e5+10;
-vector<ll> spf;
-vector<ll> primes;
-
-void precalc(){
-	spf.resize(N,0);
-	primes.clear();
-
-	//Calculating spf
-	spf[1] = 1;
-	fr(i, 2, N-1){
-		if (!spf[i])
-		{
-			spf[i] = i;
-			for (int j = 2*i; j <= N-1; j+=i)
-			{
-				if (!spf[j])
-				{
-					spf[j] = i;
-				}
-			}
-		}
-	}
-
-	fr(i, 2, N-1){
-		if (spf[i]==i)
-		{
-			primes.push_back(i);
-		}
-	}
-
-	return;
-}
-
 
 ll n;
-vll v;
-
+vll a;
+vll b;
 void solve(){
 	cin>>n;
-	vset(v, n, 0);
+	vset(a, n, 0);
+	vset(b, n, 0);
+	ll count = 0;
+
 	rep(i, n){
-		cin>>v[i];
+		cin>>a[i];
+	}
+	rep(i, n){
+		cin>>b[i];
+		if (!b[i] && !a[i])
+		{
+			count++;
+		}
 	}
 
-
-	ll ans = 1ll;
-	ll prev = v[0];
-	vll temp;
-	fr(i,1, n-1){
-		temp.push_back((v[i]*prev)/__gcd(v[i], prev));
-		prev = v[i];
+	map<pair<ll, pll>, ll> m1;
+	rep(i, n){
+		if (a[i]!=0 && b[i]!=0)
+		{
+			ll sign = (b[i]/abs(b[i]))/(a[i]/abs(a[i]));
+			ll r = abs(a[i]);
+			ll s = abs(b[i]);
+			ll gc = __gcd(r, s);
+			auto t = mp(sign, mp(r/gc, s/gc));
+			m1[t]++;
+		}
+		if (b[i]==0 && a[i]!=0)
+		{
+			m1[{1, {0, 1}}]++;
+		}
 	}
 
-	trace(temp);
-	prev = temp[0];
-	fr(i, 1, n-2){
-		prev = __gcd(prev, temp[i]);
-		trace(prev);
+	ll ans = 0;
+	trav(elem, m1){
+		ans = max(ans, elem.s);
 	}
 
-	cout << prev << '\n';
+	cout << ans+count << '\n';
 	return;
 }
 
@@ -211,7 +193,7 @@ int main( int argc , char ** argv )
 	
 	//Code Goes here	
 	ll t = 1;
-	precalc();
+	
 	while(t--){
 		solve();
 	}

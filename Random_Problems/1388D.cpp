@@ -136,107 +136,79 @@ ll poww(ll a, ll b, ll mod=MOD)
     return (((ans*ans)%mod)*a)%mod;
 }
 
-const ll N=2e5+10;
-vector<ll> spf;
-vector<ll> primes;
-
-void precalc(){
-	spf.resize(N,0);
-	primes.clear();
-
-	//Calculating spf
-	spf[1] = 1;
-	fr(i, 2, N-1){
-		if (!spf[i])
-		{
-			spf[i] = i;
-			for (int j = 2*i; j <= N-1; j+=i)
-			{
-				if (!spf[j])
-				{
-					spf[j] = i;
-				}
-			}
-		}
-	}
-
-	fr(i, 2, N-1){
-		if (spf[i]==i)
-		{
-			primes.push_back(i);
-		}
-	}
-	sort(all(primes));
-	return;
-}
-
-
 ll n;
-vll v;
-
-ll getPow(ll prim){
-	
-	ll ans = 0;	
-	vector<ll> s;
-	ll c1 = 0;
-	fr(i,0 ,n-1){
-		ll temp = v[i];
-		if (temp%prim!=0)
+vll a;
+vll b;
+vvll edges;
+vector<bool> visited;
+vll ans;
+vll ans2;
+ll sum;
+void dfs(ll root){
+	visited[root] = 1;
+	trav(child, edges[root]){
+		if (!visited[child])
 		{
-			c1++;
+			dfs(child);
 		}
-		if (c1>=2)
+	}
+	if (a[root]>=0)
+	{
+		sum+=a[root];
+		ans.push_back(root);
+		if (b[root]>=0)
 		{
-			return 0;
+			a[b[root]]+=a[root];
 		}
-		ll count = 0;
-		while(temp%prim==0){
-			count++;
-			temp/=prim;
-		}
-		s.push_back(count);
-		
+	}else{
+		ans2.push_back(root);
+		sum+=a[root];
 	}
-	sort(all(s));
-	if (s.size()==1)
-	{
-		return s[0];
-	}
-	if (s.size()==0)
-	{
-		return 0;
-	}
-
-	return s[1];
 }
 
 void solve(){
 	cin>>n;
-	vset(v, n, 0);
+	sum = 0;
+	ans.clear();
+	vset(a, n, 0);
+	vset(b, n, 0);
+	vset(edges, n, vll(0));
+	vset(visited, n, 0);
+	ans2.clear();
+
 	rep(i, n){
-		cin>>v[i];
+		cin>>a[i];
 	}
 
-	//Basically, you need to find the primepower such that it is there in atleast n-1 elements
-	//Basically the second smallest power amongst all powers of pi in differnt elements
-	//OPTIMIZE: If you can't find in pi in two or more of the elements, then break.
-	ll temp = *max_element(all(v));
-	ll ans = 1ll;
-	trav(prim, primes){
-		if (prim>temp)
-		{
-			break;
-		}
-		ll po = getPow(prim);
-		if (po!=0)
-		{
-			trace(prim, po);
-			
-		}
-		ans*=poww(prim, po, INF);
+	rep(i, n){
+		cin>>b[i];
+		b[i]--;
 	}
 
-	cout << ans << '\n';
+	rep(i, n){
+		if (b[i]>=0)
+		{
+			edges[b[i]].push_back(i);
+		}
+	}
+
+	rep(i, n){
+		if (!visited[i])
+		{
+			dfs(i);
+		}
+	}
+
+
+	reverse(all(ans2));
+	rep(i, ans2.size()){
+		ans.push_back(ans2[i]);
+	}
+	cout << sum << '\n';
+	trav(elem, ans){
+		cout << elem+1 << ' ';
+	}
+	cout <<  '\n';
 	return;
 }
 
@@ -250,7 +222,7 @@ int main( int argc , char ** argv )
 	
 	//Code Goes here	
 	ll t = 1;
-	precalc();
+	
 	while(t--){
 		solve();
 	}
