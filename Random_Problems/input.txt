@@ -1,7 +1,5 @@
 3
-aabce
-ace
-abacaba
-aax
-ty
-yyt
+1 2 3
+b
+ba
+ba
