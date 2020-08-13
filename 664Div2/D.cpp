@@ -33,6 +33,7 @@ typedef pair<long long, long long> pll;
 * Make sure that y>=0.
 * Use prefix sums to calculate the final ans
 */
+
 int main( int argc , char ** argv )
 {
 	ios_base::sync_with_stdio(false) ; 
