@@ -44,7 +44,7 @@ int main( int argc , char ** argv )
 	ll r, g, B; cin>>r>>g>>B;
 	vset(a, r+1, 0);
 	vset(b, g+1, 0);
-	vset(c, B+1, 0);
+	vset(c, B+1, 0); 
 	rep(i, r) cin>>a[i+1];
 	rep(i, g) cin>>b[i+1];
 	rep(i, B) cin>>c[i+1];
