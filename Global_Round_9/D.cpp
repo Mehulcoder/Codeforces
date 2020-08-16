@@ -12,7 +12,7 @@
 
 #include <bits/stdc++.h>
 using namespace std;
-#include <chrono> 
+#include <chrono>
 #ifndef mehul
 #pragma GCC optimize("Ofast")
 #endif
@@ -46,7 +46,7 @@ typedef unordered_set<int> useti;
 
 
 #define sz(x) (int)(x).size()
-template<typename T,typename U>inline bool exist(T &cont,U &val){return cont.find(val)!=cont.end();}
+template<typename T, typename U>inline bool exist(T &cont, U &val) {return cont.find(val) != cont.end();}
 #define fr(i, a, b) for (int i = (a), _b = (b); i <= _b; i++)
 #define rep(i, n) for (int i = 0, _n = (n); i < _n; i++)
 #define repr(i, n) for (int i = n; i >= 0; i--)
@@ -67,23 +67,23 @@ template<typename T, typename ...Arg>
 void __p(T a1, Arg ...a) { __p(a1); __p(a...); }
 template<typename Arg1>
 void __f(const char *name, Arg1 &&arg1) {
-	cout<<name<<" : ";__p(arg1);cout<<endl;
+    cout << name << " : "; __p(arg1); cout << endl;
 }
 template<typename Arg1, typename ... Args>
 void __f(const char *names, Arg1 &&arg1, Args &&... args) {
-	int bracket=0,i=0;
-	for(; ;i++)
-		if(names[i]==','&&bracket==0)
-			break;
-		else if(names[i]=='(')
-			bracket++;
-		else if(names[i]==')')
-			bracket--;
-	const char *comma=names+i;
-	cout.write(names,comma-names)<<" : ";
-	__p(arg1);
-	cout<<"| ";
-	__f(comma+1,args...);
+    int bracket = 0, i = 0;
+    for (; ; i++)
+        if (names[i] == ',' && bracket == 0)
+            break;
+        else if (names[i] == '(')
+            bracket++;
+        else if (names[i] == ')')
+            bracket--;
+    const char *comma = names + i;
+    cout.write(names, comma - names) << " : ";
+    __p(arg1);
+    cout << "| ";
+    __f(comma + 1, args...);
 }
 #define trace(...) cout<<"Line:"<<__LINE__<<" "; __f(#__VA_ARGS__, __VA_ARGS__)
 int begtime = clock();
@@ -110,46 +110,43 @@ struct custom_hash {
     }
 };
 //Power Function O(log(n))
-ll poww(ll a, ll b, ll mod)
-{
-    if(b==0)
+ll poww(ll a, ll b, ll mod) {
+    if (b == 0)
         return 1;
-    ll ans=poww(a,b/2, mod);
-    if(b%2==0)
-        return (ans*ans)%mod;
-    return (((ans*ans)%mod)*a)%mod;
+    ll ans = poww(a, b / 2, mod);
+    if (b % 2 == 0)
+        return (ans * ans) % mod;
+    return (((ans * ans) % mod) * a) % mod;
 }
 
 
-int main( int argc , char ** argv )
-{
-	ios_base::sync_with_stdio(false) ; 
-	cin.tie(NULL) ; 
-	#ifdef mehul
+int main(int argc , char ** argv) {
+    ios_base::sync_with_stdio(false) ;
+    cin.tie(NULL) ;
+#ifdef mehul
     freopen("input.txt", "r", stdin);
-	#endif
+#endif
 
     ll t;
-    cin>>t;
-    while(t--){
+    cin >> t;
+    while (t--) {
         int n;
-        cin>>n;
+        cin >> n;
         vector<int> v(n);
 
         set<int> mex;
         set<int> notRight;
         unordered_map<int, int, custom_hash> numbers;
-        rep(i, n+1){
+        rep(i, n + 1) {
             mex.insert(i);
         }
-        rep(i, n){ 
-            cin>>v[i];
+        rep(i, n) {
+            cin >> v[i];
             numbers[v[i]]++;
             // index[v[i]] = i;
 
             mex.erase(v[i]);
-            if (v[i]!=i)
-            {
+            if (v[i] != i) {
                 notRight.insert(i);
             }
         }
@@ -164,24 +161,22 @@ int main( int argc , char ** argv )
         vector<int> ans;
         ll times = 0;
         bool flag1 = 0;
-        while(!notRight.empty()){
+        while (!notRight.empty()) {
             int currMex = *mex.begin();
             // trace(v, currMex);
-            if (currMex == n)
-            {
+            if (currMex == n) {
                 int currNotRight = *notRight.begin();
                 mex.insert(v[currNotRight]);
-                ans.push_back(currNotRight+1);
+                ans.push_back(currNotRight + 1);
                 numbers[v[currNotRight]]--;
-                v[currNotRight] = currMex; 
-                numbers[currMex]++;          
-            }else{
-                ans.push_back(currMex+1);
+                v[currNotRight] = currMex;
+                numbers[currMex]++;
+            } else {
+                ans.push_back(currMex + 1);
                 notRight.erase(currMex);
                 mex.erase(currMex);
                 numbers[v[currMex]]--;
-                if (numbers[v[currMex]]<=0)
-                {
+                if (numbers[v[currMex]] <= 0) {
                     mex.insert(v[currMex]);
                 }
                 numbers[currMex]++;
@@ -198,19 +193,19 @@ int main( int argc , char ** argv )
         }
         cout << ans.size() << '\n';
         // trace(v, ans);
-        rep(i, ans.size()){
+        rep(i, ans.size()) {
             cout << ans[i] << ' ';
         }
         trace(v);
         cout <<  '\n';
     }
 
-	//Code Goes here
-	
-	#ifdef mehul
+    //Code Goes here
+
+#ifdef mehul
     end_routine();
-	#endif
- 
-    return 0 ; 
+#endif
+
+    return 0 ;
 }
 

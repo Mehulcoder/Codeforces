@@ -12,7 +12,7 @@
 
 #include <bits/stdc++.h>
 using namespace std;
-#include <chrono> 
+#include <chrono>
 #ifndef mehul
 #pragma GCC optimize("Ofast")
 #endif
@@ -46,7 +46,7 @@ typedef unordered_set<int> useti;
 
 
 #define sz(x) (int)(x).size()
-template<typename T,typename U>inline bool exist(T &cont,U &val){return cont.find(val)!=cont.end();}
+template<typename T, typename U>inline bool exist(T &cont, U &val) {return cont.find(val) != cont.end();}
 #define fr(i, a, b) for (int i = (a), _b = (b); i <= _b; i++)
 #define rep(i, n) for (int i = 0, _n = (n); i < _n; i++)
 #define repr(i, n) for (int i = n; i >= 0; i--)
@@ -67,23 +67,23 @@ template<typename T, typename ...Arg>
 void __p(T a1, Arg ...a) { __p(a1); __p(a...); }
 template<typename Arg1>
 void __f(const char *name, Arg1 &&arg1) {
-	cout<<name<<" : ";__p(arg1);cout<<endl;
+    cout << name << " : "; __p(arg1); cout << endl;
 }
 template<typename Arg1, typename ... Args>
 void __f(const char *names, Arg1 &&arg1, Args &&... args) {
-	int bracket=0,i=0;
-	for(; ;i++)
-		if(names[i]==','&&bracket==0)
-			break;
-		else if(names[i]=='(')
-			bracket++;
-		else if(names[i]==')')
-			bracket--;
-	const char *comma=names+i;
-	cout.write(names,comma-names)<<" : ";
-	__p(arg1);
-	cout<<"| ";
-	__f(comma+1,args...);
+    int bracket = 0, i = 0;
+    for (; ; i++)
+        if (names[i] == ',' && bracket == 0)
+            break;
+        else if (names[i] == '(')
+            bracket++;
+        else if (names[i] == ')')
+            bracket--;
+    const char *comma = names + i;
+    cout.write(names, comma - names) << " : ";
+    __p(arg1);
+    cout << "| ";
+    __f(comma + 1, args...);
 }
 #define trace(...) cout<<"Line:"<<__LINE__<<" "; __f(#__VA_ARGS__, __VA_ARGS__)
 int begtime = clock();
@@ -112,73 +112,73 @@ struct custom_hash {
 //Power Function O(log(n))
 ll poww(ll a, ll b, ll mod)
 {
-    if(b==0)
+    if (b == 0)
         return 1;
-    ll ans=poww(a,b/2, mod);
-    if(b%2==0)
-        return (ans*ans)%mod;
-    return (((ans*ans)%mod)*a)%mod;
+    ll ans = poww(a, b / 2, mod);
+    if (b % 2 == 0)
+        return (ans * ans) % mod;
+    return (((ans * ans) % mod) * a) % mod;
 }
 
 
 int main( int argc , char ** argv )
 {
-	ios_base::sync_with_stdio(false) ; 
-	cin.tie(NULL) ; 
-	#ifdef mehul
+    ios_base::sync_with_stdio(false) ;
+    cin.tie(NULL) ;
+#ifdef mehul
     freopen("input.txt", "r", stdin);
-	#endif
+#endif
 
     ll t;
-    cin>>t;
-    while(t--){
-    	int n;
-    	cin>>n;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
 
-    	vector<ll> v(n);
-    	rep(i, n){
-    		cin>>v[i];
-    		v[i] = abs(v[i]);
-    	}
+        vector<ll> v(n);
+        rep(i, n) {
+            cin >> v[i];
+            v[i] = abs(v[i]);
+        }
 
-    	bool flag = 0;
-    	// ll temp = 0;
-    	fr(i, 1, n-1){
-    		if (!flag)
-    		{
-    			if (v[i]-v[i-1]>0)
-    			{
-    				v[i] = -1*v[i];
-    			}
-    				flag = 1;
-    		}else{
-    			if (v[i]-v[i-1]<0)
-    			{
-    				v[i-1] = v[i-1]*-1;
-    			}
-	    			flag = 0;
-    		}
+        bool flag = 0;
+        // ll temp = 0;
+        fr(i, 1, n - 1) {
+            if (!flag)
+            {
+                if (v[i] - v[i - 1] > 0)
+                {
+                    v[i] = -1 * v[i];
+                }
+                flag = 1;
+            } else {
+                if (v[i] - v[i - 1] < 0)
+                {
+                    v[i - 1] = v[i - 1] * -1;
+                }
+                flag = 0;
+            }
 
-    	}
+        }
 
-    	// trace(v);
+        // trace(v);
 
-    	trav(elem, v){
-    		cout << elem << ' ';
-    	}
+        trav(elem, v) {
+            cout << elem << ' ';
+        }
 
-    	cout <<  '\n';
+        cout <<  '\n';
 
 
 
     }
 
-	//Code Goes here
-	
-	#ifdef mehul
+    //Code Goes here
+
+#ifdef mehul
     end_routine();
-	#endif
- 
-    return 0 ; 
+#endif
+
+    return 0 ;
 }
 
