@@ -33,4 +33,4 @@ private:
         board[i][j] = cur;  // reset
         return search_next;
     }
-};
+}; ww
