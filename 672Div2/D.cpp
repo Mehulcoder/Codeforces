@@ -39,70 +39,70 @@ vector<ll> fact;
 vector<ll> invFact;
 
 bool mySort(pll a, pll b) {
-    if (a.f < b.f) return 1;
-    if (a.f == b.f)
-        if (a.s > b.s) return 1;
-    return 0;
+	if (a.f < b.f) return 1;
+	if (a.f == b.f)
+		if (a.s > b.s) return 1;
+	return 0;
 }
 
 void precalc() {
-    inv.resize(N, 1);
-    fact.resize(N, 1);
-    invFact.resize(N, 1);
+	inv.resize(N, 1);
+	fact.resize(N, 1);
+	invFact.resize(N, 1);
 
-    fr(i, 2, N - 1) {
-        inv[i] = inv[MOD % i] * (MOD - MOD / i) % MOD;
-        fact[i] = (fact[i - 1] * i) % MOD;
-        invFact[i] = (invFact[i - 1] * inv[i]) % MOD;
-    }
+	fr(i, 2, N - 1) {
+		inv[i] = inv[MOD % i] * (MOD - MOD / i) % MOD;
+		fact[i] = (fact[i - 1] * i) % MOD;
+		invFact[i] = (invFact[i - 1] * inv[i]) % MOD;
+	}
 
-    return;
+	return;
 }
 
 ll ncr(ll n, ll r, ll mod = MOD) {
-    if (r > n) {
-        return 0;
-    }
-    return (((fact[n] * invFact[n - r]) % mod) * invFact[r]) % mod;
+	if (r > n) {
+		return 0;
+	}
+	return (((fact[n] * invFact[n - r]) % mod) * invFact[r]) % mod;
 }
 
 void solve() {
-    ll n, k; cin >> n >> k;
+	ll n, k; cin >> n >> k;
 
-    vector<pll> v;
+	vector<pll> v;
 
-    rep(i, n) {
-        ll a, b;
-        cin >> a >> b;
-        v.push_back({a, 1});
-        v.push_back({b, -1});
-    }
+	rep(i, n) {
+		ll a, b;
+		cin >> a >> b;
+		v.push_back({a, 1});
+		v.push_back({b, -1});
+	}
 
-    sort(all(v), mySort);
-    ll counter = 0, ans = 0;
+	sort(all(v), mySort);
+	ll counter = 0, ans = 0;
 
-    rep(i, 2 * n) {
-        counter += v[i].s;
-        if (v[i].s == -1) {
-            ans += ncr(counter, k - 1);
-            ans %= MOD;
-        }
-    }
+	rep(i, 2 * n) {
+		counter += v[i].s;
+		if (v[i].s == -1) {
+			ans += ncr(counter, k - 1);
+			ans %= MOD;
+		}
+	}
 
-    cout << (ans + MOD) % MOD << '\n';
-    return;
+	cout << (ans + MOD) % MOD << '\n';
+	return;
 
 }
 
 int main(int argc , char ** argv) {
-    ios_base::sync_with_stdio(false) ;
-    cin.tie(NULL) ;
+	ios_base::sync_with_stdio(false) ;
+	cin.tie(NULL) ;
 
-    ll t = 1;
-    precalc();
-    while (t--) {
-        solve();
-    }
+	ll t = 1;
+	precalc();
+	while (t--) {
+		solve();
+	}
 
-    return 0 ;
+	return 0 ;
 }
