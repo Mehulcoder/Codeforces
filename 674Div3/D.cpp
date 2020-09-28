@@ -21,20 +21,21 @@ using pll = pair<ll, ll>;
 
 
 /*
-	Think of it as, you have say k intervals(imagine as segments on x axis)
-	and you have placed them one after other in the increasing order of their end.
-	Now you basically need to find the total number of vertical lines to make, so
-	that every segment is cut atleast once.
+Think of it as, you have say k intervals(imagine as segments on x axis)
+and you have placed them one after other in the increasing order of their end.
+Now you basically need to find the total number of vertical lines to make, so
+that every segment is cut atleast once.
 */
 
 bool mySort(pll a, pll b) {
 	return a.s < b.s;
 }
+
 void solve() {
 	ll n; cin >> n;
 	vll a(n, 0);
-
 	rep(i, n) cin >> a[i];
+
 	vector<pll> intervals;
 	vll pre(n, 0);
 	rep(i, n) {
@@ -51,7 +52,6 @@ void solve() {
 			intervals.push_back({m[pre[i]] + 1, i});
 		}
 		m[pre[i]] = i;
-
 	}
 
 	sort(all(intervals), mySort);
@@ -59,10 +59,9 @@ void solve() {
 		cout << 0 << '\n';
 		return;
 	}
+
 	ll ans = 1;
-
 	pll prev = intervals[0];
-
 	fr(i, 1, intervals.size() - 1) {
 		pll curr = intervals[i];
 		if (prev.s > curr.f) continue;
