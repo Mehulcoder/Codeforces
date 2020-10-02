@@ -26,45 +26,51 @@ using pll = pair<ll, ll>;
 #define fil(ar, val) memset(ar, val, sizeof(ar))
 const ll MOD = 1e9 + 7;
 
-/*
-*	For each element from 1 ---> n (say x). Find out the maximum difference
-*	between the consecutive indices of x (Corner case: n-prevIndexOfX).
-*	What does this mean? This maximum value means, that for all the windows
-* 	of size equal to it or greater than this, x can be a valid answer.
-*/
 
-ll n, k, x, m;
+vector<vector<pll>> edges;
 void solve() {
-	cin >> n;
-	vvll a(n);
-	rep(i, n) {
-		cin >> x;
-		x--;
-		a[x].push_back(i);
+	ll n, m; cin >> n >> m;
+	edges.resize(n);
+
+	rep(i, m) {
+		ll u, v, w;
+		cin >> u >> v >> w;
+		u--; v--;
+		edges[u].push_back({v, w});
+		edges[v].push_back({u, w});
 	}
 
-	vll ans(n + 2, n + n);
+
+	vll a(n), ans;
+	rep(i, n) cin >> a[i];
+	ans = a;
+
+	set<pll> s;
+	map<ll, ll> m;
 	rep(i, n) {
-		k = -1;
-		m = 0;
-		rep(j, a[i].size()) {
-			m = max(m, a[i][j] - k);
-			k = a[i][j];
+		s.insert({a[i], i});
+		m[i] = a[i];
+	}
+
+	vector<bool> vis(n, 0);
+	while (!s.empty()) {
+		auto root = *(s.begin());
+		s.erase(s.begin());
+
+		trav(child, edges[root]) {
+			if (vis[child.f]) continue;
+
+			ll to = child.f;
+			ll wt = child.s;
+
+			if (2 * wt + root.f < m[to]) {
+				s.erase({m[to], to});
+				m[to] = 2 * wt + root.f;
+				s.insert({m[to], to});
+			}
 		}
-		m = max(m, n - k);
-		ans[m] = min(ans[m], (ll)i);
-	}
-	ll mi = n + n;
-	fr(i, 1, n) {
-		mi = min(mi, ans[i]);
-		if (mi > n) {
-			cout << "-1" << " ";
-		} else
-			cout << (mi + 1) << " ";
-	}
-	cout << "\n";
 
-	return;
+	}
 }
 
 int main(int argc , char ** argv) {
@@ -72,7 +78,7 @@ int main(int argc , char ** argv) {
 	cin.tie(NULL) ;
 
 	ll t = 1;
-	cin >> t;
+
 	while (t--) {
 		solve();
 	}
