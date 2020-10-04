@@ -26,6 +26,20 @@ using pll = pair<ll, ll>;
 #define fil(ar, val) memset(ar, val, sizeof(ar))
 const ll MOD = 1e9 + 7;
 
+/*
+
+* Think of it like dijsktra. What would be the answer for the place
+* with minimum cost? Itself. Right? Why would we want to go to some other
+* place.
+
+* Now this place has some neighbours, so this place "might" be a nice option
+* for them. Think similary for others
+
+* Push all the {cost, node} pairs to the set. So that the min is always on the top
+* Now choose the min and try to update neighbours, mark top as visited, pop the top.
+* Do till the set has > 0 elements
+
+*/
 
 vector<vector<pll>> edges;
 void solve() {
@@ -41,15 +55,12 @@ void solve() {
 	}
 
 
-	vll a(n), ans;
+	vll a(n);
 	rep(i, n) cin >> a[i];
-	ans = a;
 
 	set<pll> s;
-	map<ll, ll> m;
 	rep(i, n) {
 		s.insert({a[i], i});
-		m[i] = a[i];
 	}
 
 	vector<bool> vis(n, 0);
@@ -57,20 +68,28 @@ void solve() {
 		auto root = *(s.begin());
 		s.erase(s.begin());
 
-		trav(child, edges[root]) {
+		trav(child, edges[root.s]) {
 			if (vis[child.f]) continue;
 
 			ll to = child.f;
 			ll wt = child.s;
 
-			if (2 * wt + root.f < m[to]) {
-				s.erase({m[to], to});
-				m[to] = 2 * wt + root.f;
-				s.insert({m[to], to});
+			if (2 * wt + root.f < a[to]) {
+				s.erase({a[to], to});
+				a[to] = 2 * wt + root.f;
+				s.insert({a[to], to});
 			}
 		}
 
+		vis[root.s] = 1;
 	}
+
+	trav(elem, a) {
+		cout << elem << ' ';
+	}
+
+	cout << '\n';
+	return;
 }
 
 int main(int argc , char ** argv) {
@@ -78,7 +97,6 @@ int main(int argc , char ** argv) {
 	cin.tie(NULL) ;
 
 	ll t = 1;
-
 	while (t--) {
 		solve();
 	}
