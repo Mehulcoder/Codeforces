@@ -15,6 +15,11 @@ const ll MOD = 1e9 + 7;
 // Assuming the max value of n<=1e5
 // If not, then use map in place of array dp
 
+//It can further be optimized for n<=1e12
+//Note that for every level there is always a left and a right
+//All numbers within that range have to be added
+//So no need of dp[][]
+
 /*
 * Can very easily be proved with simple inequalities that
 * a number k will be jth element of ith row (1 based index)
