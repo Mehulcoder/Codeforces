@@ -1,0 +1,16 @@
+[
+	{
+		"correct_answers":
+		[
+			"SUCCESS",
+			"IMPOSSIBLE"
+		],
+		"test": "4 4 3\n####\n@.x#\n##.#\n##s#\n\n\n"
+	},
+	{
+		"test": "4 4 3\n####\n@.s#\n##.#\n#xs#"
+	},
+	{
+		"test": "4 4 3\n####\n@.s#\n##.#\n#xs#\n"
+	}
+]
