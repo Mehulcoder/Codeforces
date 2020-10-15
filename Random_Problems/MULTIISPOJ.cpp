@@ -31,15 +31,15 @@ void solve() {
 			v.push_back(i);
 		}
 	}
-
 	vector<bool> vis(N + 10, 0);
 	while (!q.empty()) {
 		auto temp = q.front();
 		q.pop();
 
-		ll curr = temp.f;
+		ll curr = temp.f % N;
 		string num = temp.s;
 		if (curr == 0) {
+			bool ok = 0;
 			cout << num << endl;
 			return;
 		}
