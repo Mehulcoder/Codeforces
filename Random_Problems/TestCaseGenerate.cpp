@@ -27,19 +27,72 @@ using pll = pair<ll, ll>;
 const ll MOD = 1e9 + 7;
 
 
-void solve() {
+ll getNum(ll from, ll to) {
+	assert(from <= to);
+	ll num = (ll)rand();
+	num %= (from - to + 1);
+	num += from;
+	return num;
+}
 
+vector<ll> getArray(ll from, ll to, ll sz) {
+	assert(from <= to && sz > 0);
+
+	vector<ll> ans;
+	ans.resize(sz);
+
+	rep(i, sz) {
+		ans[i] = getNum(from, to);
+	}
+
+	return ans;
+}
+
+string getString(ll from, ll to, ll sz) {
+	assert(from <= to && sz > 0);
+
+	vector<ll> temp = getArray(from, to, sz);
+	string ans = "";
+	rep(i, sz) {
+		ans += temp[i] + 'a';
+	}
+	return ans;
+}
+
+vector<ll> getUniqueArray(ll from, ll to, ll sz) {
+	assert(to - from + 1 >= sz);
+	assert(from <= to && sz > 0);
+	vector<ll> ans;
+
+	set<ll> s;
+	while (s.size() < sz) {
+		ll num = getNum(from, to);
+		if (s.find(num) == s.end()) ans.push_back(num);
+		s.insert(num);
+	}
+
+	return ans;
+}
+
+
+void getTestCases() {
+	vll uarr = getUniqueArray(-20, 12, 20);
+	rep(i, uarr.size()) {
+		cout << uarr[i] << ' ';
+	}
+	cout <<  '\n';
+	return;
 }
 
 int main(int argc , char ** argv) {
 	ios_base::sync_with_stdio(false) ;
 	cin.tie(NULL) ;
 
-	ll t = 1;
+	unsigned int seed;
+	cin >> seed;
+	srand(seed);
 
-	while (t--) {
-		solve();
-	}
+	getTestCases();
 
 	return 0 ;
 }
