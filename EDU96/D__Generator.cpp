@@ -27,21 +27,23 @@ using pll = pair<ll, ll>;
 const ll MOD = 1e9 + 7;
 
 
-void solve() {
-	ll n;
-	cin >> n;
+ll getNum(ll from, ll to) {
+	assert(from <= to);
+	ll num = (ll)rand();
+	num %= (abs(from - to) + 1);
+	num += from;
+	return num;
+}
 
-	ll res = n;
-	for (ll i = n - 1; i >= 1; i--)
-		res = (res + i + 1) / 2;
-
-	cout << res << '\n';
-	res = n;
-	for (ll i = n - 1; i >= 1; i--) {
-		cout << i << ' ' << res << '\n';
-		res = (res + i + 1) / 2;
+void getTestCases() {
+	cout << 1 << '\n';
+	ll len = getNum(1, 5);
+	cout << len << '\n';
+	rep(i, len) {
+		cout << (getNum(0, 1));
 	}
-
+	cout << '\n';
+	cout << '\n';
 	return;
 }
 
@@ -49,11 +51,10 @@ int main(int argc , char ** argv) {
 	ios_base::sync_with_stdio(false) ;
 	cin.tie(NULL) ;
 
-	ll t = 1;
-	cin >> t;
-	while (t--) {
-		solve();
-	}
+	unsigned int seed;
+	cin >> seed;
+	srand(seed);
+	getTestCases();
 
 	return 0 ;
 }
