@@ -17,7 +17,7 @@ using namespace std;
 using namespace __gnu_pbds;
 template <typename T>
 using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-#include <chrono> 
+#include <chrono>
 #ifndef mehul
 #pragma GCC optimize("Ofast")
 #endif
@@ -51,7 +51,7 @@ typedef unordered_set<int> useti;
 
 
 #define sz(x) (int)(x).size()
-template<typename T,typename U>inline bool exist(T &cont,U &val){return cont.find(val)!=cont.end();}
+template<typename T, typename U>inline bool exist(T &cont, U &val) {return cont.find(val) != cont.end();}
 #define fr(i, a, b) for (int i = (a), _b = (b); i <= _b; i++)
 #define rep(i, n) for (int i = 0, _n = (n); i < _n; i++)
 #define repr(i, n) for (int i = n; i >= 0; i--)
@@ -72,23 +72,23 @@ template<typename T, typename ...Arg>
 void __p(T a1, Arg ...a) { __p(a1); __p(a...); }
 template<typename Arg1>
 void __f(const char *name, Arg1 &&arg1) {
-	cout<<name<<" : ";__p(arg1);cout<<endl;
+	cout << name << " : "; __p(arg1); cout << endl;
 }
 template<typename Arg1, typename ... Args>
 void __f(const char *names, Arg1 &&arg1, Args &&... args) {
-	int bracket=0,i=0;
-	for(; ;i++)
-		if(names[i]==','&&bracket==0)
+	int bracket = 0, i = 0;
+	for (; ; i++)
+		if (names[i] == ',' && bracket == 0)
 			break;
-		else if(names[i]=='(')
+		else if (names[i] == '(')
 			bracket++;
-		else if(names[i]==')')
+		else if (names[i] == ')')
 			bracket--;
-	const char *comma=names+i;
-	cout.write(names,comma-names)<<" : ";
+	const char *comma = names + i;
+	cout.write(names, comma - names) << " : ";
 	__p(arg1);
-	cout<<"| ";
-	__f(comma+1,args...);
+	cout << "| ";
+	__f(comma + 1, args...);
 }
 #define trace(...) cout<<"Line:"<<__LINE__<<" "; __f(#__VA_ARGS__, __VA_ARGS__)
 int begtime = clock();
@@ -104,7 +104,7 @@ Using of set
 O(log(n))
 
 ordered_set<int>  s;
-s.insert(1); 
+s.insert(1);
 s.insert(3);
 cout << s.order_of_key(2) << endl; // the number of elements in the s less than 2
 cout << *s.find_by_order(0) << endl; // print the 0-th smallest number in s(0-based)
@@ -113,41 +113,39 @@ cout << *s.find_by_order(0) << endl; // print the 0-th smallest number in s(0-ba
 
 //Custom hash for unordered map
 struct custom_hash {
-    static uint64_t splitmix64(uint64_t x) {
-        // http://xorshift.di.unimi.it/splitmix64.c
-        x += 0x9e3779b97f4a7c15;
-        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
-        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
-        return x ^ (x >> 31);
-    }
+	static uint64_t splitmix64(uint64_t x) {
+		// http://xorshift.di.unimi.it/splitmix64.c
+		x += 0x9e3779b97f4a7c15;
+		x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
+		x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+		return x ^ (x >> 31);
+	}
 
-    size_t operator()(uint64_t x) const {
-        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
-        return splitmix64(x + FIXED_RANDOM);
-    }
+	size_t operator()(uint64_t x) const {
+		static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
+		return splitmix64(x + FIXED_RANDOM);
+	}
 };
 
 //Power Function O(log(n))
-ll poww(ll a, ll b, ll mod)
-{
-    if(b==0)
-        return 1;
-    ll ans=poww(a,b/2, mod);
-    if(b%2==0)
-        return (ans*ans)%mod;
-    return (((ans*ans)%mod)*a)%mod;
+ll poww(ll a, ll b, ll mod) {
+	if (b == 0)
+		return 1;
+	ll ans = poww(a, b / 2, mod);
+	if (b % 2 == 0)
+		return (ans * ans) % mod;
+	return (((ans * ans) % mod) * a) % mod;
 }
 
 
-class node
-{
+class node {
 public:
 	ll suff;
 	ll pre;
 	ll sum;
 	ll ans;
 
-	node(ll val){
+	node(ll val) {
 		pre = max(0ll, val);
 		suff = max(0ll, val);
 		ans = max(0ll, val);
@@ -159,88 +157,82 @@ public:
 vector<ll> v;
 vector<node> t;
 ll n, m;
-
-node help(node left, node right){
+node help(node left, node right) {
 	node res(0);
-	res.sum = left.sum+right.sum;
-	res.ans = max(left.ans, max(right.ans, left.suff+right.pre));
-	res.pre = max(left.pre, left.sum+right.pre);
-	res.suff = max(right.suff, right.sum+left.suff);
+	res.sum = left.sum + right.sum;
+	res.ans = max(left.ans, max(right.ans, left.suff + right.pre));
+	res.pre = max(left.pre, left.sum + right.pre);
+	res.suff = max(right.suff, right.sum + left.suff);
 
 	return res;
 }
 
-void build(ll start, ll tl, ll tr){
-	if (tl+1==tr)
-	{
+void build(ll start, ll tl, ll tr) {
+	if (tl + 1 == tr) {
 		t[start] = node(v[tl]);
 		return;
 	}
 
-	ll mid = (tl+tr)/2;
-	build(2*start+1, tl, mid);
-	build(2*start+2, mid, tr);
-	node left = t[2*start+1];
-	node right = t[2*start+2];
+	ll mid = (tl + tr) / 2;
+	build(2 * start + 1, tl, mid);
+	build(2 * start + 2, mid, tr);
+	node left = t[2 * start + 1];
+	node right = t[2 * start + 2];
 	t[start] =  help(left, right);
 	return;
 }
 
 
-void sett(ll start, ll tl, ll tr, ll pos, ll val){
-	if (tl+1==tr)
-	{
+void sett(ll start, ll tl, ll tr, ll pos, ll val) {
+	if (tl + 1 == tr) {
 		t[start] = node(val);
 		return;
 	}
-	ll mid = (tl+tr)/2;
-	if (pos<mid)
-	{
-		sett(2*start+1, tl, mid, pos, val);
-	}else{
-		sett(2*start+2, mid, tr, pos, val);
+	ll mid = (tl + tr) / 2;
+	if (pos < mid) {
+		sett(2 * start + 1, tl, mid, pos, val);
+	} else {
+		sett(2 * start + 2, mid, tr, pos, val);
 	}
-	node left = t[2*start+1];
-	node right = t[2*start+2];
+	node left = t[2 * start + 1];
+	node right = t[2 * start + 2];
 	t[start] = help(left, right);
 	return;
 }
 
 
-node get(ll start, ll tl, ll tr, ll l, ll r){
-	if (tl>=r || tr<=l)
-	{
+node get(ll start, ll tl, ll tr, ll l, ll r) {
+	if (tl >= r || tr <= l) {
 		return node(-INF);
 	}
 
-	if (l<=tl && r>=tr)
-	{
+	if (l <= tl && r >= tr) {
 		return t[start];
 	}
 
-	ll mid = (tl+tr)/2;
-	node left = get(2*start+1, tl, mid, l, r);
-	node right = get(2*start+2, mid, tr, l, r);
+	ll mid = (tl + tr) / 2;
+	node left = get(2 * start + 1, tl, mid, l, r);
+	node right = get(2 * start + 2, mid, tr, l, r);
 	node ans = help(left, right);
 	return ans;
 }
 
-void solve(){
-	cin>>n>>m;
+void solve() {
+	cin >> n >> m;
 	t.clear();
 	v.clear();
 	v.resize(n);
-	t.resize(4*n, node(0));
-	rep(i, n){
-		cin>>v[i];
+	t.resize(4 * n, node(0));
+	rep(i, n) {
+		cin >> v[i];
 	}
 
 	build(0, 0, n);
 	cout << get(0, 0, n, 0, n).ans << '\n';
-	
-	rep(i, m){
+
+	rep(i, m) {
 		ll a, b;
-		cin>>a>>b;
+		cin >> a >> b;
 		//set v[a] as b
 		sett(0, 0, n, a, b);
 		cout << get(0, 0, n, 0, n).ans << '\n';
@@ -250,25 +242,24 @@ void solve(){
 
 }
 
-int main( int argc , char ** argv )
-{
-	ios_base::sync_with_stdio(false) ; 
-	cin.tie(NULL) ; 
-	#ifdef mehul
+int main(int argc , char ** argv) {
+	ios_base::sync_with_stdio(false) ;
+	cin.tie(NULL) ;
+#ifdef mehul
 	freopen("input.txt", "r", stdin);
-	#endif
-	
-	//Code Goes here	
+#endif
+
+	//Code Goes here
 	ll t = 1;
 	// cin>>t;
-	while(t--){
+	while (t--) {
 		solve();
 	}
-	
-	#ifdef mehul
+
+#ifdef mehul
 	end_routine();
-	#endif
- 	
- 	return 0 ; 
+#endif
+
+	return 0 ;
 }
 

@@ -76,11 +76,18 @@ vector<ll> getUniqueArray(ll from, ll to, ll sz) {
 
 
 void getTestCases() {
-	vll uarr = getUniqueArray(-20, 12, 20);
+	ll n = getNum(1, 100000);
+	cout << n << '\n';
+	vll uarr = getArray(-100000, 100000, n);
 	rep(i, uarr.size()) {
 		cout << uarr[i] << ' ';
 	}
 	cout <<  '\n';
+	cout << 1  << '\n';
+	ll l = getNum(0, n - 1);
+	ll r = getNum(l, n - 1);
+	ll num = getNum(-100000, 100000);
+	cout << l << ' ' << r << " " << num << '\n';
 	return;
 }
 
