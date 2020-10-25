@@ -26,132 +26,102 @@ using pll = pair<ll, ll>;
 #define fil(ar, val) memset(ar, val, sizeof(ar))
 const ll MOD = 1e9 + 7;
 
-#ifdef mehul
-template<typename T>
-void __p(T a) { cout << a << " "; }
-template<typename T>
-void __p(std::vector<T> a) { cout << "{ "; for (auto p : a) __p(p); cout << "}"; }
-template<typename T, typename F>
-void __p(pair<T, F> a) { cout << "{ "; __p(a.first); __p(a.second); cout << "}"; }
-template<typename T, typename F>
-void __p(std::vector<pair<T, F>> a) { cout << "{ "; for (auto p : a) __p(p); cout << "}"; }
-template<typename T, typename ...Arg>
-void __p(T a1, Arg ...a) { __p(a1); __p(a...); }
-template<typename Arg1>
-void __f(const char *name, Arg1 &&arg1) {
-	cout << name << " : "; __p(arg1); cout << endl;
-}
-template<typename Arg1, typename ... Args>
-void __f(const char *names, Arg1 &&arg1, Args &&... args) {
-	int bracket = 0, i = 0;
-	for (; ; i++)
-		if (names[i] == ',' && bracket == 0)
-			break;
-		else if (names[i] == '(')
-			bracket++;
-		else if (names[i] == ')')
-			bracket--;
-	const char *comma = names + i;
-	cout.write(names, comma - names) << " : ";
-	__p(arg1);
-	cout << "| ";
-	__f(comma + 1, args...);
-}
-#define trace(...) cout<<"Line:"<<__LINE__<<" "; __f(#__VA_ARGS__, __VA_ARGS__)
-int begtime = clock();
-#define end_routine() cout << "\n\nTime elapsed: "<< fixed << double(clock() - begtime)*1000/CLOCKS_PER_SEC << setprecision(12) << " ms\n\n";
-#else
-#define endl '\n'
-#define trace(...)
-#define end_routine()
-#endif
+vll anss;
 
+const ll MAXN = 300005 + 1000;
+const ll MAXLOG = 20;
 
-class node {
-public:
-	ll gcdd;
+ll n; // length of our array
+ll logs[MAXN]; // logs[i] means such maximum p that 2^p <= i
 
-	node(ll val) {
-		gcdd = val;
+void computeLogs() {
+	logs[1] = 0;
+	for (ll i = 2; i <= n; i++) {
+		logs[i] = logs[i / 2] + 1;
 	}
-
-};
-
-vector<ll> v;
-vector<node> t;
-ll n, m;
-
-node help(node left, node right) {
-	node res(__gcd(left.gcdd, right.gcdd));
-	return res;
 }
 
-void build(ll start, ll tl, ll tr) {
-	if (tl + 1 == tr) {
-		t[start] = node(v[tl]);
-		return;
-	}
+ll a[MAXN];
+ll table[MAXLOG][MAXN];
+ll table2[MAXLOG][MAXN];
 
-	ll mid = (tl + tr) / 2;
-	build(2 * start + 1, tl, mid);
-	build(2 * start + 2, mid, tr);
-	node left = t[2 * start + 1];
-	node right = t[2 * start + 2];
-	t[start] =  help(left, right);
-	return;
+void buildSparseTable() {
+	for (ll i = 0; i <= logs[n]; i++) {
+		ll curLen = 1 << i; // 2^i
+		for (ll j = 0; j + curLen <= n; j++) {
+			if (curLen == 1) {
+				table[i][j] = a[j];
+			} else {
+				table[i][j] = min(table[i - 1][j], table[i - 1][j + (curLen / 2)]);
+			}
+		}
+	}
+}
+
+void buildSparseTable2() {
+	for (ll i = 0; i < n; i++) table2[0][i] = a[i];
+	for (ll j = 1; j <= logs[n]; j++) {
+		ll currLen = (1 << j);
+		for (ll i = 0; i <= n - currLen; i++) {
+			table2[j][i] = __gcd(table2[j - 1][i],
+			                     table2[j - 1][i + (1 << (j - 1))]);
+		}
+	}
 }
 
 
-node get(ll start, ll tl, ll tr, ll l, ll r) {
-	if (l == tl && r == tr) {
-		return t[start];
-	}
+ll getMin(ll l, ll r) {
+	ll p = logs[r - l + 1];
+	ll pLen = 1 << p; // 2^p
+	return min(table[p][l], table[p][r - pLen + 1]);
+}
 
-	ll mid = (tl + tr) / 2;
-	node left = get(2 * start + 1, tl, mid, l, min(mid, r));
-	node right = get(2 * start + 2, mid, tr, max(mid, l), r);
-	return help(left, right);
+ll getGcd(ll l, ll r) {
+	ll p = logs[r - l + 1];
+	ll pLen = 1 << p; // 2^p
+	return __gcd(table2[p][l], table2[p][r - pLen + 1]);
 }
 
 bool check(ll len) {
-	multiset<ll> s;
-	rep(i, len) {
-		s.insert(v[i]);
-	}
-
-	ll g = get(0, 0, n, 0, len).gcdd;
-	trace(len);
-	bool ok = (g == (*s.begin()));
-
-	ll curr = 0;
-	while (curr + len < n) {
-		s.erase(s.find(v[curr]));
-		s.insert(v[curr + len]);
-		curr++;
-
-		g = get(0, 0, n, curr, curr + len).gcdd;
-		ok = ok || (g == *(s.begin()));
+	bool ok = 0;
+	rep(l, n) {
+		ll r = l + len - 1;
+		if (r >= n) break;
+		ll g = getGcd(l, r);
+		if (g == getMin(l, r)) ok = 1;
+		if (ok) return 1;
 	}
 
 	return ok;
 }
 
+void gett(ll len) {
+	rep(l, n) {
+		bool ok = 0;
+		ll r = l + len - 1;
+		if (r >= n) break;
+		ll g = getGcd(l, r);
+		if (g == getMin(l, r)) ok = 1;
+		if (ok) anss.push_back(l);
+	}
+
+	return;
+}
 
 void solve() {
 	cin >> n;
-	vset(v, n, 0);
-	t.clear();
-	t.resize(4 * n, node(1));
+	rep(i, n) cin >> a[i];
+	anss.clear();
 
-	rep(i, n) cin >> v[i];
+	computeLogs();
+	buildSparseTable();
+	buildSparseTable2();
 
-	build(0, 0, n);
+
 	ll lo = 1;
 	ll hi = n;
 	ll ans = 1;
 
-	cout << get(0, 0, n, 1, 4).gcdd << '\n';
-	return;
 	while (lo <= hi) {
 		ll mid = (lo + hi) / 2;
 		if (check(mid)) {
@@ -162,7 +132,13 @@ void solve() {
 		}
 	}
 
-	cout << ans << '\n';
+	gett(ans);
+	sort(all(anss));
+	cout << anss.size() << " " << ans - 1 << '\n';
+	rep(i, anss.size()) {
+		cout << anss[i] + 1 << ' ';
+	}
+	cout << '\n';
 
 	return;
 }
