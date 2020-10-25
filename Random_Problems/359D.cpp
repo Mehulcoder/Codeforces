@@ -7,32 +7,21 @@ Talent is overrated
 using namespace std;
 
 using ll = long long;
-using ld = long double;
-using pll = pair<ll, ll>;
 
-#define mp make_pair
 #define all(x) (x).begin(), (x).end()
-#define f first
-#define s second
 #define vll vector<long long>
-#define vvll vector<vector<ll>>
-#define vset(v, n, val) v.clear(); v.resize(n, val)
-#define INF 4557430888798830399ll
-#define fr(i, a, b) for (int i = (a), _b = (b); i <= _b; i++)
 #define rep(i, n) for (int i = 0, _n = (n); i < _n; i++)
-#define repr(i, n) for (int i = n; i >= 0; i--)
-#define frr(i, a, b) for (int i = (a), _b = (b); i >= _b; i--)
-#define trav(a, x) for(auto& a : x)
-#define fil(ar, val) memset(ar, val, sizeof(ar))
-const ll MOD = 1e9 + 7;
 
 vll anss;
 
 const ll MAXN = 300005 + 1000;
 const ll MAXLOG = 20;
 
-ll n; // length of our array
-ll logs[MAXN]; // logs[i] means such maximum p that 2^p <= i
+ll n;
+ll logs[MAXN];
+ll a[MAXN];
+ll table[MAXLOG][MAXN];
+ll table2[MAXLOG][MAXN];
 
 void computeLogs() {
 	logs[1] = 0;
@@ -41,30 +30,18 @@ void computeLogs() {
 	}
 }
 
-ll a[MAXN];
-ll table[MAXLOG][MAXN];
-ll table2[MAXLOG][MAXN];
+
 
 void buildSparseTable() {
-	for (ll i = 0; i <= logs[n]; i++) {
-		ll curLen = 1 << i; // 2^i
-		for (ll j = 0; j + curLen <= n; j++) {
-			if (curLen == 1) {
-				table[i][j] = a[j];
-			} else {
-				table[i][j] = min(table[i - 1][j], table[i - 1][j + (curLen / 2)]);
-			}
-		}
-	}
-}
+	for (ll i = 0; i < n; i++) table2[0][i] = a[i], table[0][i] = a[i];
 
-void buildSparseTable2() {
-	for (ll i = 0; i < n; i++) table2[0][i] = a[i];
 	for (ll j = 1; j <= logs[n]; j++) {
 		ll currLen = (1 << j);
 		for (ll i = 0; i <= n - currLen; i++) {
 			table2[j][i] = __gcd(table2[j - 1][i],
 			                     table2[j - 1][i + (1 << (j - 1))]);
+			table[j][i] = min(table[j - 1][i],
+			                  table[j - 1][i + (1 << (j - 1))]);
 		}
 	}
 }
@@ -115,7 +92,6 @@ void solve() {
 
 	computeLogs();
 	buildSparseTable();
-	buildSparseTable2();
 
 
 	ll lo = 1;
@@ -133,6 +109,7 @@ void solve() {
 	}
 
 	gett(ans);
+
 	sort(all(anss));
 	cout << anss.size() << " " << ans - 1 << '\n';
 	rep(i, anss.size()) {
