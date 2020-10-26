@@ -26,26 +26,27 @@ using pll = pair<ll, ll>;
 #define fil(ar, val) memset(ar, val, sizeof(ar))
 const ll MOD = 1e9 + 7;
 
-void solve() {
-	int n, maxi = 0, cnt, i = 0;
-	cin >> n;
-	int a[300005], ans[300005];
-	for (int i = 0; i < n; i++)
-		cin >> a[i];
-	while (i < n) {
-		int l = i, r = i;
-		while (l > 0 && (a[l - 1] % a[i] == 0))l--;
-		while (r < n - 1 && (a[r + 1] % a[i] == 0))r++;
-		int length = (r - l);
-		i = r + 1;
-		if (length > maxi)
-			cnt = 0, maxi = length;
-		if (length == maxi)
-			ans[cnt++] = l + 1;
+
+ll getNum(ll from, ll to) {
+	assert(from <= to);
+	ll num = (ll)rand();
+	num %= (to - from + 1);
+	num += from;
+	return num;
+}
+
+void getTestCases() {
+	ll n = getNum(2, 100);
+	cout << n << '\n';
+	rep(i, n - 1) {
+		ll l = getNum(1, i + 1);
+		cout << l << ' ';
 	}
-	cout << cnt << " " << maxi << endl;
-	for (int i = 0; i < cnt; i++)
-		cout << ans[i] << " ";
+	cout << '\n';
+	rep(i, n) {
+		cout << getNum(0, 5) << ' ';
+	}
+	cout << '\n';
 	return;
 }
 
@@ -53,11 +54,11 @@ int main(int argc , char ** argv) {
 	ios_base::sync_with_stdio(false) ;
 	cin.tie(NULL) ;
 
-	ll t = 1;
+	unsigned int seed;
+	cin >> seed;
+	srand(seed);
 
-	while (t--) {
-		solve();
-	}
+	getTestCases();
 
 	return 0 ;
 }
