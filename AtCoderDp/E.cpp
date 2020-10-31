@@ -26,34 +26,55 @@ using pll = pair<ll, ll>;
 #define fil(ar, val) memset(ar, val, sizeof(ar))
 const ll MOD = 1e9 + 7;
 
+const ll N = 100;
+
+ll n, W;
+ll w[N], v[N];
+ll dp[100005][N];
 
 /*
-*	dp[i][j] ----> The minimum I can get if a use j for i
-*	The greedy here is: If smaller values are not useful for smaller a[i]s
-*	They obviously won't be useful for larger a[i]s
+	dp[i][j] ===> Weights required till position j to make the
+	sum equal to i.
 */
 
-
-
-ll n;
-vector<ll> a;
-ll dp[205][405];
-ll calc(ll p, ll t) {
-	if (p == n) return 0;
-	if (t == 2 * n + 1) return INF;
-	if (dp[p][t] != -1) return dp[p][t];
-	return dp[p][t] = min(calc(p, t + 1), calc(p + 1, t + 1) + abs(a[p] - t));
-}
-
 void solve() {
-	cin >> n;
-	a.resize(n);
-	rep(i, n) cin >> a[i];
-	sort(all(a));
+	cin >> n >> W;
+	rep(i, n) cin >> w[i] >> v[i];
 
-	fil(dp, -1);
-	cout << calc(0, 1) << "\n";
+	ll sumVal = 0;
+	rep(i, n) sumVal += v[i];
 
+	rep(i, sumVal + 1) {
+		rep(j, n) {
+			dp[i][j] = INF;
+		}
+	}
+
+	dp[0][0] = 0;
+	ll ans = 0ll;
+	fr(i, 1, sumVal) {
+		dp[i][0] = ((v[0] == i) ? w[0] : INF);
+		if (dp[i][0] <= W) ans = max(ans, (ll)i);
+
+	}
+
+	rep(j, n) {
+		dp[0][j] = 0;
+		if (dp[0][j] <= W) ans = max(ans, 0ll);
+
+	}
+
+	fr(i, 1, sumVal) {
+		fr(j, 1, n - 1) {
+			ll a = ((i - v[j] >= 0) ? (w[j] + dp[i - v[j]][j - 1]) : INF);
+			ll b = dp[i][j - 1];
+			dp[i][j] = min(a, b);
+			if (dp[i][j] <= W) ans = max(ans, (ll)i);
+		}
+	}
+
+	cout << ans << '\n';
+	return;
 }
 
 int main(int argc , char ** argv) {
@@ -61,7 +82,7 @@ int main(int argc , char ** argv) {
 	cin.tie(NULL) ;
 
 	ll t = 1;
-	cin >> t;
+
 	while (t--) {
 		solve();
 	}

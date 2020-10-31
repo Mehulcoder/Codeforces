@@ -26,34 +26,28 @@ using pll = pair<ll, ll>;
 #define fil(ar, val) memset(ar, val, sizeof(ar))
 const ll MOD = 1e9 + 7;
 
+const ll N = 100;
 
-/*
-*	dp[i][j] ----> The minimum I can get if a use j for i
-*	The greedy here is: If smaller values are not useful for smaller a[i]s
-*	They obviously won't be useful for larger a[i]s
-*/
+ll n, W;
+ll w[N], v[N];
+ll dp[N][100005];
+ll get(ll pos, ll tot) {
+	if (tot > W) return -INF;
+	if (pos >= n || tot == W) return 0;
 
+	ll &anss = dp[pos][tot];
+	if (anss != -1) return anss;
 
-
-ll n;
-vector<ll> a;
-ll dp[205][405];
-ll calc(ll p, ll t) {
-	if (p == n) return 0;
-	if (t == 2 * n + 1) return INF;
-	if (dp[p][t] != -1) return dp[p][t];
-	return dp[p][t] = min(calc(p, t + 1), calc(p + 1, t + 1) + abs(a[p] - t));
+	return anss = max(v[pos] + get(pos + 1, tot + w[pos]), get(pos + 1, tot));
 }
 
 void solve() {
-	cin >> n;
-	a.resize(n);
-	rep(i, n) cin >> a[i];
-	sort(all(a));
+	cin >> n >> W;
+	rep(i, n) cin >> w[i] >> v[i];
 
 	fil(dp, -1);
-	cout << calc(0, 1) << "\n";
-
+	cout << get(0, 0) << '\n';
+	return;
 }
 
 int main(int argc , char ** argv) {
@@ -61,7 +55,7 @@ int main(int argc , char ** argv) {
 	cin.tie(NULL) ;
 
 	ll t = 1;
-	cin >> t;
+
 	while (t--) {
 		solve();
 	}
