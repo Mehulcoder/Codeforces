@@ -30,6 +30,7 @@ string k;
 ll d;
 ll n;
 ll dp[101][10004][2];
+
 ll get(ll rem, ll pos, bool isEqualYet) {
 	if (pos == n) return (!((rem % d + d) % d));
 	ll ans = 0ll;
@@ -49,7 +50,6 @@ ll get(ll rem, ll pos, bool isEqualYet) {
 		}
 	} else {
 		/**
-		 *
 		 * This means that the digits till now
 		 * are equal and now we will have two cases
 		 * to handle
