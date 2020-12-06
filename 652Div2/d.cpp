@@ -91,76 +91,7 @@ int begtime = clock();
 #define end_routine()
 #endif
 
-void matMult(auto &a, auto &b, ll mod){
-	ll n = a.size();
-	ll m = a[0].size();
 
-	auto temp = a;
-
-	rep(i, n){
-		rep(j, m){
-			temp[i][j] = 0;
-		}
-	}
-
-
-	rep(i, n){
-		rep(j, m){
-			rep(k, m){
-				temp[i][j]+=((a[i][k]%mod)*(b[k][j]%mod))%mod;
-			}
-		}
-	}
-
-	a = temp;
-
-	return;
-}
-
-void matPow(auto &mat, ll x, ll mod){
-	if (x==1)
-	{
-		return;
-	}
-	if (!x)
-	{
-		ll n = mat.size();
-		ll m = mat[0].size();
-		rep(i, n){
-			rep(j, m){
-				mat[i][j] = (i==j);
-			}
-		}
-
-		return;
-	}
-
-	auto temp = mat;
-
-	if (x%2==0)
-	{
-		matPow(mat, x/2, mod);
-		matMult(mat, mat, mod);
-		return;
-	}
-
-	matPow(mat, x-1, mod);
-	matMult(mat, temp, mod);
-	return;
-}
-
-ll get(auto mat, ll n){
-	vector<vector<int>> base(4, vector<int>(1, 0));
-	base[3][0] = 1;
-	ll x = n/3;
-	ll rem = n%3;
-
-	matPow(mat, x, MOD);
-
-	return mat[2-rem][3]%MOD;
-	
-
-}
 
 int main( int argc , char ** argv )
 {
@@ -170,18 +101,47 @@ int main( int argc , char ** argv )
     freopen("input.txt", "r", stdin);
 	#endif
 
-	//X is the power of the matrix that we want to raise
+    ll n = 2*1000000+9;
+    // n=12;
 
-	vector<vector<ll>> mat(4, vector<ll>(4));
-	mat = {{5, 6, 0, 3},{3,2,0,1},{1,2,0,1}, {0,0,0,1}};
+    vector<vector<ll>> dp(4, vector<ll>(n+1, 0));
+    dp[0][1] = 1;
+    dp[1][1] = 0;
+    dp[3][1] = 0;
+    // trace("hello");
+    int add = 0;
+    fr(i, 2, n){
+    	dp[0][i] = (2*dp[1][i-1]%MOD+dp[0][i-1]%MOD)%MOD;
+    	dp[1][i] = (dp[0][i-1])%MOD;
+    	dp[3][i] = (dp[1][i-1]%MOD+dp[3][i-1]%MOD)%MOD;
+    }
+
+    vector<ll> sol(n+1, 0);
+    sol[1] = 0;
+    sol[2] = 0;
+
+    fr(i, 3, n){
+    	sol[i] = ((i >= 3?sol[i-3] : 0)+dp[3][i]%MOD-dp[3][i-1]%MOD+MOD)%MOD;
+    }
+    // trace(dp[0]);
+    // trace(dp[1]);
+    // trace(dp[3]);
+    // trace(sol);
+	
 	int t;
 	cin>>t;
 	while(t--){
-		ll n;
-		cin>>n;
+		int k;
+		cin>>k;
 
-		cout << (get(mat, n)%MOD*4)%MOD << '\n';
+		cout << (sol[k]*4)%MOD << '\n';
+
+
+
+
 	}
+
+	//Code Goes here
 	
 	#ifdef mehul
     end_routine();
