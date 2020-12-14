@@ -24,7 +24,8 @@ int main()
 	{
 		string t = s[i];
 		reverse(t.begin(), t.end());
-		if (t == s[i]) mid = t;
+		if (t == s[i])
+			mid = t;
 		else if (dict.find(t) != dict.end())
 		{
 			left.push_back(s[i]);
@@ -34,10 +35,12 @@ int main()
 		}
 	}
 	cout << left.size() * m * 2 + mid.size() << endl;
-	for (string x : left) cout << x;
+	for (string x : left)
+		cout << x;
 	cout << mid;
 
 	reverse(right.begin(), right.end());
-	for (string x : right) cout << x;
+	for (string x : right)
+		cout << x;
 	cout << endl;
 }

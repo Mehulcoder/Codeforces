@@ -15,13 +15,13 @@
 */
 
 #include <bits/stdc++.h>
-#include<ext/pb_ds/assoc_container.hpp>
-#include<ext/pb_ds/tree_policy.hpp>
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
 using namespace std;
 using namespace __gnu_pbds;
 template <typename T>
 using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
-#include <chrono> 
+#include <chrono>
 #ifndef mehul
 #pragma GCC optimize("Ofast")
 #endif
@@ -53,50 +53,84 @@ typedef unordered_set<int> useti;
 #define EPS 1e-7
 #define PI acos(-1)
 
-
 #define sz(x) (int)(x).size()
-template<typename T,typename U>inline bool exist(T &cont,U &val){return cont.find(val)!=cont.end();}
+template <typename T, typename U>
+inline bool exist(T &cont, U &val)
+{
+	return cont.find(val) != cont.end();
+}
 #define fr(i, a, b) for (int i = (a), _b = (b); i <= _b; i++)
 #define rep(i, n) for (int i = 0, _n = (n); i < _n; i++)
 #define repr(i, n) for (int i = n; i >= 0; i--)
 #define frr(i, a, b) for (int i = (a), _b = (b); i >= _b; i--)
-#define trav(a, x) for(auto& a : x)
-#define fil(ar, val) memset(ar, val, sizeof(ar))  // 0x3f for inf, 0x80 for -INF can also use with pairs
+#define trav(a, x) for (auto &a : x)
+#define fil(ar, val) memset(ar, val, sizeof(ar)) // 0x3f for inf, 0x80 for -INF can also use with pairs
 
 #ifdef mehul
-template<typename T>
-void __p(T a) { cout << a << " "; }
-template<typename T>
-void __p(std::vector<T> a) { cout << "{ "; for (auto p : a) __p(p); cout << "}"; }
-template<typename T, typename F>
-void __p(pair<T, F> a) { cout << "{ "; __p(a.first); __p(a.second); cout << "}"; }
-template<typename T, typename F>
-void __p(std::vector<pair<T, F>> a) { cout << "{ "; for (auto p : a) __p(p); cout << "}"; }
-template<typename T, typename ...Arg>
-void __p(T a1, Arg ...a) { __p(a1); __p(a...); }
-template<typename Arg1>
-void __f(const char *name, Arg1 &&arg1) {
-	cout<<name<<" : ";__p(arg1);cout<<endl;
+template <typename T>
+void __p(T a)
+{
+	cout << a << " ";
 }
-template<typename Arg1, typename ... Args>
-void __f(const char *names, Arg1 &&arg1, Args &&... args) {
-	int bracket=0,i=0;
-	for(; ;i++)
-		if(names[i]==','&&bracket==0)
-			break;
-		else if(names[i]=='(')
-			bracket++;
-		else if(names[i]==')')
-			bracket--;
-	const char *comma=names+i;
-	cout.write(names,comma-names)<<" : ";
+template <typename T>
+void __p(std::vector<T> a)
+{
+	cout << "{ ";
+	for (auto p : a)
+		__p(p);
+	cout << "}";
+}
+template <typename T, typename F>
+void __p(pair<T, F> a)
+{
+	cout << "{ ";
+	__p(a.first);
+	__p(a.second);
+	cout << "}";
+}
+template <typename T, typename F>
+void __p(std::vector<pair<T, F>> a)
+{
+	cout << "{ ";
+	for (auto p : a)
+		__p(p);
+	cout << "}";
+}
+template <typename T, typename... Arg>
+void __p(T a1, Arg... a)
+{
+	__p(a1);
+	__p(a...);
+}
+template <typename Arg1>
+void __f(const char *name, Arg1 &&arg1)
+{
+	cout << name << " : ";
 	__p(arg1);
-	cout<<"| ";
-	__f(comma+1,args...);
+	cout << endl;
 }
-#define trace(...) cout<<"Line:"<<__LINE__<<" "; __f(#__VA_ARGS__, __VA_ARGS__)
+template <typename Arg1, typename... Args>
+void __f(const char *names, Arg1 &&arg1, Args &&... args)
+{
+	int bracket = 0, i = 0;
+	for (;; i++)
+		if (names[i] == ',' && bracket == 0)
+			break;
+		else if (names[i] == '(')
+			bracket++;
+		else if (names[i] == ')')
+			bracket--;
+	const char *comma = names + i;
+	cout.write(names, comma - names) << " : ";
+	__p(arg1);
+	cout << "| ";
+	__f(comma + 1, args...);
+}
+#define trace(...)                      \
+	cout << "Line:" << __LINE__ << " "; \
+	__f(#__VA_ARGS__, __VA_ARGS__)
 int begtime = clock();
-#define end_routine() cout << "\n\nTime elapsed: "<< fixed << double(clock() - begtime)*1000/CLOCKS_PER_SEC << setprecision(12) << " ms\n\n";
+#define end_routine() cout << "\n\nTime elapsed: " << fixed << double(clock() - begtime) * 1000 / CLOCKS_PER_SEC << setprecision(12) << " ms\n\n";
 #else
 #define endl '\n'
 #define trace(...)
@@ -114,90 +148,93 @@ cout << s.order_of_key(2) << endl; // the number of elements in the s less than 
 cout << *s.find_by_order(0) << endl; // print the 0-th smallest number in s(0-based)
 */
 
-
 //Custom hash for unordered map
-struct custom_hash {
-    static uint64_t splitmix64(uint64_t x) {
-        // http://xorshift.di.unimi.it/splitmix64.c
-        x += 0x9e3779b97f4a7c15;
-        x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
-        x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
-        return x ^ (x >> 31);
-    }
+struct custom_hash
+{
+	static uint64_t splitmix64(uint64_t x)
+	{
+		// http://xorshift.di.unimi.it/splitmix64.c
+		x += 0x9e3779b97f4a7c15;
+		x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
+		x = (x ^ (x >> 27)) * 0x94d049bb133111eb;
+		return x ^ (x >> 31);
+	}
 
-    size_t operator()(uint64_t x) const {
-        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
-        return splitmix64(x + FIXED_RANDOM);
-    }
+	size_t operator()(uint64_t x) const
+	{
+		static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
+		return splitmix64(x + FIXED_RANDOM);
+	}
 };
 
 //Power Function O(log(n))
 ll poww(ll a, ll b, ll mod)
 {
-    if(b==0)
-        return 1;
-    ll ans=poww(a,b/2, mod);
-    if(b%2==0)
-        return (ans*ans)%mod;
-    return (((ans*ans)%mod)*a)%mod;
+	if (b == 0)
+		return 1;
+	ll ans = poww(a, b / 2, mod);
+	if (b % 2 == 0)
+		return (ans * ans) % mod;
+	return (((ans * ans) % mod) * a) % mod;
 }
-
 
 vector<ll> spf;
 vector<ll> fact;
 vector<ll> invFact;
 vector<ll> inv;
 
-
 ///PreCalculate NcR
-ll ncr(ll n, ll r, ll mod=MOD){
-	return (((fact[n]*invFact[n-r])%mod)*invFact[r])%mod;
+ll ncr(ll n, ll r, ll mod = MOD)
+{
+	return (((fact[n] * invFact[n - r]) % mod) * invFact[r]) % mod;
 }
 
-void solve(){
-	
+void solve()
+{
+
 	vector<ll> primeFactoes;
 	ll x, y;
-	cin>>x>>y;
+	cin >> x >> y;
 	ll ans = 1;
 	ll temp = x;
 
 	//Get prime Factors
-	while(temp!=1){
-		if (primeFactoes.size()==0 || primeFactoes.back()!=spf[temp])
+	while (temp != 1)
+	{
+		if (primeFactoes.size() == 0 || primeFactoes.back() != spf[temp])
 		{
 			primeFactoes.push_back(spf[temp]);
 		}
-		temp/=spf[temp];
-
+		temp /= spf[temp];
 	}
 
 	//Ditribute all occurances of each prime factor
-	trav(fact, primeFactoes){
+	trav(fact, primeFactoes)
+	{
 		ll temp = x;
 		ll power = 0;
-		while(temp%fact==0 && temp>0){
+		while (temp % fact == 0 && temp > 0)
+		{
 			power++;
-			temp=temp/fact;
+			temp = temp / fact;
 		}
-		ans*=(ncr(y+power-1,y-1, MOD));
-		ans%=MOD;
+		ans *= (ncr(y + power - 1, y - 1, MOD));
+		ans %= MOD;
 	}
-	ans*=poww(2, y-1, MOD);
-	ans%=MOD;
+	ans *= poww(2, y - 1, MOD);
+	ans %= MOD;
 	cout << ans << '\n';
 	return;
-
 }
 
-int main( int argc , char ** argv )
+int main(int argc, char **argv)
 {
-	ios_base::sync_with_stdio(false) ; 
-	cin.tie(NULL) ; 
-	#ifdef mehul
-    freopen("input.txt", "r", stdin);
-	#endif
-	
+	ios_base::sync_with_stdio(false);
+	cin.tie(NULL);
+#ifdef mehul
+	freopen("input.txt", "r", stdin);
+#endif
+
 	spf.resize(1100000, 0);
 	fact.resize(1100000, 1);
 	inv.resize(1100000, 1);
@@ -205,41 +242,40 @@ int main( int argc , char ** argv )
 
 	//Precalc: Inverse of number, factorial, inverse of factorial of a number
 	//Calculate till max possible value of y+maxPowerOfAFactor
-	fr(i, 2, 1010000){
-		fact[i] = (fact[i-1]*i)%MOD;
-		inv[i] = inv[MOD%i]*(MOD-MOD/i)%MOD;
-		invFact[i] = (invFact[i-1]*inv[i])%MOD;
-	}	
+	fr(i, 2, 1010000)
+	{
+		fact[i] = (fact[i - 1] * i) % MOD;
+		inv[i] = inv[MOD % i] * (MOD - MOD / i) % MOD;
+		invFact[i] = (invFact[i - 1] * inv[i]) % MOD;
+	}
 
 	//Pre calc smallest prime factor
 	spf[1] = 1;
-	fr(i, 2, 1010000){
+	fr(i, 2, 1010000)
+	{
 		if (!spf[i])
 		{
 			spf[i] = i;
-			for (ll j = 2*i; j < 1010000; j+=i)
+			for (ll j = 2 * i; j < 1010000; j += i)
 			{
 				if (!spf[j])
 				{
 					spf[j] = i;
-					
 				}
 			}
 		}
 	}
 
-
 	ll t = 1;
-	cin>>t;
-	while(t--){
+	cin >> t;
+	while (t--)
+	{
 		solve();
 	}
 
-	
-	#ifdef mehul
-    end_routine();
-	#endif
- 
-    return 0 ; 
-}
+#ifdef mehul
+	end_routine();
+#endif
 
+	return 0;
+}
