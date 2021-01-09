@@ -17,8 +17,8 @@ using pll = pair<ll, ll>;
 #define vll vector<long long>
 #define vvll vector<vector<ll>>
 #define vset(v, n, val) \
-	v.clear();      \
-	v.resize(n, val)
+    v.clear();          \
+    v.resize(n, val)
 #define INF 4557430888798830399ll
 #define fr(i, a, b) for (int i = (a), _b = (b); i <= _b; i++)
 #define rep(i, n) for (int i = 0, _n = (n); i < _n; i++)
@@ -28,47 +28,44 @@ using pll = pair<ll, ll>;
 #define fil(ar, val) memset(ar, val, sizeof(ar))
 const ll MOD = 1e9 + 7;
 
-/**
- * 4 <= 1+2+3
- * 1+2+3...+k = (k)*(k+1)/2
- * */
-
 void solve()
 {
-	ll x;
-	cin >> x;
+    ll q;
+    cin>>q;
+    multiset<pair<ll, ll>> m;
 
-	ll finalPos = 0;
-	ll adder = 1, steps = 0;
-	while (finalPos < x)
-	{
-		finalPos += adder++;
-		steps++;
-	}
+    ll curr = 1;
+    queue<pair<ll, ll>>     qu;
+    while(q--){
+        ll a; cin>>a;
+        ll b;
+        if(a==1){
+            cin>>b;
+            qu.push({-b, curr+1});
+            m.insert({-b, curr++});
+        }else if (a == 2)
+        {
+            cout<<qu.front().second<<endl;
+            m.erase(m.find({qu.front()}));
+            qu.pop();
 
-	if (finalPos - x == 1)
-	{
-		std::cout << steps + 1 << std::endl;
-	}
-	else
-	{
-		std::cout << steps << std::endl;
-	}
+        }
+    }
 
-	return;
+
 }
 
 int main(int argc, char **argv)
 {
-	ios_base::sync_with_stdio(false);
-	cin.tie(NULL);
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
 
-	ll t = 1;
-	cin >> t;
-	while (t--)
-	{
-		solve();
-	}
+    ll t = 1;
+    
+    while (t--)
+    {
+        solve();
+    }
 
-	return 0;
+    return 0;
 }
