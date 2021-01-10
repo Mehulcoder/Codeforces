@@ -28,31 +28,37 @@ using pll = pair<ll, ll>;
 #define fil(ar, val) memset(ar, val, sizeof(ar))
 const ll MOD = 1e9 + 7;
 
+
+
 void solve()
 {
     ll q;
     cin>>q;
-    multiset<pair<ll, ll>> m;
-
     ll curr = 1;
-    queue<pair<ll, ll>>     qu;
+    // trace(curr);
+    multiset<pair<ll, ll>> m;
+    multiset<pair<ll, ll>> qu;
     while(q--){
         ll a; cin>>a;
         ll b;
         if(a==1){
             cin>>b;
-            qu.push({-b, curr+1});
+            qu.insert({curr, -b});
             m.insert({-b, curr++});
         }else if (a == 2)
         {
-            cout<<qu.front().second<<endl;
-            m.erase(m.find({qu.front()}));
-            qu.pop();
-
+            cout<<qu.begin()->first<<" ";
+            m.erase(m.find({qu.begin()->second, qu.begin()->first}));
+            qu.erase(qu.begin());
+        }else{
+            cout<<m.begin()->second<<" ";
+            qu.erase({m.begin()->second, m.begin()->first});
+            m.erase(m.begin());
         }
     }
 
-
+    cout<<endl;
+    return;
 }
 
 int main(int argc, char **argv)
