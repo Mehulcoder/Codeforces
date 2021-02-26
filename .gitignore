@@ -1,4 +1,3 @@
+*
+!*.cpp
 input.txt
-a.out
-*.prob
-*.exe
