@@ -1,3 +1,4 @@
+
 /*
 Author: Mehul Chaturvedi
 Talent is overrated
@@ -27,34 +28,35 @@ using pll = pair<ll, ll>;
 const ll MOD = 1e9 + 7;
 
 void solve() {
-	ll n; cin >> n;
-	vll a(n);
+	ll m, n; cin >> m >> n;
 
-	rep(i, n) cin >> a[i];
-	ll fir = 0, last = n - 1;
-	rep(i, n) {
-		if (a[i] == 1) {
-			fir = i;
-			break;
-		}
+	string s, t; cin >> s >> t;
+	vvll pos(26);
+
+	rep(i, m) {
+		pos[s[i] - 'a'].push_back(i);
 	}
 
-	repr(i, n - 1) {
-		if (a[i] == 1) {
-			last = i;
-			break;
-		}
-	}
-
+	vll low(n, -1);
+	vll high(n, -1);
 	ll ans = 0;
-	fr(i, fir, last) {
-		if (a[i] == 0) ans++;
+	low[0] = (pos[t[0] - 'a'][0]);
+	high[n - 1] = (pos[t.back() - 'a'].back());
+
+	fr(i, 1, n - 1) {
+		low[i] = *upper_bound(pos[t[i] - 'a'].begin(), pos[t[i] - 'a'].end(), low[i - 1]);
+	}
+	frr(i, n - 2, 0) {
+		high[i] = pos[t[i] - 'a'][lower_bound(pos[t[i] - 'a'].begin(), pos[t[i] - 'a'].end(), high[i + 1]) - pos[t[i] - 'a'].begin() - 1];
+	}
+	// trace(low, high);
+	fr(i, 1, n - 1) {
+		ans = max(ans, high[i] - low[i - 1]);
 	}
 
-	cout << ans << '\n';
+	cout << ans << endl;
 
 	return;
-
 }
 
 int main(int argc , char ** argv) {
@@ -62,7 +64,7 @@ int main(int argc , char ** argv) {
 	cin.tie(NULL) ;
 
 	ll t = 1;
-	cin >> t;
+
 	while (t--) {
 		solve();
 	}

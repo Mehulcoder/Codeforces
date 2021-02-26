@@ -1,3 +1,4 @@
+
 /*
 Author: Mehul Chaturvedi
 Talent is overrated
@@ -28,33 +29,41 @@ const ll MOD = 1e9 + 7;
 
 void solve() {
 	ll n; cin >> n;
-	vll a(n);
+	vll a(n, 0);
 
-	rep(i, n) cin >> a[i];
-	ll fir = 0, last = n - 1;
+	ll s = 0;
 	rep(i, n) {
-		if (a[i] == 1) {
-			fir = i;
-			break;
+		cin >> a[i];
+		s += a[i];
+	}
+
+	rep(k, n) {
+		if (s % (n - k) != 0) continue;
+		ll sum = s / (n - k);
+
+		ll groups = 0;
+		ll i = 0;
+		ll ss = 0;
+		bool ok = 1;
+		while (i < n) {
+			ss += a[i];
+			if (ss == sum) {
+				groups++, ss = 0;
+			} else if (ss > sum) {
+				ok = 0;
+				break;
+			}
+			i++;
 		}
-	}
 
-	repr(i, n - 1) {
-		if (a[i] == 1) {
-			last = i;
-			break;
+		if (ok) {
+			cout << n - groups << endl;
+			return;
 		}
+		// cout << -1 << endl;
 	}
-
-	ll ans = 0;
-	fr(i, fir, last) {
-		if (a[i] == 0) ans++;
-	}
-
-	cout << ans << '\n';
 
 	return;
-
 }
 
 int main(int argc , char ** argv) {

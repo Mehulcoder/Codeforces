@@ -1,3 +1,4 @@
+
 /*
 Author: Mehul Chaturvedi
 Talent is overrated
@@ -27,34 +28,29 @@ using pll = pair<ll, ll>;
 const ll MOD = 1e9 + 7;
 
 void solve() {
-	ll n; cin >> n;
-	vll a(n);
+	ll a, b, k; cin >> a >> b >> k;
 
-	rep(i, n) cin >> a[i];
-	ll fir = 0, last = n - 1;
-	rep(i, n) {
-		if (a[i] == 1) {
-			fir = i;
-			break;
-		}
+	map<ll, ll> ma, mb;
+	vll x(k, 0), y(k, 0);
+	rep(i, k) {
+		ll a; cin >> a;
+		x[i] = a;
+		ma[a]++;
 	}
 
-	repr(i, n - 1) {
-		if (a[i] == 1) {
-			last = i;
-			break;
-		}
+	rep(i, k) {
+		ll b; cin >> b;
+		y[i] = b;
+		mb[b]++;
 	}
 
 	ll ans = 0;
-	fr(i, fir, last) {
-		if (a[i] == 0) ans++;
+	rep(i, k) {
+		ans += k + 1 - ma[x[i]] - mb[y[i]];
 	}
 
-	cout << ans << '\n';
-
+	cout << ans / 2 << endl;
 	return;
-
 }
 
 int main(int argc , char ** argv) {

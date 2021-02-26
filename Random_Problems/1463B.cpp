@@ -1,3 +1,4 @@
+
 /*
 Author: Mehul Chaturvedi
 Talent is overrated
@@ -28,34 +29,33 @@ const ll MOD = 1e9 + 7;
 
 void solve() {
 	ll n; cin >> n;
-	vll a(n);
 
+	vll a(n, 0);
 	rep(i, n) cin >> a[i];
-	ll fir = 0, last = n - 1;
+
+	ll s = 0, odd = 0, even = 0;
 	rep(i, n) {
-		if (a[i] == 1) {
-			fir = i;
-			break;
+		s += a[i];
+		if (i % 2 == 0) even += a[i];
+		if (i % 2 != 0) odd += a[i];
+	}
+
+	if (2 * (odd - n / 2) <= s) {
+		rep(i, n) {
+			if (i % 2 == 0) cout << a[i] << " ";
+			else cout << 1 << " ";
+		}
+	} else {
+		rep(i, n) {
+			if (i % 2 != 0) cout << a[i] << " ";
+			else cout << 1 << " ";
 		}
 	}
-
-	repr(i, n - 1) {
-		if (a[i] == 1) {
-			last = i;
-			break;
-		}
-	}
-
-	ll ans = 0;
-	fr(i, fir, last) {
-		if (a[i] == 0) ans++;
-	}
-
-	cout << ans << '\n';
-
+	cout << endl;
 	return;
 
 }
+
 
 int main(int argc , char ** argv) {
 	ios_base::sync_with_stdio(false) ;
