@@ -1,3 +1,5 @@
-*
-!*.cpp
 input.txt
+a.out
+*.prob
+*.exe
+*.cpp_tests
