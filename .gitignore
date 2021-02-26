@@ -2,4 +2,4 @@ input.txt
 a.out
 *.prob
 *.exe
-*.cpp_tests
+*.cpp__tests
