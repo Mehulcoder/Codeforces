@@ -27,6 +27,7 @@ using pll = pair<ll, ll>;
 #define fil(ar, val) memset(ar, val, sizeof(ar))
 const ll MOD = 1e9 + 7;
 
+
 void solve() {
 	ll n; cin >> n;
 

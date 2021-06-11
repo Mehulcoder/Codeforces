@@ -10,6 +10,7 @@ using namespace std;
 using ll = long long;
 using ld = long double;
 using pll = pair<ll, ll>;
+using ppll = pair<pll, pll>;
 
 #define mp make_pair
 #define all(x) (x).begin(), (x).end()
@@ -27,29 +28,56 @@ using pll = pair<ll, ll>;
 #define fil(ar, val) memset(ar, val, sizeof(ar))
 const ll MOD = 1e9 + 7;
 
-ll n, p, k;
 string s;
-vll dp;
-ll get(ll i) {
-	if (i >= n) return 0;
-	if (dp[i] != -1) return dp[i];
-	return dp[i] = get(i + k) + '1' - s[i];
-}
-
 void solve() {
-	cin >> n >> p >> k;
-	p--;
 	cin >> s;
-	ll x, y; cin >> x >> y;
+	ll n = s.size();
+	ll ans = 0;
+	set <pair<pll, pll>> st;
 
-	vset(dp, n, -1);
+	ll ii = 0, jj = 0;
 	rep(i, n) {
-		dp[i] = get(i);
-	}
-
-	ll ans = INF;
-	fr(i, p, n - 1) {
-		ans = min(ans, x * dp[i] + (i - p) * y);
+		auto c = s[i];
+		if (s[i] == 'N') {
+			if (st.find({{ii, jj}, {ii, jj + 1}}) == st.end()) {
+				ans += 5;
+			} else {
+				ans += 1;
+			}
+			st.insert({{ii, jj}, {ii, jj + 1}});
+			st.insert({{ii, jj + 1}, {ii, jj}});
+			jj++;
+		}
+		if (s[i] == 'S') {
+			if (st.find({{ii, jj}, {ii, jj - 1}}) == st.end()) {
+				ans += 5;
+			} else {
+				ans += 1;
+			}
+			st.insert({{ii, jj}, {ii, jj - 1}});
+			st.insert({{ii, jj - 1}, {ii, jj}});
+			jj--;
+		}
+		if (s[i] == 'W') {
+			if (st.find({{ii, jj}, {ii - 1, jj}}) == st.end()) {
+				ans += 5;
+			} else {
+				ans += 1;
+			}
+			st.insert({{ii, jj}, {ii - 1, jj}});
+			st.insert({{ii - 1, jj}, {ii, jj}});
+			ii--;
+		}
+		if (s[i] == 'E') {
+			if (st.find({{ii, jj}, {ii + 1, jj }}) == st.end()) {
+				ans += 5;
+			} else {
+				ans += 1;
+			}
+			st.insert({{ii, jj}, {ii + 1, jj}});
+			st.insert({{ii + 1, jj}, {ii, jj}});
+			ii++;
+		}
 	}
 
 	cout << ans << endl;

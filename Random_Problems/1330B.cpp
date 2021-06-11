@@ -27,32 +27,65 @@ using pll = pair<ll, ll>;
 #define fil(ar, val) memset(ar, val, sizeof(ar))
 const ll MOD = 1e9 + 7;
 
-ll n, p, k;
-string s;
-vll dp;
-ll get(ll i) {
-	if (i >= n) return 0;
-	if (dp[i] != -1) return dp[i];
-	return dp[i] = get(i + k) + '1' - s[i];
-}
 
 void solve() {
-	cin >> n >> p >> k;
-	p--;
-	cin >> s;
-	ll x, y; cin >> x >> y;
+	ll n; cin >> n;
 
-	vset(dp, n, -1);
-	rep(i, n) {
-		dp[i] = get(i);
+	vll a(n, 0);
+	rep(i, n) cin >> a[i];
+
+	ll maxi = *max_element(all(a));
+
+	vll b = a;
+	sort(a.begin(), a.begin() + maxi);
+	sort(a.begin() + maxi, a.end());
+
+	sort(b.begin() + n - maxi, b.end());
+	sort(b.begin(), b.begin() + n - maxi);
+
+
+	bool ok1 = 1;
+	bool ok2 = 1;
+	rep(i, maxi) {
+		if (a[i] != i + 1) {
+			ok1 = 0;
+			break;
+		}
 	}
 
-	ll ans = INF;
-	fr(i, p, n - 1) {
-		ans = min(ans, x * dp[i] + (i - p) * y);
+	fr(i, maxi, n - 1) {
+		if (a[i] != i - maxi + 1) {
+			ok1 = 0;
+			break;
+		}
 	}
 
-	cout << ans << endl;
+	rep(i, n - maxi) {
+		if (b[i] != i + 1) {
+			ok2 = 0;
+			break;
+		}
+	}
+
+
+	fr(i, n - maxi, n - 1) {
+		if (b[i] != i - n + maxi + 1) {
+			ok2 = 0;
+			break;
+		}
+	}
+
+	if (ok1 && ok2 && 2 * maxi != n) {
+		cout << 2 << endl;
+	} else if (ok1 || ok2) {
+		cout << 1 << endl;
+	} else {
+		cout << 0 << endl;
+	}
+	if (ok1)
+		cout << maxi << " " << n - maxi << endl;
+	if (ok2 && (2 * maxi != n))
+		cout << n - maxi << " " << maxi << endl;
 	return;
 }
 
