@@ -27,56 +27,47 @@ using pll = pair<ll, ll>;
 #define fil(ar, val) memset(ar, val, sizeof(ar))
 const ll MOD = 1e9 + 7;
 
-/**
- * Simply put the smallest blocks in the tower which has the smallest
- * height yet. Do this and check in the last that if the conditon of
- * x has been satisfied.
- */
+void solve() {
+	ll n;
+	cin >> n;
 
-
-void solve(int  t) {
-	ll n, m, x; cin >> n >> m >> x;
-
-	vector<pair<ll, ll>> h(n);
-	rep(i, n) {
-		cin >> h[i].f;
-		h[i].s = i;
-	}
-
-	set<pair<ll, ll>> bucket;
-	rep(i, m) {
-		bucket.insert({0, i + 1});
-	}
-
-	sort(all(h));
-	vector<ll> ans(n);
+	vll a(n, 0);
+	map<ll, ll> frq;
 
 	rep(i, n) {
-		auto temp = *bucket.begin();
-		bucket.erase(bucket.begin());
-		temp.f += h[i].f;
-		ans[h[i].s] = temp.s;
-		bucket.insert(temp);
+		cin >> a[i];
+		frq[a[i]]++;
 	}
 
-	ll mini, maxi;
-	mini = (*bucket.begin()).f;
-	trav(elem, bucket) {
-		maxi = elem.f;
+	multiset<ll, greater<ll>> s;
+
+	trav(elem, frq) {
+		s.insert(elem.s);
 	}
 
 
-	if (maxi - mini > x) {
-		cout << "NO" << endl;
+	while (s.size() >= 2) {
+		auto temp1 = *s.begin();
+		s.erase(s.begin());
+		auto temp2 = *s.begin();
+		s.erase(s.begin());
+
+		temp1--;
+		temp2--;
+		if (temp1 > 0) {
+			s.insert(temp1);
+		}
+
+		if (temp2 > 0) {
+			s.insert(temp2);
+		}
+	}
+
+	if (s.size() == 0) {
+		cout << 0 << endl;
 		return;
-	} else {
-		cout << "YES" << endl;
 	}
-	rep(i, n) {
-		cout << ans[i] << " ";
-	}
-
-	cout << endl;
+	cout <<  *s.begin() << endl;
 	return;
 }
 
@@ -87,10 +78,8 @@ int main(int argc , char ** argv) {
 	ll t = 1;
 	cin >> t;
 	while (t--) {
-		solve(t);
+		solve();
 	}
 
 	return 0 ;
 }
-
-

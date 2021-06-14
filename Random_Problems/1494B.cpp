@@ -27,57 +27,42 @@ using pll = pair<ll, ll>;
 #define fil(ar, val) memset(ar, val, sizeof(ar))
 const ll MOD = 1e9 + 7;
 
-/**
- * Simply put the smallest blocks in the tower which has the smallest
- * height yet. Do this and check in the last that if the conditon of
- * x has been satisfied.
- */
 
+ll n;
+bool isOk(ll a) {
+	return a >= 0 && a <= n - 2;
+}
 
-void solve(int  t) {
-	ll n, m, x; cin >> n >> m >> x;
+void solve() {
+	ll u, r, d, l;
+	cin >> n >> u >> r >> d >> l;
 
-	vector<pair<ll, ll>> h(n);
-	rep(i, n) {
-		cin >> h[i].f;
-		h[i].s = i;
+	rep(lu, 2) {
+		rep(ru, 2) {
+			rep(ld, 2) {
+				rep(rd, 2) {
+					ll up = lu + ru;
+					ll down = ld + rd;
+					ll left = lu + ld;
+					ll right = ru + rd;
+
+					ll uu = u - up;
+					ll lll = l - left;
+					ll rr = r - right;
+					ll dd = d - down;
+
+					if (isOk(uu) && isOk(lll) && isOk(rr) && isOk(dd)) {
+						cout << "YES" << endl;
+						return;
+					}
+				}
+			}
+		}
 	}
 
-	set<pair<ll, ll>> bucket;
-	rep(i, m) {
-		bucket.insert({0, i + 1});
-	}
-
-	sort(all(h));
-	vector<ll> ans(n);
-
-	rep(i, n) {
-		auto temp = *bucket.begin();
-		bucket.erase(bucket.begin());
-		temp.f += h[i].f;
-		ans[h[i].s] = temp.s;
-		bucket.insert(temp);
-	}
-
-	ll mini, maxi;
-	mini = (*bucket.begin()).f;
-	trav(elem, bucket) {
-		maxi = elem.f;
-	}
-
-
-	if (maxi - mini > x) {
-		cout << "NO" << endl;
-		return;
-	} else {
-		cout << "YES" << endl;
-	}
-	rep(i, n) {
-		cout << ans[i] << " ";
-	}
-
-	cout << endl;
+	cout << "NO" << endl;
 	return;
+
 }
 
 int main(int argc , char ** argv) {
@@ -87,10 +72,8 @@ int main(int argc , char ** argv) {
 	ll t = 1;
 	cin >> t;
 	while (t--) {
-		solve(t);
+		solve();
 	}
 
 	return 0 ;
 }
-
-
