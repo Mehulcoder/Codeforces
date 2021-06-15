@@ -28,29 +28,13 @@ using pll = pair<ll, ll>;
 const ll MOD = 1e9 + 7;
 
 void solve() {
-	ll n; cin >> n;
+	ll n, g, b; cin >> n >> g >> b;
 
-	vll a(n, 0);
-	map<ll, ll> frq;
+	ll ans = (n + 1) / 2;
+	ans += ceil(((n + 1) / 2) / (1.0 * g)) * b;
+	ans -= b;
 
-	rep(i, n) {
-		cin >> a[i];
-		frq[a[i]]++;
-	}
-
-	ll maxi = 0;
-	trav(elem, frq) {
-		maxi = max(maxi, elem.s);
-	}
-
-	if (maxi >= n / 2.00) {
-		cout << 2 * maxi - n << endl;
-		return;
-	} else {
-		cout << n % 2 << endl;
-		return;
-	}
-
+	cout << max(n, ans) << endl;
 }
 
 int main(int argc , char ** argv) {
@@ -65,4 +49,3 @@ int main(int argc , char ** argv) {
 
 	return 0 ;
 }
-

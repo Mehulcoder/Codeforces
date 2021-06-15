@@ -27,30 +27,58 @@ using pll = pair<ll, ll>;
 #define fil(ar, val) memset(ar, val, sizeof(ar))
 const ll MOD = 1e9 + 7;
 
-void solve() {
-	ll n; cin >> n;
+ll n;
+vector<pll> a;
 
-	vll a(n, 0);
-	map<ll, ll> frq;
+bool ok(ll i) {
+	ll curr = 0;
+	fr(j, 0, i) {
+		curr += a[j].f;
+	}
+
+	fr(j, i + 1, n - 1) {
+		if (curr < a[j].f) return 0;
+		curr += a[j].f;
+	}
+
+	return 1;
+}
+
+void solve() {
+	cin >> n;
+	a.clear();
+	a.resize(n);
 
 	rep(i, n) {
-		cin >> a[i];
-		frq[a[i]]++;
+		cin >> a[i].f;
+		a[i].s = i;
 	}
 
-	ll maxi = 0;
-	trav(elem, frq) {
-		maxi = max(maxi, elem.s);
+	ll lo = 0;
+	ll hi = n - 1;
+
+	sort(all(a));
+	ll ind = -1;
+	while (lo <= hi) {
+		ll mid = (lo + hi) / 2;
+		if (ok(mid)) hi = mid - 1, ind = mid;
+		else lo = mid + 1;
 	}
 
-	if (maxi >= n / 2.00) {
-		cout << 2 * maxi - n << endl;
-		return;
-	} else {
-		cout << n % 2 << endl;
-		return;
+	vll ans;
+	fr(i, ind, n - 1) {
+		ans.push_back(a[i].s);
 	}
 
+
+	sort(all(ans));
+	cout << ans.size() << endl;
+	trav(elem, ans) {
+		cout << elem + 1 << " ";
+	}
+
+	cout << endl;
+	return;
 }
 
 int main(int argc , char ** argv) {
@@ -65,4 +93,3 @@ int main(int argc , char ** argv) {
 
 	return 0 ;
 }
-
