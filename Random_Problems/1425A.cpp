@@ -27,14 +27,39 @@ using pll = pair<ll, ll>;
 #define fil(ar, val) memset(ar, val, sizeof(ar))
 const ll MOD = 1e9 + 7;
 
+
+ll get(ll n) {
+	if (!n) {
+		return 0;
+	}
+
+	if (n == 4) {
+		return 3;
+	}
+
+	ll ans = 0;
+	if (n % 4 == 0) {
+		ans++;
+		ans += get(n - 2);
+	} else {
+		ans += n / 2;
+		ans += get((n / 2 - 1));
+	}
+
+	return ans;
+}
 void solve() {
-	ll n, g, b; cin >> n >> g >> b;
+	ll n;
+	cin >> n;
 
-	ll ans = (n + 1) / 2;
-	ans += ceil(((n + 1) / 2) / (1.0 * g)) * b;
-	ans -= b;
+	if (n % 2) {
+		cout << n - get(n - 1) << endl;
+	} else {
+		cout << get(n) << endl;
+	}
 
-	cout << max(n, ans) << endl;
+
+	return;
 }
 
 int main(int argc , char ** argv) {
@@ -49,5 +74,3 @@ int main(int argc , char ** argv) {
 
 	return 0 ;
 }
-
-

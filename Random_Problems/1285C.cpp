@@ -27,14 +27,21 @@ using pll = pair<ll, ll>;
 #define fil(ar, val) memset(ar, val, sizeof(ar))
 const ll MOD = 1e9 + 7;
 
+ll lcm(ll a, ll b) {
+	return ((a) / __gcd(a, b)) * b;
+}
+
 void solve() {
-	ll n, g, b; cin >> n >> g >> b;
+	ll x; cin >> x;
 
-	ll ans = (n + 1) / 2;
-	ans += ceil(((n + 1) / 2) / (1.0 * g)) * b;
-	ans -= b;
+	ll ans = 1;
+	for (ll i = 1; i * i <= x; i++) {
+		if (x % i == 0 && lcm(i, x / i) == x) {
+			ans = i;
+		}
+	}
 
-	cout << max(n, ans) << endl;
+	cout << ans << " " << x / ans << endl;
 }
 
 int main(int argc , char ** argv) {
@@ -42,12 +49,10 @@ int main(int argc , char ** argv) {
 	cin.tie(NULL) ;
 
 	ll t = 1;
-	cin >> t;
+
 	while (t--) {
 		solve();
 	}
 
 	return 0 ;
 }
-
-

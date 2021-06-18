@@ -27,14 +27,53 @@ using pll = pair<ll, ll>;
 #define fil(ar, val) memset(ar, val, sizeof(ar))
 const ll MOD = 1e9 + 7;
 
+
+ll n;
+vll a;
+vvll ans;
+
+void get(ll i) {
+	ll val = a[i] - 1;
+	ll r = i;
+	ll c = i;
+	while (val--) {
+		ll r1 = r;
+		ll c1 = c - 1;
+
+		if (c1 >= 0 && ans[r1][c1] == -1) {
+			ans[r1][c1] = a[i];
+			c--;
+		} else {
+			ans[r + 1][c] = a[i];
+			r++;
+		}
+	}
+
+	return;
+}
 void solve() {
-	ll n, g, b; cin >> n >> g >> b;
+	a.clear();
+	ans.clear();
 
-	ll ans = (n + 1) / 2;
-	ans += ceil(((n + 1) / 2) / (1.0 * g)) * b;
-	ans -= b;
+	cin >> n;
+	a.resize(n);
+	ans.resize(n, vll(n, -1));
+	rep(i, n) cin >> a[i];
 
-	cout << max(n, ans) << endl;
+	rep(i, n) {
+		ans[i][i] = a[i];
+		get(i);
+	}
+
+	rep(i, n) {
+		rep(j, i + 1) {
+			cout << ans[i][j] << " ";
+		}
+		cout << endl;
+	}
+
+	return;
+
 }
 
 int main(int argc , char ** argv) {
@@ -42,12 +81,10 @@ int main(int argc , char ** argv) {
 	cin.tie(NULL) ;
 
 	ll t = 1;
-	cin >> t;
+
 	while (t--) {
 		solve();
 	}
 
 	return 0 ;
 }
-
-
