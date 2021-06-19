@@ -27,53 +27,47 @@ using pll = pair<ll, ll>;
 #define fil(ar, val) memset(ar, val, sizeof(ar))
 const ll MOD = 1e9 + 7;
 
-
-ll n;
-vll a;
-vvll ans;
-
-void get(ll i) {
-	ll val = a[i] - 1;
-	ll r = i;
-	ll c = i;
-	while (val--) {
-		ll r1 = r;
-		ll c1 = c - 1;
-
-		if (c1 >= 0 && ans[r1][c1] == -1) {
-			ans[r1][c1] = a[i];
-			c--;
-		} else {
-			ans[r + 1][c] = a[i];
-			r++;
-		}
+vector<int> z_function(string s) {
+	int n = (int) s.length();
+	vector<int> z(n);
+	for (int i = 1, l = 0, r = 0; i < n; ++i) {
+		if (i <= r)
+			z[i] = min (r - i + 1, z[i - l]);
+		while (i + z[i] < n && s[z[i]] == s[i + z[i]])
+			++z[i];
+		if (i + z[i] - 1 > r)
+			l = i, r = i + z[i] - 1;
 	}
-
-	return;
+	return z;
 }
 void solve() {
-	a.clear();
-	ans.clear();
+	ll n, k; cin >> n >> k;
+	string s; cin >> s;
+	s += s;
+	n *= 2;
 
-	cin >> n;
-	a.resize(n);
-	ans.resize(n, vll(n, -1));
-	rep(i, n) cin >> a[i];
+	auto zVec = z_function(s);
 
-	rep(i, n) {
-		ans[i][i] = a[i];
-		get(i);
-	}
-
-	rep(i, n) {
-		rep(j, i + 1) {
-			cout << ans[i][j] << " ";
+	ll pos = n;
+	ll ind = 0;
+	fr(i, 1, n - 1) {
+		ll j = i + zVec[i];
+		if (j < n) {
+			if (s[zVec[i]] < s[j]) {
+				pos = i;
+				break;
+			}
 		}
-		cout << endl;
 	}
 
-	return;
+	string ans = s.substr(0, pos);
+	while (ans.size() < k) {
+		ans += s.substr(0, pos);
+	}
 
+	ans = ans.substr(0, k);
+	cout << ans << endl;
+	return;
 }
 
 int main(int argc , char ** argv) {
@@ -88,7 +82,3 @@ int main(int argc , char ** argv) {
 
 	return 0 ;
 }
-
-
-
-
