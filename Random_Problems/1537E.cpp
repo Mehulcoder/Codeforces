@@ -92,6 +92,7 @@ void solve() {
 			}
 		}
 	}
+
 	string ans = s.substr(0, pos);
 	while (ans.size() < k) {
 		ans += s.substr(0, pos);

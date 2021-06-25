@@ -64,7 +64,9 @@ void solve() {
 	ranges.clear();
 	vis.clear();
 	dp.clear();
+
 	cin >> n;
+
 	ranges.resize(2, vll(n, 0));
 	edges.resize(n);
 	vis.resize(n, 0);
