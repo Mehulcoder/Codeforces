@@ -27,29 +27,41 @@ using pll = pair<ll, ll>;
 #define fil(ar, val) memset(ar, val, sizeof(ar))
 const ll MOD = 1e9 + 7;
 
-/**
- * The main idea is to reduce the pairs as much as possible
- * But a single pair in the start will do no harm.
- */
-
 void solve() {
-	ll n, k; cin >> n >> k;
+	ll n; cin >> n;
+	vll a(n, 0), b;
+	rep(i, n) cin >> a[i];
+	bool ok = 0;
 
-	string ans;
-	rep(i, k) {
-		ans += 'a' + i;
-		fr(j, i + 1, k - 1) {
-			ans += 'a' + i;
-			ans += 'a' + j;
+	ll x = 0;
+	ll ind = -1;
+	trav(elem, a) {
+		x ^= elem;
+		b.push_back(x);
+	}
+
+	if (!x) ok = 1;
+	else {
+		fr(i, 1, n - 1) {
+			fr(j, i + 1, n - 1) {
+				ll sum1 = b[i - 1];
+				ll sum2 = b[i - 1] ^ b[j - 1];
+				ll sum3 = b.back()^b[j - 1];
+
+				if (sum1 == sum2 && sum2 == sum3) {
+					ok = 1;
+					break;
+				}
+			}
+			if (ok) {
+				break;
+			}
 		}
 	}
 
-	while (ans.size() < n) {
-		ans += ans;
-	}
+	if (ok) cout << "YES" << endl;
+	else cout << "NO" << endl;
 
-	ans = ans.substr(0, n);
-	cout << ans << endl;
 	return;
 }
 
@@ -58,7 +70,7 @@ int main(int argc , char ** argv) {
 	cin.tie(NULL) ;
 
 	ll t = 1;
-
+	cin >> t;
 	while (t--) {
 		solve();
 	}

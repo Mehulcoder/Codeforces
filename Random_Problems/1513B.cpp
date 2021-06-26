@@ -27,28 +27,45 @@ using pll = pair<ll, ll>;
 #define fil(ar, val) memset(ar, val, sizeof(ar))
 const ll MOD = 1e9 + 7;
 
-/**
- * The main idea is to reduce the pairs as much as possible
- * But a single pair in the start will do no harm.
- */
+const ll N = 2e5 + 10;
+vector<ll> fact;
+
+void precalc() {
+	fact.resize(N, 1);
+
+	fr(i, 2, N - 1) {
+		fact[i] = (fact[i - 1] * i) % MOD;
+	}
+
+	return;
+}
 
 void solve() {
-	ll n, k; cin >> n >> k;
+	ll n; cin >> n;
+	vll a(n, 0);
+	rep(i, n) cin >> a[i];
 
-	string ans;
-	rep(i, k) {
-		ans += 'a' + i;
-		fr(j, i + 1, k - 1) {
-			ans += 'a' + i;
-			ans += 'a' + j;
-		}
+	ll top = a[0];
+	trav(elem, a) {
+		top &= elem;
 	}
 
-	while (ans.size() < n) {
-		ans += ans;
+	ll count = 0;
+	trav(elem, a) {
+		if (top == elem) count++;
 	}
 
-	ans = ans.substr(0, n);
+	if (count < 2) {
+		cout << 0 << endl;
+		return;
+	}
+
+	ll ans = (count * (count - 1));
+	ans %= MOD;
+
+	ans *= (fact[n - 2] % MOD);
+	ans %= MOD;
+
 	cout << ans << endl;
 	return;
 }
@@ -58,7 +75,8 @@ int main(int argc , char ** argv) {
 	cin.tie(NULL) ;
 
 	ll t = 1;
-
+	cin >> t;
+	precalc();
 	while (t--) {
 		solve();
 	}
